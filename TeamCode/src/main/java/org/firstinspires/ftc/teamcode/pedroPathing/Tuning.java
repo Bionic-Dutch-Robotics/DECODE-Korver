@@ -1210,7 +1210,7 @@ class Drawing {
      */
     public static void drawDebug(Follower follower) {
         if (follower.getCurrentPath() != null) {
-            drawPath(follower.getCurrentPath(), robotLook);
+            drawPath(follower.getCurrentPathChain(), robotLook);
             Pose closestPoint = follower.getPointFromPath(follower.getCurrentPath().getClosestPointTValue());
             drawRobot(new Pose(closestPoint.getX(), closestPoint.getY(), follower.getCurrentPath().getHeadingGoal(follower.getCurrentPath().getClosestPointTValue())), robotLook);
         }
@@ -1273,8 +1273,10 @@ class Drawing {
         }
 
         panelsField.setStyle(style);
-        panelsField.moveCursor(points[0][0], points[0][1]);
-        panelsField.line(points[1][0], points[1][1]);
+        for (int i = 0; i < points[0].length - 1; i++) {
+            panelsField.moveCursor(points[0][i], points[1][i]);
+            panelsField.line(points[0][i + 1], points[1][i + 1]);
+        }
     }
 
     /**
