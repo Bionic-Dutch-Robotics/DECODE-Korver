@@ -1,16 +1,19 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-
 import com.pedropathing.control.FilteredPIDFController;
 import com.pedropathing.control.PIDFController;
 import com.pedropathing.follower.Follower;
 
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.math.Vector;
+import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import static org.firstinspires.ftc.teamcode.pedroPathing.Constants.followerConstants;
 
+@SuppressWarnings("all")
 public class Drivetrain {
     private FilteredPIDFController xPid, yPid;
     private PIDFController headingPid;
@@ -19,7 +22,7 @@ public class Drivetrain {
 
     public Pose position;
     public Pose drivePower;
-    public Pose velocity;
+    public Vector velocity;
 
     public final Pose RED_GOAL = new Pose(144, 144, 0);
     public final Pose BLUE_GOAL = new Pose(0, 144, 0);
@@ -27,7 +30,7 @@ public class Drivetrain {
     /**
      * Initializes a Drivetrain object
      * @param gamepad1  takes `gamepad1` or `gamepad2` - The controller responsible for driving
-     * @param follower  A PedroPathing Follower object
+     * @param hardwareMap  An OpMode HardwareMap
      * @param startingPose  The robot's starting Pose, in inches
      */
     public Drivetrain(Gamepad gamepad1, HardwareMap hardwareMap, Pose startingPose) {

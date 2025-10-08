@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -25,7 +24,7 @@ public class Bot {
      */
     public Bot (Gamepad gamepad1, HardwareMap hardwareMap) {
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(startPose);
+        follower.setStartingPose(Constants.startPose);
 
         logs = new DataLogger("testLog1");
 
@@ -38,7 +37,7 @@ public class Bot {
 
         intake = new Intake(hardwareMap);
 
-        dt = new Drivetrain(gamepad1, follower, startPose);
+        dt = new Drivetrain(gamepad1, hardwareMap, Constants.startPose);
         dt.update();
     }
 
@@ -62,7 +61,7 @@ public class Bot {
             intake.intake();
         }
         else if (gamepad1.x) {
-            intake.reject();
+            intake.eject();
         }
     }
 

@@ -1,11 +1,12 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.util;
 
 import java.io.File;                    // already used in FTC SDK
 import java.io.Writer;
 import java.io.IOException;
 import java.io.FileWriter;              // subclass of java.io.Writer
-import java.lang.ref.Cleaner;
+//import java.lang.ref.Cleaner;
 
+@SuppressWarnings("all")
 public class DataLogger {
     
     // Declare members.
@@ -13,7 +14,7 @@ public class DataLogger {
     private StringBuffer lineBuffer;    // its methods build each line (row) of data
     private long timeBase;              // time of instantiation (milliseconds)
     private long nsBase;                 // time of reset (nanoseconds)
-    private static Cleaner cleaner;      
+    //private static Cleaner cleaner;
     public DataLogger (String fileName) {   // This constructor runs once, to initialize an instantiation of the class.
         
         // Build the path with the filename provided by the calling OpMode.
@@ -24,12 +25,14 @@ public class DataLogger {
         // .txt files allow data display in OBJ.  Download as .csv files.
         
         new File(directoryPath).mkdir();  // create Datalogs folder if needed
-        
+
+
         // Set up the file writer and line buffer.
         try {
             writer = new FileWriter(filePath);
             lineBuffer = new StringBuffer(128);     // initial length 128
 
+            /*
             cleaner = Cleaner.create();
             cleaner.register(this, ()-> {
                 try {
@@ -37,10 +40,10 @@ public class DataLogger {
                 } catch (IOException e) {
                 }
             });
+            */
 
         }
-        catch (IOException e) {
-        }
+        catch (IOException ignored) {}
         
         timeBase = System.currentTimeMillis();
         nsBase = System.nanoTime();
@@ -59,7 +62,7 @@ public class DataLogger {
             writer.write(lineBuffer.toString());    // add line (row) to file
             lineBuffer.setLength(0);                // clear the line (row)
         }
-        catch (IOException e) {
+        catch (IOException ignored) {
         }
         
     }   // end flushLineBuffer() method
@@ -181,9 +184,9 @@ public class DataLogger {
     @Override
     protected void finalize() throws Throwable {
         closeDataLogger();
-        //super.finalize();
-        cleaner.clean();
-        System.gc();
+        super.finalize();
+        //cleaner.clean();
+        //System.gc();
     }
     
 }   // end class
