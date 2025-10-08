@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.util.DataLogger;
 
+@SuppressWarnings("all")
 public class Bot {
     public Gamepad gamepad1;
     public boolean orbit;
@@ -28,8 +29,6 @@ public class Bot {
 
         logs = new DataLogger("testLog1");
 
-        logs.addField("Time");
-        logs.addField("d ms");
         logs.addField("Bot X");
         logs.addField("Bot Y");
         logs.addField("Bot Heading");
