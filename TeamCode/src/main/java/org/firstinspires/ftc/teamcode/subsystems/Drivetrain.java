@@ -4,6 +4,7 @@ import com.pedropathing.control.FilteredPIDFController;
 import com.pedropathing.control.PIDFController;
 import com.pedropathing.follower.Follower;
 
+import com.pedropathing.follower.FollowerConstants;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.math.Vector;
 import com.qualcomm.hardware.lynx.LynxModule;
@@ -15,15 +16,18 @@ import static org.firstinspires.ftc.teamcode.pedroPathing.Constants.followerCons
 
 @SuppressWarnings("all")
 public class Drivetrain {
-    private FilteredPIDFController xPid, yPid;
+    private final FilteredPIDFController xPid = new FilteredPIDFController(followerConstants.coefficientsDrivePIDF);
+    private final FilteredPIDFController yPid = new FilteredPIDFController(followerConstants.coefficientsDrivePIDF);
     private PIDFController headingPid;
     private Follower follower;
     private Gamepad gamepad1;
-
+/* Mohit
+    public Pose position = new Pose();
+    public Pose drivePower = new Pose();
+    public Vector velocity = new Vector();
+*/
     public Pose position;
-    public Pose drivePower;
     public Vector velocity;
-
     public final Pose RED_GOAL = new Pose(144, 144, 0);
     public final Pose BLUE_GOAL = new Pose(0, 144, 0);
 
@@ -36,15 +40,13 @@ public class Drivetrain {
     public Drivetrain(Gamepad gamepad1, HardwareMap hardwareMap, Pose startingPose) {
         this.gamepad1 = gamepad1;
         this.follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(startingPose);
-        follower.update();
+        this.follower.setStartingPose(startingPose);
+        this.follower.update();
 
-        xPid = new FilteredPIDFController(followerConstants.coefficientsDrivePIDF);
-        yPid = new FilteredPIDFController(followerConstants.coefficientsDrivePIDF);
         headingPid = new PIDFController(followerConstants.coefficientsHeadingPIDF);
 
-        position = startingPose;
-        drivePower = new Pose();
+        position = new Pose(startingPose.getX(),startingPose.getY()); //Mohit
+        velocity = new Vector(); //Mohit
 
         for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
             module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
@@ -84,12 +86,12 @@ public class Drivetrain {
      * @param driveCoefficient  Speed coefficient. 1 is full speed, 0 is bricked.
      * @param isAutoOrienting   Toggle Orbit
      */
-    public void runTeleOpDrive(double driveCoefficient, boolean isAutoOrienting, Pose orbitTarget) {
+    public void runTeleOpDrive(Pose power, double driveCoefficient, boolean isAutoOrienting, Pose orbitTarget) {
         if (!isAutoOrienting) {
             follower.setTeleOpDrive(
-                    -gamepad1.left_stick_y * driveCoefficient,
-                    gamepad1.left_stick_x * driveCoefficient,
-                    gamepad1.right_stick_x * driveCoefficient,
+                    power.getX() * driveCoefficient,
+                    power.getY() * driveCoefficient,
+                    power.getHeading() * driveCoefficient,
                     false
             );
 

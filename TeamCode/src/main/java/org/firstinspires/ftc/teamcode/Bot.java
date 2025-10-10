@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -25,7 +26,6 @@ public class Bot {
      */
     public Bot (Gamepad gamepad1, HardwareMap hardwareMap) {
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(Constants.startPose);
 
         logs = new DataLogger("testLog1");
 
@@ -43,12 +43,17 @@ public class Bot {
     /**
      * Runs the Drivetrain and Follower for TeleOp
      */
-    public void drivetrain() {
-        if (gamepad1.aWasPressed()) {
-            orbit = !orbit;
-        }
+    public void drivetrain(Pose power, boolean orbit) {
 
-        dt.runTeleOpDrive(0.5, orbit, dt.RED_GOAL);
+        dt.runTeleOpDrive(
+                new Pose(
+                    gamepad1.left_stick_x,
+                    -gamepad1.left_stick_y,
+                    gamepad1.right_stick_x
+                ),
+                0.5,
+                orbit,
+                dt.RED_GOAL);
         dt.update();
     }
 
