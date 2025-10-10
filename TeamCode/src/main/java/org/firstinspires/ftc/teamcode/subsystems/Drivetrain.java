@@ -19,7 +19,7 @@ public class Drivetrain {
     private final FilteredPIDFController xPid = new FilteredPIDFController(followerConstants.coefficientsDrivePIDF);
     private final FilteredPIDFController yPid = new FilteredPIDFController(followerConstants.coefficientsDrivePIDF);
     private PIDFController headingPid;
-    private Follower follower;
+    public Follower follower;
     private Gamepad gamepad1;
 /* Mohit
     public Pose position = new Pose();

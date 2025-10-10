@@ -12,6 +12,7 @@ import org.opencv.core.*;
 import java.util.ArrayList;
 import java.util.List;
 
+//TODO: Merge Vision.java and Intake.java for intake automation
 public class Vision implements VisionProcessor {
 
     public Scalar lowerRed1 = new Scalar(0, 100, 200);
