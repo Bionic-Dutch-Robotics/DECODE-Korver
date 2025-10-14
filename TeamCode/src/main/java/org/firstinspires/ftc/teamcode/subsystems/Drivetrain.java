@@ -17,8 +17,10 @@ import static org.firstinspires.ftc.teamcode.pedroPathing.Constants.startPose;
 
 @SuppressWarnings("all")
 public class Drivetrain {
-    private final FilteredPIDFController xPid = new FilteredPIDFController(followerConstants.coefficientsDrivePIDF);
-    private final FilteredPIDFController yPid = new FilteredPIDFController(followerConstants.coefficientsDrivePIDF);
+    private final FilteredPIDFController xPid = new
+            FilteredPIDFController(followerConstants.coefficientsDrivePIDF);
+    private final FilteredPIDFController yPid = new
+            FilteredPIDFController(followerConstants.coefficientsDrivePIDF);
     private PIDFController headingPid;
     public Follower follower;
     private Gamepad gamepad1;
@@ -31,19 +33,23 @@ public class Drivetrain {
 
     /**
      * Initializes a Drivetrain object
-     * @param gamepad1  takes `gamepad1` or `gamepad2` - The controller responsible for driving
+     * @param gamepad1  takes `gamepad1` or `gamepad2` - The
+    controller responsible for driving
      * @param hardwareMap  An OpMode HardwareMap
      * @param startingPose  The robot's starting Pose, in inches
      */
-    public Drivetrain(Gamepad gamepad1, HardwareMap hardwareMap, Pose startingPose) {
+    public Drivetrain(Gamepad gamepad1, HardwareMap hardwareMap, Pose
+            startingPose) {
         this.gamepad1 = gamepad1;
         this.follower = Constants.createFollower(hardwareMap);
         this.follower.setStartingPose(startingPose);
         this.follower.update();
 
-        headingPid = new PIDFController(followerConstants.coefficientsHeadingPIDF);
+        headingPid = new
+                PIDFController(followerConstants.coefficientsHeadingPIDF);
 
-        position = new Pose(startingPose.getX(), startPose.getY(), startingPose.getHeading());
+        position = new Pose(startingPose.getX(), startPose.getY(),
+                startingPose.getHeading());
         velocity = new Vector();
 
         for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
@@ -51,21 +57,24 @@ public class Drivetrain {
         }
     }
 
-    public Drivetrain createDrivetrain(Gamepad gamepad1, HardwareMap hardwareMap, Pose startingPose) {
-        try {
+    public static Drivetrain createDrivetrain(Gamepad gamepad1, HardwareMap hardwareMap, Pose startingPose) {
+        return new Drivetrain(gamepad1, hardwareMap, startingPose);
+        /*try {
             return new Drivetrain(gamepad1, hardwareMap, startingPose);
         }
         catch (Exception e) {
             return null;
-        }
+        }*/
     }
 
     /**
      * Drive the Follower
      * @param power         Movement vector, Y forward, X strafe
-     * @param isRobotCentric  Should the robot drive robot centric or field centric?
+     * @param isRobotCentric  Should the robot drive robot centric or
+    field centric?
      */
-    public void drive(double forwardPower, double strafePower, double turnPower, boolean isRobotCentric) {
+    public void drive(double forwardPower, double strafePower, double
+            turnPower, boolean isRobotCentric) {
         follower.setTeleOpDrive (
                 forwardPower,
                 strafePower,
@@ -76,7 +85,8 @@ public class Drivetrain {
 
     /**
      * Orbits the drivetrain around the selected goal
-     * @param posMultiplier Position control coefficient. 1 is full speed, 0 is bricked.
+     * @param posMultiplier Position control coefficient. 1 is full
+    speed, 0 is bricked.
      * @param goal          Target to orbit around
      */
     private void orbit(double posMultiplier, Pose goal) {
@@ -86,7 +96,7 @@ public class Drivetrain {
         drive(
                 -gamepad1.left_stick_y * posMultiplier,
                 gamepad1.left_stick_x * posMultiplier,
-                headingPid.run()
+                headingPid.run(),
                 false
         );
 
@@ -97,29 +107,34 @@ public class Drivetrain {
                         gamepad1.right_stick_x * headingMultiplier
                     );
 
-        follower.setTeleOpDrive(drivePower.getX(), drivePower.getY(), drivePower.getHeading());
+        follower.setTeleOpDrive(drivePower.getX(), drivePower.getY(),
+drivePower.getHeading());
         */
     }
 
     /**
      * Sets the drivetrain brake mode
-     * @param brake If true, drivetrain will brake when no power is applied. If false, drivetrain will coast.
+     * @param brake If true, drivetrain will brake when no power is
+    applied. If false, drivetrain will coast.
      */
     public void setBrakeMode (boolean brake) {
-        follower.startTeleOpDrive(brake);
+        follower.startTeleopDrive(brake);
     }
 
     /**
      * Drives a robot Field-Centric
-     * @param driveCoefficient  Speed coefficient. 1 is full speed, 0 is bricked.
+     * @param driveCoefficient  Speed coefficient. 1 is full speed, 0
+    is bricked.
      * @param isAutoOrienting   Toggle Orbit
      */
-    public void runTeleOpDrive(Pose power, double driveCoefficient, boolean isAutoOrienting, Pose orbitTarget) {
+    public void runTeleOpDrive(double forwardPower, double
+            strafePower, double turnPower, double driveCoefficient, boolean
+                                       isAutoOrienting, Pose orbitTarget) {
         if (!isAutoOrienting) {
             follower.setTeleOpDrive(
-                    power.getX() * driveCoefficient,
-                    power.getY() * driveCoefficient,
-                    power.getHeading() * driveCoefficient,
+                    (forwardPower * driveCoefficient),
+                    (strafePower * driveCoefficient),
+                    (turnPower * driveCoefficient),
                     false
             );
 
@@ -131,7 +146,8 @@ public class Drivetrain {
                     );
 
         follower.setTeleOpDrive(
-            calculateDrive(drivePower.getX(), drivePower.getY(), drivePower.getHeading());
+            calculateDrive(drivePower.getX(), drivePower.getY(),
+drivePower.getHeading());
         );
         */
         } else {
@@ -144,11 +160,14 @@ public class Drivetrain {
      * @param xPower    Desired X power
      * @param yPower    Desired Y power
      * @param headingPower  Desired Heading power
-     * @param posThreshold  If X or Y power is less than this number, respective dimension will be locked in place
-     * @param headingThreshold  If heading power is less than this number, it will lock in place
+     * @param posThreshold  If X or Y power is less than this number,
+    respective dimension will be locked in place
+     * @param headingThreshold  If heading power is less than this
+    number, it will lock in place
      * @return  heading-locked and position-locked vectors.
      */
-    public Pose calculateDrive(double xPower, double yPower, double headingPower, double posThreshold, double headingThreshold) {
+    public Pose calculateDrive(double xPower, double yPower, double
+            headingPower, double posThreshold, double headingThreshold) {
         xPid.updatePosition(position.getX());
         yPid.updatePosition(position.getY());
         headingPid.updatePosition(position.getHeading());
@@ -157,23 +176,29 @@ public class Drivetrain {
 
         if (xPower < posThreshold) {
             xPid.setTargetPosition(position.getX());
-            outputPower = new Pose(xPid.run(), outputPower.getY(), outputPower.getHeading());
+            outputPower = new Pose(xPid.run(), outputPower.getY(),
+                    outputPower.getHeading());
         } else {
-            outputPower = new Pose(xPower, outputPower.getY(), outputPower.getHeading());
+            outputPower = new Pose(xPower, outputPower.getY(),
+                    outputPower.getHeading());
         }
 
         if (yPower < posThreshold) {
             yPid.setTargetPosition(position.getY());
-            outputPower = new Pose(outputPower.getX(), yPid.run(), outputPower.getHeading());
+            outputPower = new Pose(outputPower.getX(), yPid.run(),
+                    outputPower.getHeading());
         } else {
-            outputPower = new Pose(outputPower.getX(), yPower, outputPower.getHeading());
+            outputPower = new Pose(outputPower.getX(), yPower,
+                    outputPower.getHeading());
         }
 
         if (headingPower < headingThreshold) {
             headingPid.setTargetPosition(position.getHeading());
-            outputPower = new Pose(outputPower.getX(), outputPower.getY(), headingPid.run());
+            outputPower = new Pose(outputPower.getX(),
+                    outputPower.getY(), headingPid.run());
         } else {
-            outputPower = new Pose(outputPower.getX(), outputPower.getY(), headingPower);
+            outputPower = new Pose(outputPower.getX(),
+                    outputPower.getY(), headingPower);
         }
 
         return outputPower;

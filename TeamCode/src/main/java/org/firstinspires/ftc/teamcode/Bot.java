@@ -1,16 +1,16 @@
 package org.firstinspires.ftc.teamcode;
 
+
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
+import com.qualcomm.robotcore.exception.RobotCoreException;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.util.DataLogger;
 
-import com.qualcomm.robotcore.RobotCoreException;
 import java.lang.Exception;
 
 @SuppressWarnings("all")
@@ -20,32 +20,39 @@ public class Bot {
     public Drivetrain dt;
 
     /**
-     * Constructs a new Bot, consisting of a Pedro Follower, Intake, Drivetrain, DataLogger and Gamepad
+     * Constructs a new Bot, consisting of a Pedro Follower, Intake,
+     Drivetrain, DataLogger and Gamepad
      * @param gamepad1  takes `gamepad1` or `gamepad2`
      * @param hardwareMap   takes `hardwareMap`
      */
-    public Bot throws Exception(Gamepad gamepad1, HardwareMap hardwareMap) {
-        dt = dt.createDrivetrain(gamepad1, hardwareMap, Constants.startPose);
-        dt.update();
+    public Bot(Gamepad gamepad, HardwareMap hwMap) throws Exception{
+        try {
+            dt = Drivetrain.createDrivetrain(gamepad1, hwMap, Constants.startPose);
+            dt.update();
+        }
+        catch (RuntimeException ignored) {
+
+        }
 
         if (dt == null) {   // Ends program and throws error to RC Phone if `dt` is not initialized properly
-            throw new RobotCoreException("Failed to Initialize Drivetrain", new Exception());
-            return 1;
+            //throw new RobotCoreException("Failed to Initialize Drivetrain", new Exception());
         }
+
+        gamepad1 = gamepad;
     }
 
     /**
      * Runs the Drivetrain and Follower for TeleOp
      */
-    public void drivetrain(Pose power, boolean orbit) {
+    public void drivetrain(boolean orbit) {
 
         dt.runTeleOpDrive(
                 -gamepad1.left_stick_y,     //  Forward
-                gamepad1.left_stick_y,      //  Strafe
-                gamepad1.right_stick_x      //  Rotation
+                gamepad1.left_stick_x,      //  Strafe
+                gamepad1.right_stick_x,      //  Rotation
                 0.5,                        //  Drive Power Relative to Input
                 orbit,                      //  Boolean: Should the robot orbit around the goal?
-                dt.RED_GOAL                 //  Pose object indicating where to orbit around
+                        dt.RED_GOAL                 //  Pose object indicating where to orbit around
         );
 
         if (gamepad1.aWasPressed()) {       //Toggle orbit
