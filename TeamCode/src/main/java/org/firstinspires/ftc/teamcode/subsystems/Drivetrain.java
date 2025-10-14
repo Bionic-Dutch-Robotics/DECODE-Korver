@@ -43,8 +43,8 @@ public class Drivetrain {
 
         headingPid = new PIDFController(followerConstants.coefficientsHeadingPIDF);
 
-        position = new Pose(startingPose.getX(), startPose.getY(), startingPose.getHeading()); //Mohit
-        velocity = new Vector(); //Mohit
+        position = new Pose(startingPose.getX(), startPose.getY(), startingPose.getHeading());
+        velocity = new Vector();
 
         for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
             module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
@@ -65,11 +65,11 @@ public class Drivetrain {
      * @param power         Movement vector, Y forward, X strafe
      * @param isRobotCentric  Should the robot drive robot centric or field centric?
      */
-    public void drive(Pose power, boolean isRobotCentric) {
+    public void drive(double forwardPower, double strafePower, double turnPower, boolean isRobotCentric) {
         follower.setTeleOpDrive (
-                power.getY(),
-                power.getX(),
-                power.getHeading(),
+                forwardPower,
+                strafePower,
+                turnPower,
                 isRobotCentric
         );
     }
@@ -82,17 +82,11 @@ public class Drivetrain {
     private void orbit(double posMultiplier, Pose goal) {
         headingPid.updatePosition(position.getHeading());
         headingPid.setTargetPosition(calculateRobotCentricTargetHeading(goal));
-        drive( new Pose(
-                    gamepad1.left_stick_x * posMultiplier,
-                    gamepad1.left_stick_y * posMultiplier,
-                        headingPid.run()
-                        ),
-                false
-        );
-        follower.setTeleOpDrive(
+
+        drive(
                 -gamepad1.left_stick_y * posMultiplier,
                 gamepad1.left_stick_x * posMultiplier,
-                headingPid.run(),
+                headingPid.run()
                 false
         );
 
@@ -107,8 +101,12 @@ public class Drivetrain {
         */
     }
 
-    public void startTeleOpDrive(boolean brake) {
-        follower.startTeleopDrive(brake);
+    /**
+     * Sets the drivetrain brake mode
+     * @param brake If true, drivetrain will brake when no power is applied. If false, drivetrain will coast.
+     */
+    public void setBrakeMode (boolean brake) {
+        follower.startTeleOpDrive(brake);
     }
 
     /**

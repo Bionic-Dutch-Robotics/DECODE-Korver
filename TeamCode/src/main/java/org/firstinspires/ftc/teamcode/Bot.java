@@ -10,6 +10,9 @@ import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.util.DataLogger;
 
+import com.qualcomm.robotcore.RobotCoreException;
+import java.lang.Exception;
+
 @SuppressWarnings("all")
 public class Bot {
     public Gamepad gamepad1;
@@ -21,9 +24,14 @@ public class Bot {
      * @param gamepad1  takes `gamepad1` or `gamepad2`
      * @param hardwareMap   takes `hardwareMap`
      */
-    public Bot (Gamepad gamepad1, HardwareMap hardwareMap) {
+    public Bot throws Exception(Gamepad gamepad1, HardwareMap hardwareMap) {
         dt = dt.createDrivetrain(gamepad1, hardwareMap, Constants.startPose);
         dt.update();
+
+        if (dt == null) {   // Ends program and throws error to RC Phone if `dt` is not initialized properly
+            throw new RobotCoreException("Failed to Initialize Drivetrain", new Exception());
+            return 1;
+        }
     }
 
     /**
@@ -32,17 +40,15 @@ public class Bot {
     public void drivetrain(Pose power, boolean orbit) {
 
         dt.runTeleOpDrive(
-                new Pose(
-                    gamepad1.left_stick_x,
-                    -gamepad1.left_stick_y,
-                    gamepad1.right_stick_x
-                ),
-                0.5,
-                orbit,
-                dt.RED_GOAL
+                -gamepad1.left_stick_y,     //  Forward
+                gamepad1.left_stick_y,      //  Strafe
+                gamepad1.right_stick_x      //  Rotation
+                0.5,                        //  Drive Power Relative to Input
+                orbit,                      //  Boolean: Should the robot orbit around the goal?
+                dt.RED_GOAL                 //  Pose object indicating where to orbit around
         );
 
-        if (gamepad1.aWasPressed()) {
+        if (gamepad1.aWasPressed()) {       //Toggle orbit
             orbit = !orbit;
         }
 

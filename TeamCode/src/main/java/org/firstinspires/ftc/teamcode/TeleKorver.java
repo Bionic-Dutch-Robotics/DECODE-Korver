@@ -12,16 +12,12 @@ import java.util.List;
 @TeleOp (name="TeleOp")
 public class TeleKorver extends OpMode {
     private Bot bot;
-    private Pose drivePower = new Pose();
+    private Pose drivePower;
 
     @Override
     public void init () {
         bot = new Bot(gamepad1, hardwareMap);
-
-        List<LynxModule> allHubs = hardwareMap.getAll(LynxModule.class);
-        for (LynxModule hub : allHubs) {
-            hub.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
-        }
+        drivePower = new Pose();
     }
 
     @Override
@@ -37,7 +33,5 @@ public class TeleKorver extends OpMode {
                 gamepad1.right_stick_x
         );
         bot.drivetrain(drivePower, false);
-        bot.intake();
-        bot.log();
     }
 }
