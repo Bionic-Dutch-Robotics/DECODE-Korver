@@ -15,7 +15,7 @@ import java.lang.Exception;
 
 @SuppressWarnings("all")
 public class Bot {
-    public Gamepad gamepad1;
+    //public Gamepad gamepad1;
     public boolean orbit;
     public Drivetrain dt;
 
@@ -27,7 +27,7 @@ public class Bot {
      */
     public Bot(Gamepad gamepad, HardwareMap hwMap) throws Exception{
         try {
-            dt = Drivetrain.createDrivetrain(gamepad, hwMap, Constants.startPose);
+            dt = new Drivetrain(gamepad, hwMap, Constants.startPose);
             dt.update();
         }
         catch (RuntimeException ignored) {
@@ -38,24 +38,25 @@ public class Bot {
             //throw new RobotCoreException("Failed to Initialize Drivetrain", new Exception());
         }
 
-        gamepad1 = gamepad;
+        //gamepad1 = gamepad;
     }
 
     /**
      * Runs the Drivetrain and Follower for TeleOp
      */
-    public void drivetrain(boolean orbit) {
+    public void drivetrain(boolean orbit, Gamepad gamepad) {
 
         dt.runTeleOpDrive(
-                -gamepad1.left_stick_y,     //  Forward
-                gamepad1.left_stick_x,      //  Strafe
-                gamepad1.right_stick_x,      //  Rotation
+                -gamepad.left_stick_y,     //  Forward
+                gamepad.left_stick_x,      //  Strafe
+                gamepad.right_stick_x,      //  Rotation
                 0.5,                        //  Drive Power Relative to Input
                 orbit,                      //  Boolean: Should the robot orbit around the goal?
-                dt.RED_GOAL                 //  Pose object indicating where to orbit around
+                dt.RED_GOAL,                 //  Pose object indicating where to orbit around
+                gamepad
         );
 
-        if (gamepad1.aWasPressed()) {       //Toggle orbit
+        if (gamepad.aWasPressed()) {       //Toggle orbit
             orbit = !orbit;
         }
 

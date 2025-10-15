@@ -4,7 +4,6 @@ import com.pedropathing.control.FilteredPIDFController;
 import com.pedropathing.control.PIDFController;
 import com.pedropathing.follower.Follower;
 
-import com.pedropathing.follower.FollowerConstants;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.math.Vector;
 import com.qualcomm.hardware.lynx.LynxModule;
@@ -23,7 +22,7 @@ public class Drivetrain {
             FilteredPIDFController(followerConstants.coefficientsDrivePIDF);
     private PIDFController headingPid;
     public Follower follower;
-    private Gamepad gamepad1;
+    //private Gamepad gamepad1;
 
     public Pose position;
     public Pose drivePower;
@@ -38,9 +37,9 @@ public class Drivetrain {
      * @param hardwareMap  An OpMode HardwareMap
      * @param startingPose  The robot's starting Pose, in inches
      */
-    public Drivetrain(Gamepad gamepad1, HardwareMap hardwareMap, Pose
-            startingPose) {
-        this.gamepad1 = gamepad1;
+    public Drivetrain(Gamepad gamepad, HardwareMap hardwareMap, Pose startingPose)
+    {
+        //this.gamepad1 = gamepad;
         this.follower = Constants.createFollower(hardwareMap);
         this.follower.setStartingPose(startingPose);
         this.follower.update();
@@ -57,15 +56,16 @@ public class Drivetrain {
         }
     }
 
-    public static Drivetrain createDrivetrain(Gamepad gamepad1, HardwareMap hardwareMap, Pose startingPose) {
-        return new Drivetrain(gamepad1, hardwareMap, startingPose);
-        /*try {
+/*    public static Drivetrain createDrivetrain(Gamepad gamepad, HardwareMap hardwareMap, Pose startingPose) {
+        return new Drivetrain(gamepad, hardwareMap, startingPose);
+        try {
             return new Drivetrain(gamepad1, hardwareMap, startingPose);
         }
         catch (Exception e) {
             return null;
-        }*/
+        }
     }
+  */
 
     /**
      * Drive the Follower
@@ -89,13 +89,13 @@ public class Drivetrain {
     speed, 0 is bricked.
      * @param goal          Target to orbit around
      */
-    private void orbit(double posMultiplier, Pose goal) {
+    private void orbit(double posMultiplier, Pose goal, Gamepad gamepad) {
         headingPid.updatePosition(position.getHeading());
         headingPid.setTargetPosition(calculateRobotCentricTargetHeading(goal));
 
         drive(
-                -gamepad1.left_stick_y * posMultiplier,
-                gamepad1.left_stick_x * posMultiplier,
+                -gamepad.left_stick_y * posMultiplier,
+                gamepad.left_stick_x * posMultiplier,
                 headingPid.run(),
                 false
         );
@@ -127,10 +127,12 @@ drivePower.getHeading());
     is bricked.
      * @param isAutoOrienting   Toggle Orbit
      */
-    public void runTeleOpDrive(double forwardPower, double
-            strafePower, double turnPower, double driveCoefficient, boolean
-                                       isAutoOrienting, Pose orbitTarget) {
-        if (!isAutoOrienting) {
+    public void runTeleOpDrive(double forwardPower, double strafePower, double turnPower,
+                               double driveCoefficient, boolean isAutoOrienting, Pose orbitTarget,
+                                Gamepad gamepad)
+    {
+        if (!isAutoOrienting)
+        {
             follower.setTeleOpDrive(
                     (forwardPower * driveCoefficient),
                     (strafePower * driveCoefficient),
@@ -151,7 +153,7 @@ drivePower.getHeading());
         );
         */
         } else {
-            orbit(driveCoefficient, orbitTarget);
+            orbit(driveCoefficient, orbitTarget, gamepad);
         }
     }
 

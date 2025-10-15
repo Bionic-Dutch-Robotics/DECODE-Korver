@@ -35,6 +35,6 @@ public class TeleKorver extends OpMode {
                 -gamepad1.left_stick_y,
                 gamepad1.right_stick_x
         );
-        bot.drivetrain(false);
+        bot.drivetrain(false, gamepad1);
     }
 }
