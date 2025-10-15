@@ -27,7 +27,7 @@ public class Bot {
      */
     public Bot(Gamepad gamepad, HardwareMap hwMap) throws Exception{
         try {
-            dt = Drivetrain.createDrivetrain(gamepad1, hwMap, Constants.startPose);
+            dt = Drivetrain.createDrivetrain(gamepad, hwMap, Constants.startPose);
             dt.update();
         }
         catch (RuntimeException ignored) {
@@ -52,7 +52,7 @@ public class Bot {
                 gamepad1.right_stick_x,      //  Rotation
                 0.5,                        //  Drive Power Relative to Input
                 orbit,                      //  Boolean: Should the robot orbit around the goal?
-                        dt.RED_GOAL                 //  Pose object indicating where to orbit around
+                dt.RED_GOAL                 //  Pose object indicating where to orbit around
         );
 
         if (gamepad1.aWasPressed()) {       //Toggle orbit
