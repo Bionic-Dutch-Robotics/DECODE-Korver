@@ -31,21 +31,19 @@ public class Bot {
             dt.update();
         }
         catch (RuntimeException ignored) {
-
+            throw new RobotCoreException("Failed to Initialize Drivetrain");
         }
 
         if (dt == null) {   // Ends program and throws error to RC Phone if `dt` is not initialized properly
-            //throw new RobotCoreException("Failed to Initialize Drivetrain", new Exception());
+            throw new RobotCoreException("Drivetrain returned `null`, line 30", new Exception());
         }
 
-        //gamepad1 = gamepad;
     }
 
     /**
      * Runs the Drivetrain and Follower for TeleOp
      */
     public void drivetrain(boolean orbit, Gamepad gamepad) {
-
         dt.runTeleOpDrive(
                 -gamepad.left_stick_y,     //  Forward
                 gamepad.left_stick_x,      //  Strafe

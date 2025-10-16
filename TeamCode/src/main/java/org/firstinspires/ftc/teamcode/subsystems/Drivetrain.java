@@ -56,25 +56,15 @@ public class Drivetrain {
         }
     }
 
-/*    public static Drivetrain createDrivetrain(Gamepad gamepad, HardwareMap hardwareMap, Pose startingPose) {
-        return new Drivetrain(gamepad, hardwareMap, startingPose);
-        try {
-            return new Drivetrain(gamepad1, hardwareMap, startingPose);
-        }
-        catch (Exception e) {
-            return null;
-        }
-    }
-  */
-
     /**
      * Drive the Follower
-     * @param power         Movement vector, Y forward, X strafe
-     * @param isRobotCentric  Should the robot drive robot centric or
-    field centric?
+     * @param forwardPower      Forward `power` vector
+     * @param strafePower       Strafe `power` vector
+     * @param turnPower         Turn `power` vector
+     * @param isRobotCentric    Should the robot drive robot centric or field centric?
      */
-    public void drive(double forwardPower, double strafePower, double
-            turnPower, boolean isRobotCentric) {
+    public void drive(double forwardPower, double strafePower, double turnPower,
+                    boolean isRobotCentric) {
         follower.setTeleOpDrive (
                 forwardPower,
                 strafePower,
@@ -93,14 +83,15 @@ public class Drivetrain {
         headingPid.updatePosition(position.getHeading());
         headingPid.setTargetPosition(calculateRobotCentricTargetHeading(goal));
 
-        drive(
+        this.drive(
                 -gamepad.left_stick_y * posMultiplier,
                 gamepad.left_stick_x * posMultiplier,
                 headingPid.run(),
-                false
+                false               // Robot-centric
         );
 
-        /*  TEST Position Lock Drive
+        //TODO: Finish testing normal drive, migrate to calculateDrive() for position and heading lock
+        /*  TEST: Position Lock Drive
         drivePower = calculateDrive(
                         gamepad1.left_stick_x * posMultiplier,
                         gamepad1.left_stick_y * posMultiplier,
@@ -129,8 +120,8 @@ drivePower.getHeading());
      */
     public void runTeleOpDrive(double forwardPower, double strafePower, double turnPower,
                                double driveCoefficient, boolean isAutoOrienting, Pose orbitTarget,
-                                Gamepad gamepad)
-    {
+                                Gamepad gamepad) {
+        // TODO: Remove vector inputs, rely on gamepad. Testing needed.
         if (!isAutoOrienting)
         {
             follower.setTeleOpDrive(
