@@ -39,10 +39,10 @@ public class Constants {
                     0.0006
             ))
             .headingPIDFCoefficients(new PIDFCoefficients(
-                    0.8,
-                    0,
-                    0,
-                    0.01
+                    0.4,
+                    0.001,
+                    0.01,
+                    0.0
             ))
             .secondaryHeadingPIDFCoefficients(new PIDFCoefficients(
                     2.5,
