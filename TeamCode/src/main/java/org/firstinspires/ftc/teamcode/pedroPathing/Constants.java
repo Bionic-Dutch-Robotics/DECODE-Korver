@@ -16,7 +16,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Constants {
-    public static final Pose startPose = new Pose(9,9,0);
+    public static final Pose startPose = new Pose(7.25,5,Math.PI);
 
 
 

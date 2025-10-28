@@ -29,8 +29,10 @@ public class Drivetrain {
     public Pose position;
     public Pose drivePower;
     public Vector velocity;
-    public final Pose RED_GOAL = new Pose(144, 144, 0);
-    public final Pose BLUE_GOAL = new Pose(0, 144, 0);
+    public final Pose RED_GOAL = new Pose(144, 144);
+    public final Pose BLUE_GOAL = new Pose(0, 144);
+    public final Pose RED_PICK_POS = new Pose(125, 125, Math.PI / 2);
+    public final Pose BLUE_PICK_POS = new Pose(15, 125, Math.PI * 1.5);
 
     /**
      * Initializes a Drivetrain object
@@ -130,7 +132,7 @@ drivePower.getHeading());
                     (forwardPower * driveCoefficient),
                     (strafePower * driveCoefficient),
                     (turnPower * driveCoefficient),
-                    false
+                    true
             );
 
         /*  TEST Position Lock Drive
@@ -146,7 +148,7 @@ drivePower.getHeading());
         );
         */
         } else {
-            orbit(driveCoefficient, orbitTarget, gamepad);
+            //orbit(driveCoefficient, orbitTarget, gamepad);
         }
     }
 
