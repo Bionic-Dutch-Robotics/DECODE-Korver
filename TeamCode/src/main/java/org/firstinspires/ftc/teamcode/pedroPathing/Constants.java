@@ -32,6 +32,7 @@ public class Constants {
                     0.015
             ))
             .translationalPIDFSwitch(4)
+            .useSecondaryTranslationalPIDF(false)
             .secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(
                     0.4,
                     0,
@@ -44,6 +45,7 @@ public class Constants {
                     0.01,
                     0.0
             ))
+            .useSecondaryHeadingPIDF(false)
             .secondaryHeadingPIDFCoefficients(new PIDFCoefficients(
                     2.5,
                     0,
@@ -57,6 +59,7 @@ public class Constants {
                     0.6,
                     0.015
             ))
+            .useSecondaryDrivePIDF(false)
             .secondaryDrivePIDFCoefficients(new FilteredPIDFCoefficients(
                     0.02,
                     0,
@@ -96,5 +99,8 @@ public class Constants {
                 .mecanumDrivetrain(driveConstants)
                 .pinpointLocalizer(localizerConstants)
                 .build();
+
+
     }
+
 }
