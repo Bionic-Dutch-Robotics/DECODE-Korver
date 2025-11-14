@@ -15,8 +15,7 @@ import static org.firstinspires.ftc.teamcode.pedroPathing.Constants.followerCons
 import static org.firstinspires.ftc.teamcode.pedroPathing.Constants.startPose;
 
 import androidx.annotation.NonNull;
-//test
-@SuppressWarnings("all")
+
 public class Drivetrain {
     private final FilteredPIDFController xPid = new
             FilteredPIDFController(followerConstants.coefficientsDrivePIDF);
@@ -36,7 +35,7 @@ public class Drivetrain {
 
     /**
      * Initializes a Drivetrain object
-     * @param gamepad1  takes `gamepad1` or `gamepad2` - The
+     * @param gamepad  takes `gamepad1` or `gamepad2` - The
     controller responsible for driving
      * @param hardwareMap  An OpMode HardwareMap
      * @param startingPose  The robot's starting Pose, in inches
