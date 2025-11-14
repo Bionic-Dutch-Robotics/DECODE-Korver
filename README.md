@@ -1,5 +1,5 @@
 ## Contributors
-Thanks to @bboonstra and @chetanvanam for their help in programming this year.
+Thanks to @bboonstra for his help creating a first-meet autonomous.
 
 ## Tools:
 * [Pedro](https://pedropathing.com/docs)
