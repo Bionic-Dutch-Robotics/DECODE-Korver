@@ -1,56 +1,47 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
-import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.HeadingInterpolator;
 import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.pedropathing.control.PIDFCoefficients;
+
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
-import org.firstinspires.ftc.teamcode.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.util.Settings;
 
 import java.util.function.Supplier;
 
 public class BOTT {
-
-    public enum ShotPos {
-        FAR,
-        CLOSE,
-        EJECT
-    }
     public Follower fw;
     public Intake intake;
-    public static ShotPos shotPos;
     boolean runIntake;
-    Shooter shooter;
+    public Shooter shooter;
     boolean runShooter;
-    private final PIDFCoefficients shooterCoefficients = new PIDFCoefficients(0.09, 0.0, 0.01, 0.0);
+    public Transfer transfer;
     double forwardPower, strafePower, turnPower;
     private boolean goTo;
     private Supplier<PathChain> pathChain;
     public BOTT(HardwareMap hwMap) {
         fw = Constants.createFollower(hwMap);
         fw.setStartingPose(
-                new Pose(8,8,Math.PI/2)
+                Settings.Positions.Drivetrain.TELEOP_START
         );
 
         intake = new Intake(hwMap);
-        shooter = new Shooter(hwMap, shooterCoefficients);
+        shooter = new Shooter(hwMap, Settings.Positions.Shooter.shooterCoefficients);
+        transfer = new Transfer(hwMap);
 
         fw.startTeleopDrive(true);
 
         runIntake = false;
         runShooter = false;
 
-        shotPos = ShotPos.FAR;
 
         pathChain = () -> fw.pathBuilder() //Lazy Curve Generation
-                .addPath(new Path(new BezierLine(fw::getPose, new Pose(72,72,Math.PI/2))))
-                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(fw::getHeading, Math.toRadians(135), 0.8))
+                .addPath(new Path(new BezierLine(fw::getPose, Settings.Positions.Drivetrain.MIDFIELD_SHOOT)))
+                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(fw::getHeading, Settings.Positions.Drivetrain.MIDFIELD_SHOOT.getHeading(), 0.8))
                 .build();
 
         goTo = false;
@@ -116,29 +107,27 @@ public class BOTT {
     }
 
     public void shooter(Gamepad gp) {
-        if (gp.dpad_up) {
-            shooter.reload();
-        }
-        else {
-            shooter.transfer();
-        }
-
-
         if (gp.yWasPressed()) {
             runShooter = !runShooter;
         }
 
         if (runShooter) {
-            shooter.lob();
-            shotPos = ShotPos.FAR;
+            shooter.shootFar();
         }
         else if (gp.x) {
             shooter.eject();
-            shotPos = ShotPos.EJECT;
         }
         else {
             shooter.stop();
-            shotPos = ShotPos.CLOSE;
+        }
+    }
+
+    public void transfer(Gamepad gp) {
+        if (gp.dpad_up) {
+            transfer.reload();
+        }
+        else {
+            transfer.feed();
         }
     }
 }

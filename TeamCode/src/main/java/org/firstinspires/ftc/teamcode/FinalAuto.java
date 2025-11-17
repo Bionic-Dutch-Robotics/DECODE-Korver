@@ -2,9 +2,8 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import java.util.Timer;
+import org.firstinspires.ftc.teamcode.subsystems.BOTT;
 
 @Autonomous(name = "AUTO", preselectTeleOp = "FinalDrive")
 public class FinalAuto extends OpMode {
@@ -22,7 +21,7 @@ public class FinalAuto extends OpMode {
     @Override
     public void start() {
         super.start();
-        bot.shooter.lob();
+        bot.shooter.shootFar();
         timer.resetTimer();
         state = State.LAUNCH;
     }
@@ -51,19 +50,19 @@ public class FinalAuto extends OpMode {
             case NEXT:
                 if (timer.getElapsedTimeSeconds() < 2) {break;}
                 bot.intake.intake();
-                bot.shooter.reload();
+                bot.transfer.reload();
                 timer.resetTimer();
                 state = State.READY;
             case READY:
                 if (timer.getElapsedTimeSeconds() < 2) {break;}
                 bot.intake.stop();
-                bot.shooter.lob();
+                bot.shooter.shootFar();
                 timer.resetTimer();
                 state = State.LAUNCH;
                 break;
             case LAUNCH:
                 if (timer.getElapsedTimeSeconds() < 3) {break;}
-                bot.shooter.transfer();
+                bot.transfer.feed();
                 shots += 1;
                 timer.resetTimer();
                 state = State.NEXT;
