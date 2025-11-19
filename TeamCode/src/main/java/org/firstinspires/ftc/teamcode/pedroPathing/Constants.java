@@ -16,7 +16,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Constants {
-    public static final Pose startPose = new Pose(87,5.,0);
+    public static final Pose blueStartPose = new Pose(69,5.5,Math.PI/2);
+    public static final Pose redStartPose = new Pose(85, 5.5, Math.PI/2);
 
 
 
@@ -46,9 +47,9 @@ public class Constants {
                     0.0006
             ))
             .headingPIDFCoefficients(new PIDFCoefficients(
-                    0.4,
+                    1.5,
                     0.001,
-                    0.01,
+                    0.08,
                     0.0
             ))
             .secondaryHeadingPIDFCoefficients(new PIDFCoefficients(
@@ -96,8 +97,8 @@ public class Constants {
                 .encoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)
                 .forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
                 .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED)
-                .forwardPodY(-1.25)
-                .strafePodX(-2);
+                .forwardPodY(2)
+                .strafePodX(2.4);
 
 
     public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);

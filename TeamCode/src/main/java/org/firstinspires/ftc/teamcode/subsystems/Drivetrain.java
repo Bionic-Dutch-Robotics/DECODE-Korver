@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import static org.firstinspires.ftc.teamcode.pedroPathing.Constants.followerConstants;
-import static org.firstinspires.ftc.teamcode.pedroPathing.Constants.startPose;
+import static org.firstinspires.ftc.teamcode.pedroPathing.Constants.redStartPose;
 
 import androidx.annotation.NonNull;
 //test
@@ -50,7 +50,7 @@ public class Drivetrain {
         headingPid = new
                 PIDFController(followerConstants.coefficientsHeadingPIDF);
 
-        position = new Pose(startingPose.getX(), startPose.getY(),
+        position = new Pose(startingPose.getX(), redStartPose.getY(),
                 startingPose.getHeading());
         velocity = new Vector();
 

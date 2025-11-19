@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 
 import java.util.function.Supplier;
 
-public class TestBenchBot {
+public class TestBenchBotBlue {
 
     public enum ShotPos {
         FAR,
@@ -33,14 +33,14 @@ public class TestBenchBot {
     double forwardPower, strafePower, turnPower;
     private boolean goTo;
     private Supplier<PathChain> pathChain;
-    public TestBenchBot(HardwareMap hwMap) {
+    public TestBenchBotBlue(HardwareMap hwMap) {
         fw = Constants.createFollower(hwMap);
         fw.setStartingPose(
-               Constants.redStartPose
+                Constants.blueStartPose
         );
 
         intake = new Intake(hwMap);
-        shooterCoefficients = new PIDFCoefficients(0.09, 0.0, 0.04, 0.0);
+        shooterCoefficients = new PIDFCoefficients(0.1, 0.0, 0.003, 0.0);
         shooter = new Shooter(hwMap, shooterCoefficients);
 
         fw.startTeleopDrive(true);
@@ -51,8 +51,8 @@ public class TestBenchBot {
         shotPos = ShotPos.FAR;
 
         pathChain = () -> fw.pathBuilder() //Lazy Curve Generation
-                .addPath(new Path(new BezierLine(fw::getPose, new Pose(72,72,Math.PI/2))))
-                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(fw::getHeading, Math.toRadians(135), 0.8))
+                .addPath(new Path(new BezierLine(fw::getPose, new Pose(72,72))))
+                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(fw::getHeading, Math.toRadians(45), 0.8))
                 .build();
 
         goTo = false;

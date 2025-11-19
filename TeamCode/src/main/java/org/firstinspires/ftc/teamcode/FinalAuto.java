@@ -22,7 +22,7 @@ public class FinalAuto extends OpMode {
     @Override
     public void start() {
         super.start();
-        bot.shooter.lob();
+        bot.shooter.midFieldShoot();
         timer.resetTimer();
         state = State.LAUNCH;
     }
@@ -57,7 +57,7 @@ public class FinalAuto extends OpMode {
             case READY:
                 if (timer.getElapsedTimeSeconds() < 2) {break;}
                 bot.intake.stop();
-                bot.shooter.lob();
+                bot.shooter.midFieldShoot();
                 timer.resetTimer();
                 state = State.LAUNCH;
                 break;

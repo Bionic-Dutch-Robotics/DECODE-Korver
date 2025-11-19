@@ -40,8 +40,12 @@ public class Shooter {
         shooter.setPower(0.43);
     }
 
-    public void lob() {
-        shooter.setVelocity(120, AngleUnit.DEGREES);
+    public void midFieldShoot() {
+        shooter.setVelocity(140, AngleUnit.DEGREES);
+    }
+
+    public void farShoot() {
+        shooter.setVelocity(180, AngleUnit.DEGREES);
     }
 
     public void transfer() {

@@ -129,7 +129,7 @@ public class BOTT {
         }
 
         if (runShooter) {
-            shooter.lob();
+            shooter.midFieldShoot();
             shotPos = ShotPos.FAR;
         }
         else if (gp.x) {

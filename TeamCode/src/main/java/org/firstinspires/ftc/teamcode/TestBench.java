@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
-@TeleOp(name="Test Bench")
+@TeleOp(name="Test Bench Red")
 public class TestBench extends OpMode {
     TestBenchBot bot;
 
@@ -20,7 +20,14 @@ public class TestBench extends OpMode {
         bot.intake(gamepad1);
         bot.shooter(gamepad1);
 
+        telemetry.addData("Bot X", bot.fw.getPose().getX());
+        telemetry.addData("Bot Y", bot.fw.getPose().getY());
+        telemetry.addData("Bot Theta", bot.fw.getPose().getHeading());
         telemetry.addData("Shooter Speed: ", bot.shooter.shooter.getVelocity(AngleUnit.DEGREES));
+        telemetry.addData("Shooter Boolean: ",
+                bot.shooter.shooter.getVelocity() > 140 && bot.shooter.shooter.getVelocity() < 160
+        );
+
         telemetry.update();
     }
 }
