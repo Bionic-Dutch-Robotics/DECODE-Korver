@@ -7,11 +7,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 @TeleOp(name="Test Bench Red")
 public class TestBench extends OpMode {
-    TestBenchBot bot;
+    TestBenchBotRed bot;
 
     @Override
     public void init() {
-        bot = new TestBenchBot(hardwareMap);
+        bot = new TestBenchBotRed(hardwareMap);
     }
 
     @Override

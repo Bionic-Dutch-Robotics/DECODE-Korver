@@ -1,27 +1,25 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import com.pedropathing.control.PIDFCoefficients;
-import com.pedropathing.control.PIDFController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit;
 
 public class Shooter {
     private PIDFCoefficients shooterCoefficients = null;
-    private PIDFController shooterPid = null;
     public DcMotorEx shooter = null;
     public Servo transfer = null;
     public Shooter (HardwareMap hwMap, PIDFCoefficients shooterCoefficients) {
         shooter = hwMap.get(DcMotorEx.class, "shooter");
         shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        shooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         transfer = hwMap.get(Servo.class, "push");
 
         this.shooterCoefficients = shooterCoefficients;
-        shooterPid = new PIDFController(shooterCoefficients);
+        shooter.setVelocityPIDFCoefficients(shooterCoefficients.p, shooterCoefficients.i, shooterCoefficients.d, shooterCoefficients.f);
 
     }
 
@@ -30,14 +28,14 @@ public class Shooter {
     }
 
     public void eject() {
-        shooter.setPower(-0.05);
+        shooter.setPower(-1.0);
     }
 
     public void stop() {
         shooter.setPower(0);
     }
     public void idle() {
-        shooter.setPower(0.43);
+        shooter.setPower(0.2);
     }
 
     public void midFieldShoot() {
@@ -45,7 +43,7 @@ public class Shooter {
     }
 
     public void farShoot() {
-        shooter.setVelocity(180, AngleUnit.DEGREES);
+        shooter.setVelocity(170, AngleUnit.DEGREES);
     }
 
     public void transfer() {

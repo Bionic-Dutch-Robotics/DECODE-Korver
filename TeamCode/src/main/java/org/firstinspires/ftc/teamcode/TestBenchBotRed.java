@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.pedropathing.control.PIDFCoefficients;
+import static org.firstinspires.ftc.teamcode.pedroPathing.Constants.shooterCoefficients;
+
+import com.bylazar.configurables.annotations.Configurable;
+import com.bylazar.configurables.annotations.IgnoreConfigurable;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
@@ -16,8 +19,10 @@ import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 
 import java.util.function.Supplier;
 
-public class TestBenchBot {
+@Configurable
+public class TestBenchBotRed {
 
+    @IgnoreConfigurable
     public enum ShotPos {
         FAR,
         CLOSE,
@@ -29,18 +34,19 @@ public class TestBenchBot {
     boolean runIntake;
     Shooter shooter;
     boolean runShooter;
-    private PIDFCoefficients shooterCoefficients;
     double forwardPower, strafePower, turnPower;
-    private boolean goTo;
-    private Supplier<PathChain> pathChain;
-    public TestBenchBot(HardwareMap hwMap) {
+    private boolean goToMidField;
+    private boolean goToFar;
+    private Supplier<PathChain> closePathChain;
+    private Supplier<PathChain> farPathChain;
+    public TestBenchBotRed(HardwareMap hwMap) {
         fw = Constants.createFollower(hwMap);
         fw.setStartingPose(
                Constants.redStartPose
         );
 
         intake = new Intake(hwMap);
-        shooterCoefficients = new PIDFCoefficients(0.09, 0.0, 0.04, 0.0);
+
         shooter = new Shooter(hwMap, shooterCoefficients);
 
         fw.startTeleopDrive(true);
@@ -50,18 +56,24 @@ public class TestBenchBot {
 
         shotPos = ShotPos.FAR;
 
-        pathChain = () -> fw.pathBuilder() //Lazy Curve Generation
+        closePathChain = () -> fw.pathBuilder() //Lazy Curve Generation
                 .addPath(new Path(new BezierLine(fw::getPose, new Pose(72,72,Math.PI/2))))
                 .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(fw::getHeading, Math.toRadians(135), 0.8))
                 .build();
 
-        goTo = false;
+        farPathChain = () -> fw.pathBuilder()
+                .addPath(new Path(new BezierLine(fw::getPose, Constants.farRedShoot)))
+                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(fw::getHeading, Constants.farRedShoot::getHeading, 0.8))
+                .build();
+
+        goToMidField = false;
+        goToFar = false;
     }
 
     public void drivetrain(Gamepad gp) {
         fw.update();
 
-        if (!goTo) {
+        if (!goToMidField) {
             forwardPower = -gp.left_stick_y;
             if (Math.abs(forwardPower) < 0.05) {
                 forwardPower = 0;
@@ -86,17 +98,37 @@ public class TestBenchBot {
             );
         }
 
+        if (goToMidField) {
+            shooter.midFieldShoot();
+        }
+        else if (goToFar) {
+            shooter.farShoot();
+        }
+
         if (gp.dpadUpWasPressed()) {
-            if (goTo) {
+            if (goToMidField) {
                 fw.breakFollowing();
                 fw.startTeleopDrive(true);
             }
             else {
-                fw.followPath(pathChain.get());
+                goToFar = false;
+                //fw.followPath(closePathChain.get());
             }
 
-            goTo = !goTo;
+            goToMidField = !goToMidField;
 
+        }
+        else if (gp.dpadDownWasPressed()) {
+            if (goToFar) {
+                fw.breakFollowing();
+                fw.startTeleopDrive(true);
+            }
+            else{
+                goToMidField = false;
+                //fw.followPath(farPathChain.get());
+            }
+
+            goToFar = !goToFar;
         }
     }
 

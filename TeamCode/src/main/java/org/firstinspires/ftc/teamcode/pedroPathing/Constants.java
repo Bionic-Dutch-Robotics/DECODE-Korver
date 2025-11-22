@@ -1,7 +1,8 @@
 package org.firstinspires.ftc.teamcode.pedroPathing;
 
+import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.control.FilteredPIDFCoefficients;
-import com.pedropathing.control.PIDFCoefficients;
+import com.pedropathing.control.*;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.follower.FollowerConstants;
 import com.pedropathing.ftc.FollowerBuilder;
@@ -15,18 +16,26 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
+@Configurable
 public class Constants {
-    public static final Pose blueStartPose = new Pose(69,5.5,Math.PI/2);
-    public static final Pose redStartPose = new Pose(85, 5.5, Math.PI/2);
+        public static final Pose blueStartPose = new Pose(69, 5.5, Math.PI / 2);
+        public static final Pose redStartPose = new Pose(85, 5.5, Math.PI / 2);
+        public static final Pose farRedShoot = new Pose(87, 16, 2.85);
+        public static final Pose farBlueShoot = new Pose(57, 20, -2.5);
+
+        public static final double closeShootPower = 230;
+        public static final double farShootPower = 295;
+        public static com.qualcomm.robotcore.hardware.PIDFCoefficients shooterCoefficients = new com.qualcomm.robotcore.hardware.PIDFCoefficients(0.4, 0.0, 0.00, 0.0);   //CHANGE THIS ONE;
 
 
 
-    
+
+
     public static FollowerConstants followerConstants = new FollowerConstants()
             .mass(8)
             .forwardZeroPowerAcceleration(-41.36529811151215)
             .lateralZeroPowerAcceleration(-53.76135527463098)
-            .translationalPIDFCoefficients(new PIDFCoefficients(
+            .translationalPIDFCoefficients(new com.pedropathing.control.PIDFCoefficients(
                     0.1,
                     0,
                     0.01,
