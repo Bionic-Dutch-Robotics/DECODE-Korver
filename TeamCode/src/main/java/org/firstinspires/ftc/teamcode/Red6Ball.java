@@ -14,6 +14,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.subsystems.Transfer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +33,7 @@ public class Red6Ball extends OpMode {
     private Shooter shooter;
     private Follower fw;
     private Intake intake;
+    private Transfer transfer;
     private HashMap<String, Path> paths;
     private PathChain pathChain;
     private double savedTime;
@@ -41,6 +43,7 @@ public class Red6Ball extends OpMode {
         shooter = new Shooter(hardwareMap, shooterCoefficients);
         fw = Constants.createFollower(hardwareMap);
         intake = new Intake(hardwareMap);
+        transfer = new Transfer(hardwareMap);
         autoState = AutoState.START;
 
         paths = new HashMap<>();
@@ -55,7 +58,7 @@ public class Red6Ball extends OpMode {
             case START:
                 fw.followPath(paths.get("goToFarShoot"));
 
-                shooter.transfer();
+                transfer.feed();
 
                 if (!fw.isBusy()) {
                     autoState = AutoState.SHOOT_POS;
@@ -75,11 +78,11 @@ public class Red6Ball extends OpMode {
 
             case TRANSFER:
                 intake.intake();
-                shooter.reload();
+                transfer.reload();
                 savedTime = time;
 
                 if (time - savedTime > 5) {
-                    shooter.transfer();
+                    transfer.feed();
                     intake.stop();
                     autoState = AutoState.ACCELERATE;
                 }

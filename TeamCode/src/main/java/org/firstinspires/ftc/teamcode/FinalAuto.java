@@ -51,7 +51,7 @@ public class FinalAuto extends OpMode {
             case NEXT:
                 if (timer.getElapsedTimeSeconds() < 2) {break;}
                 bot.intake.intake();
-                bot.shooter.reload();
+                bot.transfer.reload();
                 timer.resetTimer();
                 state = State.READY;
             case READY:
@@ -63,7 +63,7 @@ public class FinalAuto extends OpMode {
                 break;
             case LAUNCH:
                 if (timer.getElapsedTimeSeconds() < 3) {break;}
-                bot.shooter.transfer();
+                bot.transfer.feed();
                 shots += 1;
                 timer.resetTimer();
                 state = State.NEXT;

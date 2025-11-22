@@ -22,10 +22,11 @@ public class Constants {
         public static final Pose redStartPose = new Pose(85, 5.5, Math.PI / 2);
         public static final Pose farRedShoot = new Pose(87, 16, 2.85);
         public static final Pose farBlueShoot = new Pose(57, 20, -2.5);
-
-        public static final double closeShootPower = 230;
-        public static final double farShootPower = 295;
-        public static com.qualcomm.robotcore.hardware.PIDFCoefficients shooterCoefficients = new com.qualcomm.robotcore.hardware.PIDFCoefficients(0.4, 0.0, 0.00, 0.0);   //CHANGE THIS ONE;
+        public static final Pose redCloseShoot = new Pose(72,72,Math.toRadians(135));
+        public static final Pose blueCloseShoot = new Pose(72,72, Math.toRadians(-360+45));
+        public static final double closeShootPower = 230;   //Targets 230, really reaches 140
+        public static final double farShootPower = 295;     //Targets 295, really reaches 180
+        public static PIDFCoefficients shooterCoefficients = new PIDFCoefficients(0.005, 0,0.000011,0);   //SHOOTER PIDF
 
 
 

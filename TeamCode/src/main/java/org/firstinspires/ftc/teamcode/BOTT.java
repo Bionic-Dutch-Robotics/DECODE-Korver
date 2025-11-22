@@ -8,11 +8,12 @@ import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+import com.pedropathing.control.PIDFCoefficients;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.subsystems.Transfer;
 
 import java.util.function.Supplier;
 
@@ -25,6 +26,7 @@ public class BOTT {
     }
     public Follower fw;
     public Intake intake;
+    public Transfer transfer;
     public static ShotPos shotPos;
     boolean runIntake;
     Shooter shooter;
@@ -40,7 +42,8 @@ public class BOTT {
         );
 
         intake = new Intake(hwMap);
-        shooter = new Shooter(hwMap, shooterCoefficients);
+        shooter = new Shooter(hwMap, Constants.shooterCoefficients);
+        transfer = new Transfer(hwMap);
 
         fw.startTeleopDrive(true);
 
@@ -118,10 +121,10 @@ public class BOTT {
 
     public void shooter(Gamepad gp) {
         if (gp.dpad_up) {
-            shooter.reload();
+            transfer.reload();
         }
         else {
-            shooter.transfer();
+            transfer.feed();
         }
 
 
