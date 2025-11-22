@@ -1,5 +1,9 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.testbenches;
 
+import static org.firstinspires.ftc.teamcode.pedroPathing.Constants.shooterCoefficients;
+
+import com.bylazar.configurables.annotations.Configurable;
+import com.bylazar.configurables.annotations.IgnoreConfigurable;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
@@ -8,7 +12,6 @@ import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.pedropathing.control.PIDFCoefficients;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
@@ -17,8 +20,10 @@ import org.firstinspires.ftc.teamcode.subsystems.Transfer;
 
 import java.util.function.Supplier;
 
-public class TestBenchBotBlue {
+@Configurable
+public class TestBenchBotRed {
 
+    @IgnoreConfigurable
     public enum ShotPos {
         FAR,
         CLOSE,
@@ -31,19 +36,20 @@ public class TestBenchBotBlue {
     boolean runIntake;
     Shooter shooter;
     boolean runShooter;
-    private PIDFCoefficients shooterCoefficients;
     double forwardPower, strafePower, turnPower;
-    private boolean goTo;
-    private Supplier<PathChain> pathChain;
-    public TestBenchBotBlue(HardwareMap hwMap) {
+    private boolean goToMidField;
+    private boolean goToFar;
+    private Supplier<PathChain> closePathChain;
+    private Supplier<PathChain> farPathChain;
+    public TestBenchBotRed(HardwareMap hwMap) {
         fw = Constants.createFollower(hwMap);
         fw.setStartingPose(
-                Constants.blueStartPose
+               Constants.redStartPose
         );
 
         intake = new Intake(hwMap);
+
         shooter = new Shooter(hwMap, shooterCoefficients);
-        transfer = new Transfer(hwMap);
 
         fw.startTeleopDrive(true);
 
@@ -52,18 +58,24 @@ public class TestBenchBotBlue {
 
         shotPos = ShotPos.FAR;
 
-        pathChain = () -> fw.pathBuilder() //Lazy Curve Generation
-                .addPath(new Path(new BezierLine(fw::getPose, new Pose(72,72))))
-                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(fw::getHeading, Math.toRadians(45), 0.8))
+        closePathChain = () -> fw.pathBuilder() //Lazy Curve Generation
+                .addPath(new Path(new BezierLine(fw::getPose, new Pose(72,72,Math.PI/2))))
+                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(fw::getHeading, Math.toRadians(135), 0.8))
                 .build();
 
-        goTo = false;
+        farPathChain = () -> fw.pathBuilder()
+                .addPath(new Path(new BezierLine(fw::getPose, Constants.farRedShoot)))
+                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(fw::getHeading, Constants.farRedShoot::getHeading, 0.8))
+                .build();
+
+        goToMidField = false;
+        goToFar = false;
     }
 
     public void drivetrain(Gamepad gp) {
         fw.update();
 
-        if (!goTo) {
+        if (!goToMidField) {
             forwardPower = -gp.left_stick_y;
             if (Math.abs(forwardPower) < 0.05) {
                 forwardPower = 0;
@@ -88,17 +100,37 @@ public class TestBenchBotBlue {
             );
         }
 
+        if (goToMidField) {
+            shooter.midFieldShoot();
+        }
+        else if (goToFar) {
+            shooter.farShoot();
+        }
+
         if (gp.dpadUpWasPressed()) {
-            if (goTo) {
+            if (goToMidField) {
                 fw.breakFollowing();
                 fw.startTeleopDrive(true);
             }
             else {
-                fw.followPath(pathChain.get());
+                goToFar = false;
+                //fw.followPath(closePathChain.get());
             }
 
-            goTo = !goTo;
+            goToMidField = !goToMidField;
 
+        }
+        else if (gp.dpadDownWasPressed()) {
+            if (goToFar) {
+                fw.breakFollowing();
+                fw.startTeleopDrive(true);
+            }
+            else{
+                goToMidField = false;
+                //fw.followPath(farPathChain.get());
+            }
+
+            goToFar = !goToFar;
         }
     }
 
