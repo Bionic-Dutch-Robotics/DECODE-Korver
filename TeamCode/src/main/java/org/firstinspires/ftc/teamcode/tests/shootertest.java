@@ -6,6 +6,7 @@ import com.pedropathing.control.PIDFController;
 import com.pedropathing.math.MathFunctions;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -25,6 +26,7 @@ public class shootertest extends OpMode {
         //shooter = new Shooter(hardwareMap, Constants.shooterCoefficients);
         shooter = hardwareMap.get(DcMotorEx.class, "shooter");
         shooterPidf = new PIDFController(pidfCoefficients);
+        shooter.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         //shooter.setVelocityPIDFCoefficients(Constants.shooterCoefficients.p, Constants.shooterCoefficients.i, Constants.shooterCoefficients.d, Constants.shooterCoefficients.f);
         shooterTarget = 295;    //230 TARGET SPEED = 140 ACTUAL SPEED   //295 TARGET SPEED = 180 ACTUAL SPEED
     }
@@ -33,7 +35,8 @@ public class shootertest extends OpMode {
     public void loop() {
         shooterPidf.updatePosition(shooter.getVelocity(AngleUnit.DEGREES));
         shooterPidf.setTargetPosition(shooterTarget);
-        shooter.setPower(MathFunctions.clamp(shooterPidf.run(), -1, 1));
+        //shooter.setPower(MathFunctions.clamp(shooterPidf.run(), -1, 1));
+        shooter.setPower(1);
         telemetry.addData("Shooter Speed: ", shooter.getVelocity(AngleUnit.DEGREES));
         telemetry.addData("Shooter Power: ", shooter.getPower());
         telemetry.addData("Shooter Pos: ", shooter.getCurrentPosition());

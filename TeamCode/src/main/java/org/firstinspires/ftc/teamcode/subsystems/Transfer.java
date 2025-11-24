@@ -14,6 +14,6 @@ public class Transfer {
         transfer.setPosition(1);
     }
     public void feed() {
-        transfer.setPosition(0.845);
+        transfer.setPosition(0.85);
     }
 }

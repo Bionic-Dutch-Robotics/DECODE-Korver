@@ -17,12 +17,13 @@ public class Shooter {
     public Shooter (HardwareMap hwMap, PIDFCoefficients shooterCoefficients) {
         shooter = hwMap.get(DcMotorEx.class, "shooter");
         shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        shooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        shooter.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        shooter.setVelocityPIDFCoefficients(shooterCoefficients.P, shooterCoefficients.I, shooterCoefficients.D, shooterCoefficients.F);
         shooterPidf = new PIDFController(shooterCoefficients);
     }
 
     public void eject() {
-        shooter.setPower(-1.0);
+        shooter.setPower(-0.1);
     }
 
     public void stop() {

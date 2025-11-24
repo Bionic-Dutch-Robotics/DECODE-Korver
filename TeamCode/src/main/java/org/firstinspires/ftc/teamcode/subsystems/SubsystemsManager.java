@@ -20,9 +20,10 @@ public class SubsystemsManager {
     public Intake intake;
     public Shooter shooter;
     public Transfer transfer;
-    private AllianceColor allianceColor;
+    public AllianceColor allianceColor;
 
-    private boolean runIntake, runShooter;
+    public IntakeState intakeState;
+    public static ShooterState shooterState;
     private boolean goToMidField, goToFar;
     private Pose gpThreshold;
     private Supplier<PathChain> closeShootPath, farShootPath;
@@ -53,14 +54,16 @@ public class SubsystemsManager {
                 .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(fw::getHeading, allianceIsRed() ? Constants.farRedShoot.getHeading() : Constants.farBlueShoot.getHeading(), 0.8))
                 .build();
 
-        runIntake = false;
-        runShooter = false;
+        intakeState = IntakeState.STOP;
+        shooterState = ShooterState.STOP;
     }
 
     public void start() {
         fw.startTeleopDrive(true);
     }
     public void drivetrain(Gamepad gp) {
+        fw.update();
+
         double forward = -gp.left_stick_y;
         double strafe = -gp.left_stick_x;
         double turn = -gp.right_stick_x;
@@ -72,20 +75,105 @@ public class SubsystemsManager {
                 true
         );
 
-        if (gp.a) {
+        if(goToMidField) {
+            fw.followPath(closeShootPath.get());
+        }
+
+        if (goToFar) {
+            fw.followPath(farShootPath.get());
+        }
+
+        if (gp.aWasPressed()) {
             goToMidField = !goToMidField;
             goToFar = false;
 
-            fw.followPath(closeShootPath.get());
+            if (goToMidField) {
+                fw.followPath(closeShootPath.get());
+                shooterState = ShooterState.CLOSE;
+            } else {
+                fw.breakFollowing();
+                fw.startTeleopDrive(true);
+            }
+
+        }
+        else if (gp.bWasPressed()) {
+            goToFar = !goToFar;
+            goToMidField = false;
+
+            if (goToFar) {
+                fw.followPath(farShootPath.get());
+                shooterState = ShooterState.FAR;
+            }
+            else {
+                fw.breakFollowing();
+                fw.startTeleopDrive(true);
+            }
         }
     }
 
     public void shooter(Gamepad gp) {
+        if (gp.yWasPressed()) {
+            shooterState = ShooterState.CLOSE;
+        }
+        else if (gp.bWasPressed()) {
+            shooterState = ShooterState.FAR;
+        }
+        else if (gp.xWasPressed()) {
+            shooterState = ShooterState.EJECT;
+        }
+        else if (gp.aWasPressed()) {
+            shooterState = ShooterState.IDLE;
+        }
 
+        if (shooterState == ShooterState.CLOSE)         shooter.midFieldShoot();
+        else if (shooterState == ShooterState.FAR)      shooter.farShoot();
+        else if (shooterState == ShooterState.EJECT)    shooter.eject();
+        else shooter.idle();
+    }
+
+    public void intake(Gamepad gp) {
+        if (gp.dpadUpWasPressed()) {
+            intakeState = IntakeState.FEED;
+        }
+        else if (gp.dpadDownWasPressed()) {
+            intakeState = IntakeState.EJECT;
+        }
+        else if (gp.dpadLeftWasPressed()) {
+            intakeState = IntakeState.STOP;
+        }
+
+        if (intakeState == IntakeState.FEED) {
+            intake.intake();
+        }
+        else if (intakeState == IntakeState.EJECT) {
+            intake.eject();
+        }
+        else {
+            intake.stop();
+        }
+    }
+
+    public void transfer(Gamepad gp) {
+        if (gp.dpad_up) {
+            transfer.reload();
+        }
+        else    transfer.feed();
+    }
+
+    public void emergencyResets(Gamepad gp) {
+        if (gp.startWasPressed()) {
+            fw.setPose(allianceIsRed() ? Constants.redStartPose : Constants.blueStartPose);
+        }
     }
 
     public enum AllianceColor {
         BLUE, RED
+    }
+    public enum ShooterState {
+        STOP, IDLE, CLOSE, FAR, EJECT;
+    }
+    public enum IntakeState {
+        STOP, EJECT, FEED
     }
 
     private boolean allianceIsRed() {
