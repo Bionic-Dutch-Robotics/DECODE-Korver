@@ -40,9 +40,12 @@ public class Shooter {
     public void farShoot() {
         update(Constants.farShootPower);
     }
-    private void update(double targetVelocity) {
+    public void update(double targetVelocity) {
         shooterPidf.updatePosition(shooter.getVelocity(AngleUnit.DEGREES));
         shooterPidf.setTargetPosition(targetVelocity);
         shooter.setPower(MathFunctions.clamp(shooterPidf.run(), -1, 1));
+    }
+    public double getTarget() {
+        return shooterPidf.getTargetPosition();
     }
 }

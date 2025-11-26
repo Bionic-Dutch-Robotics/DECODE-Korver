@@ -19,7 +19,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 @Configurable
 public class Constants {
         public static final Pose blueStartPose = new Pose(69, 5.5, Math.PI / 2);
-        public static final Pose redStartPose = new Pose(85, 5.5, Math.PI / 2);
+        public static final Pose redStartPose = new Pose(85, 5.5, Math.toRadians(90));
         public static final Pose farRedShoot = new Pose(87, 16, 2.7);
         public static final Pose farBlueShoot = new Pose(57, 20, -2.75);
         public static final Pose redCloseShoot = new Pose(72,72,Math.toRadians(135));
