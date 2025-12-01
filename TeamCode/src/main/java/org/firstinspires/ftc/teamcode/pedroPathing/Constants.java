@@ -26,7 +26,8 @@ public class Constants {
         public static final Pose blueCloseShoot = new Pose(72,72, Math.toRadians(-135));
         public static final double closeShootPower = 250;   //Targets 230, really reaches 140
         public static final double farShootPower = 300;     //Targets 295, really reaches 180
-        public static PIDFCoefficients shooterCoefficients = new PIDFCoefficients(0.005, 0,0.000011,0);   //SHOOTER PIDF
+        public static final PIDFCoefficients shooterCoefficients = new PIDFCoefficients(0.005, 0,0.000011,0);   //SHOOTER PIDF
+        public static Pose teleOpStartPose = new Pose();
 
 
 

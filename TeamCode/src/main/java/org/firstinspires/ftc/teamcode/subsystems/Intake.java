@@ -36,4 +36,7 @@ public class Intake {
     public void stop() {
         spinner.setPower(0);
     }
+    public void custom(double speed) {
+        spinner.setPower(speed);
+    }
 }
