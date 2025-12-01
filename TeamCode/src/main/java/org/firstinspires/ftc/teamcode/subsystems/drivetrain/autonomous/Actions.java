@@ -20,10 +20,10 @@ import java.util.Objects;
 
 @Configurable
 public class Actions {
-    public static final Pose redRow1Target = new Pose(130, 35, 0);
+    public static final Pose redRow1Target = new Pose(110, 35, 0);
     public static final Pose redRow1Control = new Pose(90, 37);
     public static final Pose redRow2Control = new Pose(70,63.5);
-    public static final Pose redRow2Target = new Pose(130,60, 0);
+    public static final Pose redRow2Target = new Pose(110,60, 0);
     public static final Pose redExitTriangle = new Pose(96, 72, Math.toRadians(90));
     public final Path shoot1, goToLever;
 
@@ -70,7 +70,8 @@ public class Actions {
 
         Objects.requireNonNull(redIntakePaths.get("Intake1")).get(0).setLinearHeadingInterpolation(
                 this.allianceColor.isRed() ? Constants.farRedShoot.getHeading() : Constants.farBlueShoot.getHeading(),
-                this.allianceColor.isRed() ? redRow1Target.getHeading() : redRow1Target.mirror().getHeading()
+                this.allianceColor.isRed() ? redRow1Target.getHeading() : redRow1Target.mirror().getHeading(),
+                0.5
         );
 
 
@@ -78,14 +79,10 @@ public class Actions {
                 Objects.requireNonNull(redIntakePaths.get("Intake1")).get(0).getReversed()
         );
 
-        Objects.requireNonNull(redIntakePaths.get("Intake1")).get(0).setLinearHeadingInterpolation(
-                this.allianceColor.isRed() ? redRow1Target.getHeading() : redRow1Target.mirror().getHeading(),
-                this.allianceColor.isRed() ? Constants.farRedShoot.getHeading() : Constants.farBlueShoot.getHeading()
-        );
-
         Objects.requireNonNull(redIntakePaths.get("Intake1")).get(1).setLinearHeadingInterpolation(
+                this.allianceColor.isRed() ? redRow1Target.getHeading() : redRow1Target.mirror().getHeading(),
                 this.allianceColor.isRed() ? Constants.farRedShoot.getHeading() : Constants.farBlueShoot.getHeading(),
-                this.allianceColor.isRed() ? redRow1Target.getHeading() : redRow1Target.mirror().getHeading()
+                0.8
         );
 
         return new PathChain(Objects.requireNonNull(redIntakePaths.get("Intake1")));
