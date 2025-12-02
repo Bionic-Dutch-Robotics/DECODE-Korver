@@ -170,7 +170,7 @@ public class SubsystemsManager {
         BLUE, RED
     }
     public enum ShooterState {
-        STOP, IDLE, CLOSE, FAR, EJECT;
+        STOP, IDLE, CLOSE, FAR, EJECT
     }
     public enum IntakeState {
         STOP, EJECT, FEED

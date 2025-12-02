@@ -72,8 +72,10 @@ public class meet3RedAuto extends OpMode {
                     telemetry.addData("Shoot #", i);
                     this.shoot();
                 }
+
                 intakeIndex += 1;
                 telemetry.addData("Intake Target: ", intakeIndex);
+
                 if (intakeIndex == 1)   autoState = AutoState.INTAKE1;
                 if (intakeIndex == 2)   autoState = AutoState.INTAKE2;
                 if (intakeIndex == 3)   autoState = AutoState.PREPARE_TO_EMPTY_CLASSIFIER;
@@ -132,10 +134,18 @@ public class meet3RedAuto extends OpMode {
             savedTime = time.time(TimeUnit.SECONDS);
             transfer.reload();
             intake.intake();
-            if (time.time(TimeUnit.SECONDS) - savedTime >= 0.25) {
-                transfer.feed();
-                intake.custom(0.2);
-            }
+
+            waitForShoot(savedTime);
+        }
+    }
+
+    public void waitForShoot(double startTime) {
+        if (time.time(TimeUnit.SECONDS) - startTime > 0.25) {
+            transfer.feed();
+            intake.custom(0.2);
+        }
+        else {
+            this.waitForShoot(startTime);
         }
     }
 
