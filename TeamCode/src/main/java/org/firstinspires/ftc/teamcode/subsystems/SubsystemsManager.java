@@ -64,23 +64,17 @@ public class SubsystemsManager {
     public void drivetrain(Gamepad gp) {
         fw.update();
 
-        double forward = -gp.left_stick_y;
-        double strafe = -gp.left_stick_x;
-        double turn = -gp.right_stick_x;
+        if (!goToMidField && !goToFar) {
+            double forward = -gp.left_stick_y;
+            double strafe = -gp.left_stick_x;
+            double turn = -gp.right_stick_x;
 
-        fw.setTeleOpDrive(
-                forward != gpThreshold.getY() ? forward : 0,
-                strafe != gpThreshold.getX() ? strafe : 0,
-                turn != gpThreshold.getHeading() ? turn : 0,
-                true
-        );
-
-        if(goToMidField) {
-            fw.followPath(closeShootPath.get());
-        }
-
-        if (goToFar) {
-            fw.followPath(farShootPath.get());
+            fw.setTeleOpDrive(
+                    forward != gpThreshold.getY() ? forward : 0,
+                    strafe != gpThreshold.getX() ? strafe : 0,
+                    turn != gpThreshold.getHeading() ? turn : 0,
+                    true
+            );
         }
 
         if (gp.aWasPressed()) {
@@ -88,6 +82,7 @@ public class SubsystemsManager {
             goToFar = false;
 
             if (goToMidField) {
+                fw.breakFollowing();
                 fw.followPath(closeShootPath.get());
                 shooterState = ShooterState.CLOSE;
             } else {
@@ -101,6 +96,7 @@ public class SubsystemsManager {
             goToMidField = false;
 
             if (goToFar) {
+                fw.breakFollowing();
                 fw.followPath(farShootPath.get());
                 shooterState = ShooterState.FAR;
             }

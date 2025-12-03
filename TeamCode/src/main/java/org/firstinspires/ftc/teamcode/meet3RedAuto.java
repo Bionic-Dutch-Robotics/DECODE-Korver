@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
 
 @Autonomous(name="Meet 3 Red")
 public class meet3RedAuto extends OpMode {
-    public static final Actions paths = new Actions(AllianceColor.Selection.BLUE);
+    public static final Actions paths = new Actions(AllianceColor.Selection.RED);
     private static FieldManager panelsField;
     private static Follower follower;
     private static Shooter shooter;

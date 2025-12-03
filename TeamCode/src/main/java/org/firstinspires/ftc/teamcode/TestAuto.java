@@ -1,15 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.bylazar.field.FieldManager;
-import com.bylazar.field.Style;
-import com.bylazar.telemetry.PanelsTelemetry;
-import com.bylazar.telemetry.TelemetryManager;
-import com.bylazar.field.PanelsField;
 import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.BezierLine;
-import com.pedropathing.geometry.Pose;
-import com.pedropathing.math.Vector;
-import com.pedropathing.paths.callbacks.PathCallback;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -24,8 +15,8 @@ import org.firstinspires.ftc.teamcode.util.AllianceColor;
 
 import java.util.concurrent.TimeUnit;
 
-@Autonomous(name="AutoMeh")
-public class Automeh extends OpMode {
+@Autonomous(name="TEST")
+public class TestAuto extends OpMode {
     public static final Actions paths = new Actions(AllianceColor.Selection.RED);
     private static Follower follower;
     private static Shooter shooter;

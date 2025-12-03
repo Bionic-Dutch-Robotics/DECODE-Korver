@@ -18,14 +18,14 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 @Configurable
 public class Constants {
-        public static final Pose blueStartPose = new Pose(69, 5.5, Math.PI / 2);
+        public static final Pose blueStartPose = new Pose(64, 8, Math.toRadians(90));
         public static final Pose redStartPose = new Pose(80, 8, Math.toRadians(90));
-        public static final Pose farRedShoot = new Pose(87, 16, 2.7);
-        public static final Pose farBlueShoot = new Pose(57, 20, -2.75);
+        public static final Pose farRedShoot = new Pose(86, 16, 2.76);
+        public static final Pose farBlueShoot = new Pose(67, 20, -2.75);
         public static final Pose redCloseShoot = new Pose(72,72,Math.toRadians(135));
         public static final Pose blueCloseShoot = new Pose(72,72, Math.toRadians(-135));
-        public static final double closeShootPower = 250;   //Targets 230, really reaches 140
-        public static final double farShootPower = 300;     //Targets 295, really reaches 180
+        public static final double closeShootPower = 218;   //Targets 230, really reaches 140
+        public static final double farShootPower = 270;     //Targets 295, really reaches 180
         public static final PIDFCoefficients shooterCoefficients = new PIDFCoefficients(0.005, 0,0.000011,0);   //SHOOTER PIDF
         public static Pose teleOpStartPose = new Pose();
 
@@ -38,10 +38,10 @@ public class Constants {
             .forwardZeroPowerAcceleration(-34.53919833757035)
             .lateralZeroPowerAcceleration(-60.56271797569653)
             .translationalPIDFCoefficients(new com.pedropathing.control.PIDFCoefficients(
-                    0.1,
+                    0.115,
                     0,
                     0.01,
-                    0
+                    0.02
             ))
             .translationalPIDFSwitch(4)
             .drivePIDFCoefficients(new FilteredPIDFCoefficients(
@@ -112,7 +112,7 @@ public class Constants {
                 .strafePodX(2.4);
 
 
-    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
+    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1.4, 1);
 
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)

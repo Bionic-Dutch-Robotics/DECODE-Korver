@@ -21,13 +21,13 @@ public class Meet3MessyAuto extends OpMode {
     private static Shooter shooter;
     private static Transfer transfer;
     private static Intake intake;
-    public static Automeh.AutoState autoState;
+    public static TestAuto.AutoState autoState;
     public static double savedTime;
     public static ElapsedTime time;
     public static int intakeIndex;
     @Override
     public void init() {
-        autoState = Automeh.AutoState.SHOOT;
+        autoState = TestAuto.AutoState.SHOOT;
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(
                 Constants.redStartPose
@@ -47,7 +47,7 @@ public class Meet3MessyAuto extends OpMode {
             savedTime = time.time(TimeUnit.SECONDS);
             follower.followPath(paths.shoot1);
 
-            if (!follower.isBusy() || time.time(TimeUnit.SECONDS) - savedTime >= 0.5) {
+            if (!follower.isBusy()) {
                 intakeIndex++;
             }
         }
@@ -55,7 +55,7 @@ public class Meet3MessyAuto extends OpMode {
             savedTime = time.time(TimeUnit.SECONDS);
             follower.followPath(paths.redIntakeRow1);
 
-            if (time.time(TimeUnit.SECONDS) - savedTime >= 1.5) {
+            if (follower.isBusy()) {
                 intakeIndex++;
             }
         }
