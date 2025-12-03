@@ -35,10 +35,12 @@ public class meet3RedAuto extends OpMode {
     public static double savedTime;
     public static ElapsedTime time;
     public static int intakeIndex;
+    private boolean shotComplete = false; //Mohit
 
     @Override
     public void init() {
         autoState = AutoState.SHOOT;
+        shotComplete = false;
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(
                 paths.getAlliance() == AllianceColor.Selection.RED ? Constants.redStartPose : Constants.blueStartPose
@@ -62,15 +64,22 @@ public class meet3RedAuto extends OpMode {
         follower.followPath(paths.shoot1);
     }
 
+
     @Override
     public void loop() {
+
         follower.update();
         switch (autoState) {
             case SHOOT:
                 telemetry.addLine("SHOOT");
+
                 for (int i = 0; i < 3; i++) {
                     telemetry.addData("Shoot #", i);
-                    this.shoot();
+                    //Mohit
+                    shotComplete = false;
+                    while (!shotComplete) { //loop until a shot is complete
+                        this.shoot();
+                    }
                 }
 
                 intakeIndex += 1;
@@ -131,11 +140,20 @@ public class meet3RedAuto extends OpMode {
     public void shoot() {
         shooter.farShoot();
         if (!follower.isBusy() && shooter.shooter.getVelocity(AngleUnit.DEGREES) == shooter.getTarget()) {
-            savedTime = time.time(TimeUnit.SECONDS);
+            //savedTime = time.time(TimeUnit.SECONDS); //Rekha
+
             transfer.reload();
             intake.intake();
-
-            waitForShoot(savedTime);
+            //rekha
+            //if (time.time(TimeUnit.SECONDS) - startTime > 0.25) //Rekha
+            if (time.seconds()> 0.25) {
+                transfer.feed();
+                intake.custom(0.2);
+                telemetry.addLine("Shot Released");
+                shotComplete = true; //Mohit
+                time.reset(); //MOHIT
+            } //end Rekha
+            //waitForShoot(savedTime);
         }
     }
 
