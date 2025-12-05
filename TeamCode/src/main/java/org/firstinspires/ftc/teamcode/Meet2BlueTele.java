@@ -35,6 +35,8 @@ public class Meet2BlueTele extends OpMode {
         telemetry.update();
         telemetry.addData("Shooter:", SubsystemsManager.shooterState.name());
         telemetry.addData("hEADING: ", subsystems.fw.getHeading());
+        telemetry.addData("Bot X: ", subsystems.fw.getPose().getX());
+        telemetry.addData("Bot Y: ", subsystems.fw.getPose().getY());
         subsystems.drivetrain(gamepad1);
         subsystems.intake(gamepad2);
         subsystems.shooter(gamepad2);

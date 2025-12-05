@@ -5,12 +5,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class Transfer {
     public Servo transfer = null;
-    public enum ServoState {
-        IDLE,
-        OPEN,
-        CLOSED
-    }
-    public ServoState state;
 
     public Transfer(HardwareMap hwMap) {
 
@@ -19,7 +13,6 @@ public class Transfer {
 
     public void reload() {
         transfer.setPosition(1);
-        state = ServoState.OPEN;
     }
 
     public void feed() {

@@ -32,7 +32,9 @@ public class SubsystemsManager {
         this.allianceColor = allianceColor;
 
         fw = Constants.createFollower(hwMap);
-        fw.setStartingPose(Constants.redStartPose);
+        fw.setStartingPose(
+                Constants.teleOpStartPose == null ? (allianceIsRed() ? Constants.redStartPose: Constants.blueStartPose) : Constants.teleOpStartPose
+        );
 
         intake = new Intake(hwMap);
         shooter = new Shooter(hwMap, Constants.shooterCoefficients);

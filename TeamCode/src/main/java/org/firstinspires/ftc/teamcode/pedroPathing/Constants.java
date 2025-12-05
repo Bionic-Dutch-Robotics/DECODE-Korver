@@ -24,10 +24,10 @@ public class Constants {
         public static final Pose farBlueShoot = new Pose(67, 20, -2.75);
         public static final Pose redCloseShoot = new Pose(72,72,Math.toRadians(135));
         public static final Pose blueCloseShoot = new Pose(72,72, Math.toRadians(-135));
-        public static final double closeShootPower = 218;   //Targets 230, really reaches 140
-        public static final double farShootPower = 270;     //Targets 295, really reaches 180
+        public static final double closeShootPower = 210;   //Targets 230, really reaches 140
+        public static final double farShootPower = 247;     //Targets 295, really reaches 180
         public static final PIDFCoefficients shooterCoefficients = new PIDFCoefficients(0.005, 0,0.000011,0);   //SHOOTER PIDF
-        public static Pose teleOpStartPose = new Pose();
+        public static Pose teleOpStartPose = null;
 
 
 
@@ -45,7 +45,7 @@ public class Constants {
             ))
             .translationalPIDFSwitch(4)
             .drivePIDFCoefficients(new FilteredPIDFCoefficients(
-                    0.1,
+                    0.09,
                     0,
                     0.01,
                     0,

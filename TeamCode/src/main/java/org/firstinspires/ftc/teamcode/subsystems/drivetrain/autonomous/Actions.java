@@ -20,15 +20,17 @@ import java.util.Objects;
 
 @Configurable
 public class Actions {
-    public static final Pose redRow1Target = new Pose(110, 29, 0);
+    public static final Pose redRow1Target = new Pose(112, 33, 0);
     public static final Pose redRow1Control = new Pose(70, 31);
     public static final Pose redRow2Control = new Pose(70,56.5);
     public static final Pose redRow2Target = new Pose(110,55, 0);
+    public static final Pose redRow3Control = new Pose(70, 76);
+    public static final Pose redRow3Target = new Pose(105,80, 0);
     public static final Pose redExitTriangle = new Pose(96, 72, Math.toRadians(90));
     public final Path shoot1, goToLever;
 
     private final AllianceColor allianceColor;
-    public final PathChain redIntakeRow1, redIntakeRow2;
+    public final PathChain redIntakeRow1, redIntakeRow2, redIntakeRow3;
 
 
     public Actions(Selection allianceColor) {
@@ -56,6 +58,7 @@ public class Actions {
         HashMap<String, ArrayList<Path>> redIntakePaths = new HashMap<>();
         redIntakeRow1 = this.initIntake1(redIntakePaths);
         redIntakeRow2 = this.initIntake2(redIntakePaths);
+        redIntakeRow3 = this.initIntake3(redIntakePaths);
     }
 
     public PathChain initIntake1(HashMap<String, ArrayList<Path>> redIntakePaths) {
@@ -100,7 +103,8 @@ public class Actions {
 
         Objects.requireNonNull(redIntakePaths.get("Intake2")).get(0).setLinearHeadingInterpolation(
                 this.allianceColor.isRed() ? Constants.farRedShoot.getHeading() : Constants.farBlueShoot.getHeading(),
-                this.allianceColor.isRed() ? redRow2Target.getHeading() : redRow2Target.mirror().getHeading()
+                this.allianceColor.isRed() ? redRow2Target.getHeading() : redRow2Target.mirror().getHeading(),
+                0.5
         );
 
 
@@ -113,6 +117,35 @@ public class Actions {
         );
 
         return new PathChain(Objects.requireNonNull(redIntakePaths.get("Intake2")));
+    }
+
+    public PathChain initIntake3(HashMap<String, ArrayList<Path>> redIntakePaths) {
+        redIntakePaths.put("Intake3", new ArrayList<>());
+        Objects.requireNonNull(redIntakePaths.get("Intake3")).add(
+                new Path(new BezierCurve(
+                        this.allianceColor.isRed() ? Constants.farRedShoot : Constants.farBlueShoot,
+                        this.allianceColor.isRed() ? redRow3Control : redRow3Control.mirror(),
+                        this.allianceColor.isRed() ? redRow3Target : redRow3Target.mirror()
+                ))
+        );
+
+        Objects.requireNonNull(redIntakePaths.get("Intake3")).get(0).setLinearHeadingInterpolation(
+                this.allianceColor.isRed() ? Constants.farRedShoot.getHeading() : Constants.farBlueShoot.getHeading(),
+                this.allianceColor.isRed() ? redRow3Target.getHeading() : redRow3Target.mirror().getHeading(),
+                0.5
+        );
+
+        Objects.requireNonNull(redIntakePaths.get("Intake3")).add(
+                Objects.requireNonNull(redIntakePaths.get("Intake3")).get(0).getReversed()
+        );
+
+        Objects.requireNonNull(redIntakePaths.get("Intake3")).get(1).setLinearHeadingInterpolation(
+                this.allianceColor.isRed() ? redRow3Target.getHeading() : redRow3Target.mirror().getHeading(),
+                this.allianceColor.isRed() ? Constants.farRedShoot.getHeading() : Constants.farBlueShoot.getHeading(),
+                0.8
+        );
+
+        return new PathChain(Objects.requireNonNull(redIntakePaths.get("Intake3")));
     }
 
     public Selection getAlliance() {

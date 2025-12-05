@@ -4,6 +4,7 @@ import com.pedropathing.follower.Follower;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
@@ -61,7 +62,8 @@ public class ShooterManualTest extends OpMode {
         telemetry.addData("Distance: ", Math.sqrt(
                 Math.pow(144-follower.getPose().getX(), 2) + Math.pow(144-follower.getPose().getY(), 2)
         ));
-        telemetry.addData("Shooter Power: ", shooter.getTarget());
+        telemetry.addData("Shooter Velocity: ", shooter.shooter.getVelocity(AngleUnit.DEGREES));
+        telemetry.addData("Shooter Target: ", shooter.getTarget());
         telemetry.update();
     }
 }
