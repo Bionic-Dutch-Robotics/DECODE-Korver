@@ -81,7 +81,7 @@ public class shootertest extends OpMode {
         }
         else {
             headingPid.updatePosition(follower.getHeading());
-            headingPid.setTargetPosition(getRedTargetHeading(144-follower.getPose().getX(), 144-follower.getPose().getY()));
+            headingPid.setTargetPosition(getRedTargetHeading(144-follower.getPose().getX(), 146-follower.getPose().getY()));
             follower.setTeleOpDrive(
                     -gamepad1.left_stick_y,
                     -gamepad1.left_stick_x,
@@ -105,18 +105,18 @@ public class shootertest extends OpMode {
         telemetry.addData("bot X", follower.getPose().getX());
         telemetry.addData("bot Y: ", follower.getPose().getY());
         telemetry.addData("bot Heading: ", follower.getHeading());
-        telemetry.addData("Target Velocity: ", this.getRegressionVelocity(
-                this.getDistance(144-follower.getPose().getX(), 144-follower.getPose().getY())));
+        telemetry.addData("Target Velocity: ", getRegressionVelocity(
+                getDistance(144-follower.getPose().getX(), 144-follower.getPose().getY())));
         telemetry.update();
     }
 
-    public double getRegressionVelocity (double distance) {
-        return 0.000616291 * Math.pow(distance, 2) + 2.0547 * distance;
+    public static double getRegressionVelocity (double distance) {
+        return -0.00945954 * Math.pow(distance, 2) + 3.34859 * distance - 24.22496;
     }
-    public double getDistance(double x, double y) {
+    public static double getDistance(double x, double y) {
         return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
     }
-    public double getRedTargetHeading(double x, double y) {
+    public static double getRedTargetHeading(double x, double y) {
         return Math.atan2(y,x)+Math.toRadians(90);
     }
 }

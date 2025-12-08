@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import static org.firstinspires.ftc.teamcode.pedroPathing.Constants.follower;
+
 import com.pedropathing.follower.Follower;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -12,13 +14,13 @@ import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.Transfer;
 import org.firstinspires.ftc.teamcode.subsystems.drivetrain.autonomous.Actions;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
+import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import java.util.concurrent.TimeUnit;
 
-@Autonomous(name ="Sleeps Auto Blue", preselectTeleOp = "Meet2BlueTele")
+@Autonomous(name ="Sleeps Auto Blue", preselectTeleOp = "Meet 2 BLUE")
 public class MessiestBlue extends OpMode {
     public static final Actions paths = new Actions(AllianceColor.Selection.BLUE);
-    private Follower follower;
     private boolean hasShotFirst, shoot;
     private Transfer transfer;
     private Shooter shooter;

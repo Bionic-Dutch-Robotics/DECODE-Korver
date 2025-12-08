@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import static org.firstinspires.ftc.teamcode.pedroPathing.Constants.follower;
+
 import androidx.annotation.NonNull;
 
 import com.pedropathing.follower.Follower;
@@ -16,7 +18,6 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import java.util.function.Supplier;
 
 public class SubsystemsManager {
-    public Follower fw;
     public Intake intake;
     public Shooter shooter;
     public Transfer transfer;
@@ -31,11 +32,6 @@ public class SubsystemsManager {
     public SubsystemsManager (@NonNull AllianceColor allianceColor, @NonNull HardwareMap hwMap, @NonNull Gamepad gp){
         this.allianceColor = allianceColor;
 
-        fw = Constants.createFollower(hwMap);
-        fw.setStartingPose(
-                Constants.teleOpStartPose == null ? (allianceIsRed() ? Constants.redStartPose : Constants.blueStartPose) : Constants.teleOpStartPose
-        );
-
         intake = new Intake(hwMap);
         shooter = new Shooter(hwMap, Constants.shooterCoefficients);
         transfer = new Transfer(hwMap);
@@ -46,19 +42,19 @@ public class SubsystemsManager {
                 -gp.right_stick_x
         );
 
-        closeShootPath = () -> fw.pathBuilder()
-                .addPath(new Path(new BezierLine(fw::getPose, allianceIsRed() ? Constants.redCloseShoot : Constants.blueCloseShoot)))
-                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(fw::getHeading, allianceIsRed() ? Constants.redCloseShoot.getHeading() : Constants.blueCloseShoot.getHeading(), 0.8))
+        closeShootPath = () -> follower.pathBuilder()
+                .addPath(new Path(new BezierLine(follower::getPose, allianceIsRed() ? Constants.redCloseShoot : Constants.blueCloseShoot)))
+                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, allianceIsRed() ? Constants.redCloseShoot.getHeading() : Constants.blueCloseShoot.getHeading(), 0.8))
                 .build();
 
-        farShootPath = () -> fw.pathBuilder()
-                .addPath(new Path(new BezierLine(fw::getPose, allianceIsRed() ? Constants.farRedShoot : Constants.farBlueShoot)))
-                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(fw::getHeading, allianceIsRed() ? Constants.farRedShoot.getHeading() : Constants.farBlueShoot.getHeading(), 0.8))
+        farShootPath = () -> follower.pathBuilder()
+                .addPath(new Path(new BezierLine(follower::getPose, allianceIsRed() ? Constants.farRedShoot : Constants.farBlueShoot)))
+                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, allianceIsRed() ? Constants.farRedShoot.getHeading() : Constants.farBlueShoot.getHeading(), 0.8))
                 .build();
 
-        park = () -> fw.pathBuilder()
-                .addPath(new Path(new BezierLine(fw::getPose, allianceIsRed() ? Constants.redPark : Constants.bluePark)))
-                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(fw::getHeading,
+        park = () -> follower.pathBuilder()
+                .addPath(new Path(new BezierLine(follower::getPose, allianceIsRed() ? Constants.redPark : Constants.bluePark)))
+                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading,
                         allianceIsRed() ? Constants.redPark.getHeading() : Constants.bluePark.getHeading(), 0.8))
                 .build();
 
@@ -71,17 +67,17 @@ public class SubsystemsManager {
     }
 
     public void start() {
-        fw.startTeleopDrive(true);
+        follower.startTeleopDrive(true);
     }
     public void drivetrain(Gamepad gp) {
-        fw.update();
+        follower.update();
 
         if (!goToMidField && !goToFar) {
             double forward = -gp.left_stick_y;
             double strafe = -gp.left_stick_x;
             double turn = -gp.right_stick_x;
 
-            fw.setTeleOpDrive(
+            follower.setTeleOpDrive(
                     forward != Math.abs(gpThreshold.getY()) - 0.03 ? forward : 0,
                     strafe != Math.abs(gpThreshold.getX()) ? strafe : 0,
                     turn != Math.abs(gpThreshold.getY()) ? turn : 0,
@@ -95,12 +91,12 @@ public class SubsystemsManager {
             goToPark = false;
 
             if (goToMidField) {
-                fw.breakFollowing();
-                fw.followPath(closeShootPath.get());
+                follower.breakFollowing();
+                follower.followPath(closeShootPath.get());
                 shooterState = ShooterState.CLOSE;
             } else {
-                fw.breakFollowing();
-                fw.startTeleopDrive(true);
+                follower.breakFollowing();
+                follower.startTeleopDrive(true);
             }
 
         }
@@ -110,13 +106,13 @@ public class SubsystemsManager {
             goToPark = false;
 
             if (goToFar) {
-                fw.breakFollowing();
-                fw.followPath(farShootPath.get());
+                follower.breakFollowing();
+                follower.followPath(farShootPath.get());
                 shooterState = ShooterState.FAR;
             }
             else {
-                fw.breakFollowing();
-                fw.startTeleopDrive(true);
+                follower.breakFollowing();
+                follower.startTeleopDrive(true);
             }
         }
         else if (gp.xWasPressed()) {
@@ -125,12 +121,12 @@ public class SubsystemsManager {
             goToPark = !goToPark;
 
             if (goToPark) {
-                fw.breakFollowing();
-                fw.followPath(park.get());
+                follower.breakFollowing();
+                follower.followPath(park.get());
             }
             else {
-                fw.breakFollowing();
-                fw.startTeleopDrive(true);
+                follower.breakFollowing();
+                follower.startTeleopDrive(true);
             }
         }
     }
@@ -186,7 +182,7 @@ public class SubsystemsManager {
 
     public void emergencyResets(Gamepad gp) {
         if (gp.startWasPressed()) {
-            fw.setPose(allianceIsRed() ? Constants.redStartPose : Constants.blueStartPose);
+            follower.setPose(allianceIsRed() ? Constants.redStartPose : Constants.blueStartPose);
         }
     }
 

@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.tests;
 
+import com.pedropathing.control.FilteredPIDFController;
+import com.pedropathing.control.PIDFController;
 import com.pedropathing.follower.Follower;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -16,6 +18,8 @@ public class ShooterManualTest extends OpMode {
     public Shooter shooter;
     public Transfer transfer;
     public Intake intake;
+    public PIDFController headingPid;
+    public boolean goToHeading;
     public double shooterPower;
     @Override
     public void init() {
@@ -25,6 +29,8 @@ public class ShooterManualTest extends OpMode {
         intake = new Intake(hardwareMap);
         transfer = new Transfer(hardwareMap);
         shooterPower = 250;
+        headingPid = new PIDFController(follower.getConstants().getCoefficientsHeadingPIDF());
+        goToHeading = false;
     }
 
     @Override
@@ -34,12 +40,32 @@ public class ShooterManualTest extends OpMode {
     @Override
     public void loop() {
         follower.update();
-        follower.setTeleOpDrive(
-                -gamepad1.left_stick_y,
-                -gamepad1.left_stick_x,
-                -gamepad1.right_stick_x,
-                true
-        );
+        if (!goToHeading) {
+            follower.setTeleOpDrive(
+                    -gamepad1.left_stick_y,
+                    -gamepad1.left_stick_x,
+                    -gamepad1.right_stick_x,
+                    true
+            );
+        }
+        else {
+            headingPid.updatePosition(follower.getHeading());
+            headingPid.setTargetPosition(shootertest.getRedTargetHeading(144-follower.getPose().getX(), 148-follower.getPose().getY()));
+            follower.setTeleOpDrive(
+                    -gamepad1.left_stick_y,
+                    -gamepad1.left_stick_x,
+                    headingPid.run(),
+                    false
+            );
+        }
+        if (gamepad1.leftBumperWasPressed()) {
+            goToHeading = !goToHeading;
+
+            if (!goToHeading) {
+                follower.breakFollowing();
+                follower.startTeleopDrive(false);
+            }
+        }
 
         shooter.update(shooterPower);
 
@@ -48,6 +74,12 @@ public class ShooterManualTest extends OpMode {
         }
         else if (gamepad1.bWasPressed()) {
             shooterPower -= 10;
+        }
+        if (gamepad1.dpadUpWasPressed()) {
+            shooterPower +=1;
+        }
+        else if (gamepad1.dpadDownWasPressed()) {
+            shooterPower -= 1;
         }
 
         intake.intake();

@@ -31,6 +31,7 @@ public class Constants {
 
         public static final PIDFCoefficients shooterCoefficients = new PIDFCoefficients(0.0052, 0,0.000013,0);   //SHOOTER PIDF
         public static Pose teleOpStartPose = null;
+        public static Follower follower = null;
 
 
 
