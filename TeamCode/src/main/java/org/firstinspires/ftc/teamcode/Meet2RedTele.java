@@ -20,7 +20,7 @@ public class Meet2RedTele extends OpMode {
         subsystems = new SubsystemsManager(SubsystemsManager.AllianceColor.RED, hardwareMap, gamepad1);
         shooter = new Shooter(hardwareMap, Constants.shooterCoefficients);
         transfer = new Transfer(hardwareMap);
-
+        subsystems.fw.setStartingPose(Constants.teleOpStartPose);
     }
 
     @Override
@@ -34,9 +34,13 @@ public class Meet2RedTele extends OpMode {
     public void loop() {
         telemetry.update();
         telemetry.addData("Shooter:", SubsystemsManager.shooterState.name());
+        telemetry.addData("hEADING: ", subsystems.fw.getHeading());
+        telemetry.addData("Bot X: ", subsystems.fw.getPose().getX());
+        telemetry.addData("Bot Y: ", subsystems.fw.getPose().getY());
         subsystems.drivetrain(gamepad1);
         subsystems.intake(gamepad2);
         subsystems.shooter(gamepad2);
         subsystems.transfer(gamepad1);
+        subsystems.emergencyResets(gamepad1);
     }
 }

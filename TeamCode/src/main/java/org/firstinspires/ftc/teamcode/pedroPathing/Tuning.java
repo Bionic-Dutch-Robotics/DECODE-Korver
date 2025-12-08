@@ -1107,7 +1107,7 @@ class Triangle extends OpMode {
     /** Creates the PathChain for the "triangle".*/
     @Override
     public void start() {
-        follower.setStartingPose(startPose);
+        follower.setStartingPose(Constants.blueStartPose);
 
         triangle = follower.pathBuilder()
                 .addPath(new BezierLine(startPose, interPose))

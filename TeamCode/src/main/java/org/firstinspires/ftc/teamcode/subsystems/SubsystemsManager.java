@@ -24,16 +24,16 @@ public class SubsystemsManager {
 
     public IntakeState intakeState;
     public static ShooterState shooterState;
-    private boolean goToMidField, goToFar;
+    private boolean goToMidField, goToFar, goToPark;
     private Pose gpThreshold;
-    private Supplier<PathChain> closeShootPath, farShootPath;
+    private Supplier<PathChain> closeShootPath, farShootPath, park;
 
     public SubsystemsManager (@NonNull AllianceColor allianceColor, @NonNull HardwareMap hwMap, @NonNull Gamepad gp){
         this.allianceColor = allianceColor;
 
         fw = Constants.createFollower(hwMap);
         fw.setStartingPose(
-                Constants.teleOpStartPose == null ? (allianceIsRed() ? Constants.redStartPose: Constants.blueStartPose) : Constants.teleOpStartPose
+                Constants.teleOpStartPose == null ? (allianceIsRed() ? Constants.redStartPose : Constants.blueStartPose) : Constants.teleOpStartPose
         );
 
         intake = new Intake(hwMap);
@@ -56,8 +56,18 @@ public class SubsystemsManager {
                 .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(fw::getHeading, allianceIsRed() ? Constants.farRedShoot.getHeading() : Constants.farBlueShoot.getHeading(), 0.8))
                 .build();
 
+        park = () -> fw.pathBuilder()
+                .addPath(new Path(new BezierLine(fw::getPose, allianceIsRed() ? Constants.redPark : Constants.bluePark)))
+                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(fw::getHeading,
+                        allianceIsRed() ? Constants.redPark.getHeading() : Constants.bluePark.getHeading(), 0.8))
+                .build();
+
         intakeState = IntakeState.STOP;
         shooterState = ShooterState.STOP;
+
+        goToMidField = false;
+        goToFar = false;
+        goToPark = false;
     }
 
     public void start() {
@@ -72,9 +82,9 @@ public class SubsystemsManager {
             double turn = -gp.right_stick_x;
 
             fw.setTeleOpDrive(
-                    forward != gpThreshold.getY() ? forward : 0,
-                    strafe != gpThreshold.getX() ? strafe : 0,
-                    turn != gpThreshold.getHeading() ? turn : 0,
+                    forward != Math.abs(gpThreshold.getY()) - 0.03 ? forward : 0,
+                    strafe != Math.abs(gpThreshold.getX()) ? strafe : 0,
+                    turn != Math.abs(gpThreshold.getY()) ? turn : 0,
                     true
             );
         }
@@ -82,6 +92,7 @@ public class SubsystemsManager {
         if (gp.aWasPressed()) {
             goToMidField = !goToMidField;
             goToFar = false;
+            goToPark = false;
 
             if (goToMidField) {
                 fw.breakFollowing();
@@ -96,11 +107,26 @@ public class SubsystemsManager {
         else if (gp.bWasPressed()) {
             goToFar = !goToFar;
             goToMidField = false;
+            goToPark = false;
 
             if (goToFar) {
                 fw.breakFollowing();
                 fw.followPath(farShootPath.get());
                 shooterState = ShooterState.FAR;
+            }
+            else {
+                fw.breakFollowing();
+                fw.startTeleopDrive(true);
+            }
+        }
+        else if (gp.xWasPressed()) {
+            goToFar = false;
+            goToMidField = false;
+            goToPark = !goToPark;
+
+            if (goToPark) {
+                fw.breakFollowing();
+                fw.followPath(park.get());
             }
             else {
                 fw.breakFollowing();

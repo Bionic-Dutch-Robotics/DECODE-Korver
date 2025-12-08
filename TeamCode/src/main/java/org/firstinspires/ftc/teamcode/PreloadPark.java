@@ -1,10 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.BezierLine;
+import com.pedropathing.geometry.Pose;
+import com.pedropathing.paths.Path;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
@@ -13,11 +14,9 @@ import org.firstinspires.ftc.teamcode.subsystems.Transfer;
 import org.firstinspires.ftc.teamcode.subsystems.drivetrain.autonomous.Actions;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
 
-import java.util.concurrent.TimeUnit;
-
-@Autonomous(name ="Sleeps Auto Red")
-public class Messiest extends OpMode {
-    public static final Actions paths = new Actions(AllianceColor.Selection.RED);
+@Autonomous(name="Preload Park")
+public class PreloadPark extends OpMode {
+    public static final Actions paths = new Actions(AllianceColor.Selection.BLUE);
     private Follower follower;
     private boolean hasShotFirst, shoot;
     private Transfer transfer;
@@ -28,7 +27,7 @@ public class Messiest extends OpMode {
     @Override
     public void init() {
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(Constants.redStartPose);
+        follower.setStartingPose(Constants.blueStartPose);
         hasShotFirst = false;
         shoot= false;
 
@@ -39,6 +38,7 @@ public class Messiest extends OpMode {
 
         savedTime = 0.0;
     }
+
     @Override
     public void start() {
         resetRuntime();
@@ -74,9 +74,14 @@ public class Messiest extends OpMode {
         }
         else if (time > 7.5 && time < 7.65) {
             intake.intake();
-            follower.followPath(paths.redIntakeRow1);
+            follower.followPath(new Path(new BezierLine(
+                    follower.getPose(),
+                    new Pose(
+                            30, 20
+                    )
+            )));
         }
-        else if (!follower.isBusy() && time > 12 && time < 12.5) {
+        /*else if (!follower.isBusy() && time > 12 && time < 12.5) {
             intake.custom(0.85);
             transfer.reload();
         }
@@ -124,7 +129,7 @@ public class Messiest extends OpMode {
         else if (time > 24.5 && time < 25) {
             intake.intake();
             follower.followPath(paths.goToLever);
-        }
+        }*/
     }
     @Override
     public void stop() {

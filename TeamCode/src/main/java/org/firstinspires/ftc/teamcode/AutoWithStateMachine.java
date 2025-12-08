@@ -72,19 +72,19 @@ public class AutoWithStateMachine extends OpMode {
 
                     transfer.reload();
                     try {
-                        sleep(500);
+                        sleep(1000);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
                     transfer.feed();
                     try {
-                        sleep(500);
+                        sleep(1000);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
                     transfer.reload();
                     try {
-                        sleep(500);
+                        sleep(1000);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }

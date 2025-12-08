@@ -21,12 +21,20 @@ import java.util.Objects;
 @Configurable
 public class Actions {
     public static final Pose redRow1Target = new Pose(112, 33, 0);
-    public static final Pose redRow1Control = new Pose(70, 31);
-    public static final Pose redRow2Control = new Pose(70,56.5);
+    public static final Pose redRow1Control = new Pose(76, 31);
+    public static final Pose redRow2Control = new Pose(76,56.5);
     public static final Pose redRow2Target = new Pose(110,55, 0);
-    public static final Pose redRow3Control = new Pose(70, 76);
+    public static final Pose redRow3Control = new Pose(76, 76);
     public static final Pose redRow3Target = new Pose(105,80, 0);
-    public static final Pose redExitTriangle = new Pose(96, 72, Math.toRadians(90));
+    public static final Pose redExitTriangle = new Pose(96, 72, Math.toRadians(0));
+    public static final Pose blueExitTriangle = new Pose(40, 72, Math.toRadians(180));
+
+    public static final Pose blueRow1Target = new Pose(28, 39, Math.toRadians(180));
+    public static final Pose blueRow1Control = new Pose(68, 37);
+    public static final Pose blueRow2Control = new Pose(68, 61);
+    public static final Pose blueRow2Target = new Pose(28, 63, Math.toRadians(180));
+    public static final Pose blueRow3Control = new Pose(68,78);
+    public static final Pose blueRow3Target = new Pose(28, 86, Math.toRadians(180));
     public final Path shoot1, goToLever;
 
     private final AllianceColor allianceColor;
@@ -37,21 +45,21 @@ public class Actions {
         this.allianceColor = new AllianceColor(allianceColor);
 
         shoot1 = new Path(new BezierLine(
-                this.allianceColor.isRed() ? Constants.redStartPose : Constants.redStartPose.mirror(),
-                this.allianceColor.isRed() ? Constants.farRedShoot : Constants.farRedShoot.mirror()
+                this.allianceColor.isRed() ? Constants.redStartPose : Constants.blueStartPose,
+                this.allianceColor.isRed() ? Constants.farRedShoot : Constants.farBlueShoot
         ));
 
         shoot1.setLinearHeadingInterpolation(
-                this.allianceColor.isRed() ? Constants.redStartPose.getHeading() : Constants.redStartPose.mirror().getHeading(),
-                this.allianceColor.isRed() ? Constants.farRedShoot.getHeading() : Constants.farRedShoot.mirror().getHeading());
+                this.allianceColor.isRed() ? Constants.redStartPose.getHeading() : Constants.blueStartPose.getHeading(),
+                this.allianceColor.isRed() ? Constants.farRedShoot.getHeading() : Constants.farBlueShoot.getHeading());
 
         goToLever = new Path(new BezierLine(
-                this.allianceColor.isRed() ? Constants.farRedShoot : Constants.farRedShoot.mirror(),
-                redExitTriangle
+                this.allianceColor.isRed() ? Constants.farRedShoot : Constants.farBlueShoot,
+                this.allianceColor.isRed() ? redExitTriangle : blueExitTriangle
         ));
         goToLever.setLinearHeadingInterpolation(
-                this.allianceColor.isRed() ? Constants.farRedShoot.getHeading() : Constants.farRedShoot.mirror().getHeading(),
-                this.allianceColor.isRed() ? redExitTriangle.getHeading() : redExitTriangle.mirror().getHeading()
+                this.allianceColor.isRed() ? Constants.farRedShoot.getHeading() : Constants.farBlueShoot.getHeading(),
+                this.allianceColor.isRed() ? redExitTriangle.getHeading() : blueExitTriangle.getHeading()
         );
 
 
@@ -66,14 +74,14 @@ public class Actions {
         Objects.requireNonNull(redIntakePaths.get("Intake1")).add(
                 new Path(new BezierCurve(
                         this.allianceColor.isRed() ? Constants.farRedShoot : Constants.farBlueShoot,
-                        this.allianceColor.isRed() ? redRow1Control : redRow1Control.mirror(),
-                        this.allianceColor.isRed() ? redRow1Target : redRow1Target.mirror())
-                )
+                        this.allianceColor.isRed() ? redRow1Control : blueRow1Control,
+                        this.allianceColor.isRed() ? redRow1Target : blueRow1Target
+                ))
         );
 
         Objects.requireNonNull(redIntakePaths.get("Intake1")).get(0).setLinearHeadingInterpolation(
                 this.allianceColor.isRed() ? Constants.farRedShoot.getHeading() : Constants.farBlueShoot.getHeading(),
-                this.allianceColor.isRed() ? redRow1Target.getHeading() : redRow1Target.mirror().getHeading(),
+                this.allianceColor.isRed() ? redRow1Target.getHeading() : blueRow1Target.getHeading(),
                 0.5
         );
 
@@ -83,7 +91,7 @@ public class Actions {
         );
 
         Objects.requireNonNull(redIntakePaths.get("Intake1")).get(1).setLinearHeadingInterpolation(
-                this.allianceColor.isRed() ? redRow1Target.getHeading() : redRow1Target.mirror().getHeading(),
+                this.allianceColor.isRed() ? redRow1Target.getHeading() : blueRow1Target.getHeading(),
                 this.allianceColor.isRed() ? Constants.farRedShoot.getHeading() : Constants.farBlueShoot.getHeading(),
                 0.8
         );
@@ -96,14 +104,14 @@ public class Actions {
         Objects.requireNonNull(redIntakePaths.get("Intake2")).add(
                 new Path(new BezierCurve(
                         this.allianceColor.isRed() ? Constants.farRedShoot : Constants.farBlueShoot,
-                        this.allianceColor.isRed() ? redRow2Control : redRow2Control.mirror(),
-                        this.allianceColor.isRed() ? redRow2Target : redRow2Target.mirror()
+                        this.allianceColor.isRed() ? redRow2Control : blueRow2Control,
+                        this.allianceColor.isRed() ? redRow2Target : blueRow2Target
                 ))
         );
 
         Objects.requireNonNull(redIntakePaths.get("Intake2")).get(0).setLinearHeadingInterpolation(
                 this.allianceColor.isRed() ? Constants.farRedShoot.getHeading() : Constants.farBlueShoot.getHeading(),
-                this.allianceColor.isRed() ? redRow2Target.getHeading() : redRow2Target.mirror().getHeading(),
+                this.allianceColor.isRed() ? redRow2Target.getHeading() : blueRow2Target.getHeading(),
                 0.5
         );
 
@@ -112,7 +120,7 @@ public class Actions {
                 Objects.requireNonNull(redIntakePaths.get("Intake2")).get(0).getReversed()
         );
         Objects.requireNonNull(redIntakePaths.get("Intake2")).get(1).setLinearHeadingInterpolation(
-                this.allianceColor.isRed() ? redRow2Target.getHeading() : redRow2Target.mirror().getHeading(),
+                this.allianceColor.isRed() ? redRow2Target.getHeading() : blueRow2Target.getHeading(),
                 this.allianceColor.isRed() ? Constants.farRedShoot.getHeading() : Constants.farBlueShoot.getHeading()
         );
 
@@ -124,14 +132,14 @@ public class Actions {
         Objects.requireNonNull(redIntakePaths.get("Intake3")).add(
                 new Path(new BezierCurve(
                         this.allianceColor.isRed() ? Constants.farRedShoot : Constants.farBlueShoot,
-                        this.allianceColor.isRed() ? redRow3Control : redRow3Control.mirror(),
-                        this.allianceColor.isRed() ? redRow3Target : redRow3Target.mirror()
+                        this.allianceColor.isRed() ? redRow3Control : blueRow3Control,
+                        this.allianceColor.isRed() ? redRow3Target : blueRow3Target
                 ))
         );
 
         Objects.requireNonNull(redIntakePaths.get("Intake3")).get(0).setLinearHeadingInterpolation(
                 this.allianceColor.isRed() ? Constants.farRedShoot.getHeading() : Constants.farBlueShoot.getHeading(),
-                this.allianceColor.isRed() ? redRow3Target.getHeading() : redRow3Target.mirror().getHeading(),
+                this.allianceColor.isRed() ? redRow3Target.getHeading() : blueRow3Target.getHeading(),
                 0.5
         );
 
@@ -140,7 +148,7 @@ public class Actions {
         );
 
         Objects.requireNonNull(redIntakePaths.get("Intake3")).get(1).setLinearHeadingInterpolation(
-                this.allianceColor.isRed() ? redRow3Target.getHeading() : redRow3Target.mirror().getHeading(),
+                this.allianceColor.isRed() ? redRow3Target.getHeading() : blueRow3Target.getHeading(),
                 this.allianceColor.isRed() ? Constants.farRedShoot.getHeading() : Constants.farBlueShoot.getHeading(),
                 0.8
         );

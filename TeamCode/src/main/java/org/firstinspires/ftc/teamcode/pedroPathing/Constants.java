@@ -20,13 +20,16 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class Constants {
         public static final Pose blueStartPose = new Pose(64, 8, Math.toRadians(90));
         public static final Pose redStartPose = new Pose(80, 8, Math.toRadians(90));
-        public static final Pose farRedShoot = new Pose(86, 16, 2.76);
-        public static final Pose farBlueShoot = new Pose(67, 20, -2.75);
-        public static final Pose redCloseShoot = new Pose(72,72,Math.toRadians(135));
-        public static final Pose blueCloseShoot = new Pose(72,72, Math.toRadians(-135));
+        public static final Pose farRedShoot = new Pose(86, 16, 2.77);
+        public static final Pose farBlueShoot = new Pose(58, 18, -2.745);
+        public static final Pose redCloseShoot = new Pose(76,76,Math.toRadians(135));
+        public static final Pose blueCloseShoot = new Pose(68,72, Math.toRadians(-135));
         public static final double closeShootPower = 210;   //Targets 230, really reaches 140
-        public static final double farShootPower = 247;     //Targets 295, really reaches 180
-        public static final PIDFCoefficients shooterCoefficients = new PIDFCoefficients(0.005, 0,0.000011,0);   //SHOOTER PIDF
+        public static final double farShootPower = 248.5;     //Targets 295, really reaches 180
+        public static final Pose redPark = new Pose(40,32, 0);
+        public static final Pose bluePark = new Pose(104,32, 0);
+
+        public static final PIDFCoefficients shooterCoefficients = new PIDFCoefficients(0.0052, 0,0.000013,0);   //SHOOTER PIDF
         public static Pose teleOpStartPose = null;
 
 
@@ -45,9 +48,9 @@ public class Constants {
             ))
             .translationalPIDFSwitch(4)
             .drivePIDFCoefficients(new FilteredPIDFCoefficients(
-                    0.09,
+                    0.07,
                     0,
-                    0.01,
+                    0.02,
                     0,
                     0
             ))

@@ -15,9 +15,9 @@ import org.firstinspires.ftc.teamcode.util.AllianceColor;
 
 import java.util.concurrent.TimeUnit;
 
-@Autonomous(name ="Sleeps Auto Red")
-public class Messiest extends OpMode {
-    public static final Actions paths = new Actions(AllianceColor.Selection.RED);
+@Autonomous(name ="Sleeps Auto Blue", preselectTeleOp = "Meet2BlueTele")
+public class MessiestBlue extends OpMode {
+    public static final Actions paths = new Actions(AllianceColor.Selection.BLUE);
     private Follower follower;
     private boolean hasShotFirst, shoot;
     private Transfer transfer;
@@ -28,7 +28,7 @@ public class Messiest extends OpMode {
     @Override
     public void init() {
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(Constants.redStartPose);
+        follower.setStartingPose(Constants.blueStartPose);
         hasShotFirst = false;
         shoot= false;
 
@@ -50,6 +50,10 @@ public class Messiest extends OpMode {
     public void loop() {
         follower.update();
         shooter.farShoot();
+        telemetry.update();
+        telemetry.addData("Bot X", follower.getPose().getX());
+        telemetry.addData("Bot Y", follower.getPose().getY());
+        telemetry.addData("Bot Theta", follower.getHeading());
 
         if (time > 3 && time < 3.5) {
             transfer.reload();
