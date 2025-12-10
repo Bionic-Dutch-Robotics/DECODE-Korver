@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.BezierLine;
+import com.pedropathing.paths.Path;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -15,9 +17,13 @@ import org.firstinspires.ftc.teamcode.util.AllianceColor;
 
 import java.util.concurrent.TimeUnit;
 
-@Autonomous(name ="Sleeps Auto Red")
-public class Messiest extends OpMode {
+@Autonomous(name ="Close Red")
+public class MessyRedClose extends OpMode {
     public static final Actions paths = new Actions(AllianceColor.Selection.RED);
+    public static Path toCloseShoot = new Path(new BezierLine(
+            Constants.redCloseStart,
+            Constants.redCloseShoot
+    ));
     private Follower follower;
     private boolean hasShotFirst, shoot;
     private Transfer transfer;
@@ -27,8 +33,13 @@ public class Messiest extends OpMode {
 
     @Override
     public void init() {
+        toCloseShoot.setLinearHeadingInterpolation(
+                Constants.redCloseStart.getHeading(),
+                Constants.redCloseShoot.getHeading()
+        );
+
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(Constants.redStartPose);
+        follower.setStartingPose(Constants.redCloseStart);
         hasShotFirst = false;
         shoot = false;
 
@@ -43,13 +54,13 @@ public class Messiest extends OpMode {
     public void start() {
         resetRuntime();
         transfer.feed();
-        follower.followPath(paths.shoot1);
+        follower.followPath(toCloseShoot);
     }
 
     @Override
     public void loop() {
         follower.update();
-        shooter.farShoot();
+        shooter.midFieldShoot();
 
         if (time > 3 && time < 3.5) {
             transfer.reload();
@@ -71,59 +82,6 @@ public class Messiest extends OpMode {
         else if (time > 6.5 && time < 7.5) {
             transfer.feed();
             intake.stop();
-        }
-        else if (time > 7.5 && time < 7.65) {
-            intake.intake();
-            follower.followPath(paths.redIntakeRow1);
-        }
-        else if (!follower.isBusy() && time > 12 && time < 12.5) {
-            intake.custom(0.85);
-            transfer.reload();
-        }
-        else if (time > 12.5 && time < 13.5) {
-            transfer.feed();
-            intake.stop();
-        }
-        else if (time > 13.5 && time < 14) {
-            transfer.reload();
-            intake.custom(0.85);
-        }
-        else if (time > 14 && time < 15) {
-            transfer.feed();
-            intake.stop();
-        }
-        else if (time > 15 && time < 15.5) {
-            transfer.reload();
-            intake.custom(0.85);
-        }
-        else if (time > 15.5 && time < 16.5) {
-            transfer.feed();
-            intake.stop();
-        }
-        else if (time > 16.5 && time < 16.6) {
-            intake.custom(0.85);
-            follower.followPath(paths.redIntakeRow2);
-        }
-        else if (time > 22 && time < 22.5) {
-            transfer.reload();
-            intake.custom(0.85);
-        }
-        else if (time > 22.5 && time < 23.5) {
-            transfer.feed();
-            intake.stop();
-        }
-        else if (time > 23.5 && time < 24) {
-            transfer.reload();
-            intake.custom(0.85);
-        }
-        else if (time > 24 && time < 24.5) {
-            transfer.feed();
-            intake.stop();
-        }
-
-        else if (time > 24.5 && time < 25) {
-            intake.intake();
-            follower.followPath(paths.goToLever);
         }
     }
     @Override

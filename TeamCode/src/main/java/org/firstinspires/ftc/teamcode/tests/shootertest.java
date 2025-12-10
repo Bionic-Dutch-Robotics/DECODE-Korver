@@ -25,7 +25,6 @@ public class shootertest extends OpMode {
     public Intake intake;
     public Transfer transfer;
     public Follower follower;
-    public static com.pedropathing.control.PIDFCoefficients pidfCoefficients = new PIDFCoefficients(0.005, 0,0.000011,0);
     public static com.pedropathing.control.PIDFController headingPid;
     public static double shooterTarget;
     public boolean runIntake, goToHeading;
@@ -81,7 +80,7 @@ public class shootertest extends OpMode {
         }
         else {
             headingPid.updatePosition(follower.getHeading());
-            headingPid.setTargetPosition(getRedTargetHeading(144-follower.getPose().getX(), 146-follower.getPose().getY()));
+            headingPid.setTargetPosition(getRedTargetHeading(141-follower.getPose().getX(), 141-follower.getPose().getY()));
             follower.setTeleOpDrive(
                     -gamepad1.left_stick_y,
                     -gamepad1.left_stick_x,
@@ -98,8 +97,9 @@ public class shootertest extends OpMode {
             }
         }
 
-        shooter.update(this.getRegressionVelocity(
-                this.getDistance(144-follower.getPose().getX(), 144-follower.getPose().getY())));
+        shooter.update(getRegressionVelocity(
+                getDistance(144-follower.getPose().getX(), 144-follower.getPose().getY())
+        ));
 
 
         telemetry.addData("bot X", follower.getPose().getX());
@@ -111,7 +111,7 @@ public class shootertest extends OpMode {
     }
 
     public static double getRegressionVelocity (double distance) {
-        return -0.00945954 * Math.pow(distance, 2) + 3.34859 * distance - 24.22496;
+        return -0.000724792 * Math.pow(distance, 2) + 1.10181 * distance + 100.38172;
     }
     public static double getDistance(double x, double y) {
         return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));

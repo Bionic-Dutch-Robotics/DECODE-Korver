@@ -28,16 +28,14 @@ public class visionTest extends OpMode {
     @Override
     public void init() {
         pipeline = new Vision();
-
-        visionPortal = VisionPortal.easyCreateWithDefaults(
-                hardwareMap.get(CameraName.class, "webcam1"),
-                pipeline
-        );
     }
 
     @Override
     public void start() {
-        visionPortal.stopStreaming();
+        visionPortal = VisionPortal.easyCreateWithDefaults(
+                hardwareMap.get(CameraName.class, "webcam1"),
+                pipeline
+        );
     }
 
     @Override
