@@ -10,10 +10,12 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.util.AllianceColor;
 
 public class Shooter {
     private PIDFController shooterPidf = null;
     public DcMotorEx shooter = null;
+    private final double powerCoefficient = 1.1;
     public Shooter (HardwareMap hwMap, PIDFCoefficients shooterCoefficients) {
         shooter = hwMap.get(DcMotorEx.class, "shooter");
         shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -24,6 +26,13 @@ public class Shooter {
 
     public void eject() {
         shooter.setPower(-0.1);
+    }
+    public void adaptive(double x, double y, AllianceColor alliance) {
+        this.update(
+                this.getRegressionVelocity(
+                        this.getDistance(x, y, alliance)
+                )
+        );
     }
 
     public void stop() {
@@ -47,5 +56,16 @@ public class Shooter {
     }
     public double getTarget() {
         return shooterPidf.getTargetPosition();
+    }
+    public double getDistance(double x, double y, AllianceColor alliance) {
+        if (alliance.isRed()) {
+            return Math.sqrt(Math.pow(144-x, 2) + Math.pow(144-y, 2));
+        }
+        else {
+            return Math.sqrt(Math.pow(x, 2) + Math.pow(144-y, 2));
+        }
+    }
+    public double getRegressionVelocity (double distance) {
+        return -0.000724792 * Math.pow(distance, 2) + 1.10181 * distance + (100.38172 * powerCoefficient);
     }
 }

@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.Transfer;
+import org.firstinspires.ftc.teamcode.util.AllianceColor;
 
 import java.util.function.Supplier;
 
@@ -117,6 +118,6 @@ public class shootertest extends OpMode {
         return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
     }
     public static double getRedTargetHeading(double x, double y) {
-        return Math.atan2(y,x)+Math.toRadians(90);
+            return Math.atan2(y,x)+Math.toRadians(90);
     }
 }

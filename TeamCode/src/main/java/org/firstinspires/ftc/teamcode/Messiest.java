@@ -1,6 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
+import static org.firstinspires.ftc.teamcode.pedroPathing.Constants.follower;
+
 import com.pedropathing.follower.Follower;
+import com.pedropathing.paths.callbacks.ParametricCallback;
+import com.pedropathing.paths.callbacks.PathCallback;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -13,12 +17,12 @@ import org.firstinspires.ftc.teamcode.subsystems.Transfer;
 import org.firstinspires.ftc.teamcode.subsystems.drivetrain.autonomous.Actions;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
 
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 @Autonomous(name ="Sleeps Auto Red")
 public class Messiest extends OpMode {
     public static final Actions paths = new Actions(AllianceColor.Selection.RED);
-    private Follower follower;
     private boolean hasShotFirst, shoot;
     private Transfer transfer;
     private Shooter shooter;
@@ -38,6 +42,24 @@ public class Messiest extends OpMode {
         //time = new ElapsedTime();
 
         savedTime = 0.0;
+
+        ArrayList<ParametricCallback> callbacks = new ArrayList<>();
+        callbacks.add(0,
+                new ParametricCallback(1,0.001, follower,
+                () -> {
+                    follower.setMaxPower(0.2);
+                    intake.intake();
+                }));
+        callbacks.add(
+                1,
+                new ParametricCallback(1,0.001, follower,
+                        () -> {
+                            follower.setMaxPower(1);
+                            intake.custom(0.1);
+                        })
+        );
+        paths.redIntakeRow1.setCallbacks(
+                (PathCallback) callbacks);
     }
     @Override
     public void start() {

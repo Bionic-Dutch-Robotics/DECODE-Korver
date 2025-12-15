@@ -1,7 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
+import static org.firstinspires.ftc.teamcode.pedroPathing.Constants.follower;
+
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
+import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.Path;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -22,9 +25,8 @@ public class MessyRedClose extends OpMode {
     public static final Actions paths = new Actions(AllianceColor.Selection.RED);
     public static Path toCloseShoot = new Path(new BezierLine(
             Constants.redCloseStart,
-            Constants.redCloseShoot
+            new Pose(86,86)
     ));
-    private Follower follower;
     private boolean hasShotFirst, shoot;
     private Transfer transfer;
     private Shooter shooter;

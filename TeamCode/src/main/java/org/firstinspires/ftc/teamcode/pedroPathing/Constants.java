@@ -19,7 +19,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 @Configurable
 public class Constants {
         public static final Pose blueCloseStart = new Pose(30.9436, 123.8405, -2.27);
-        public static final Pose redCloseStart = new Pose(141.6233, 120.271, 2.27);
+        public static final Pose redCloseStart = new Pose(121.6233, 131.271, 2.2);
         public static final Pose blueStartPose = new Pose(64, 8, Math.toRadians(90));
         public static final Pose redStartPose = new Pose(80, 8, Math.toRadians(90));
         public static final Pose farRedShoot = new Pose(86, 16, 2.77);
@@ -28,7 +28,7 @@ public class Constants {
         public static final Pose blueCloseShoot = new Pose(68,72, Math.toRadians(-135));
         public static final double closeShootPower = 210;   //Targets 230, really reaches 140
         public static final double farShootPower = 248.5;     //Targets 295, really reaches 180
-        public static final Pose redPark = new Pose(40,32, 0);
+        public static final Pose redPark = new Pose(35,30, 0);
         public static final Pose bluePark = new Pose(104,32, 0);
 
         public static PIDFCoefficients shooterCoefficients = new PIDFCoefficients(0.00527, 0,0.000013,0);   //SHOOTER PIDF. original P was 0.0052

@@ -7,27 +7,24 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.SubsystemsManager;
 import org.firstinspires.ftc.teamcode.subsystems.Transfer;
+import org.firstinspires.ftc.teamcode.util.AllianceColor;
 
 @TeleOp(name="Meet 2 Red")
 public class Meet2RedTele extends OpMode {
     public SubsystemsManager subsystems;
     public Shooter shooter;
-    public boolean runShooterFar, runShooterClose;
     public Transfer transfer;
 
     @Override
     public void init() {
-        subsystems = new SubsystemsManager(SubsystemsManager.AllianceColor.RED, hardwareMap, gamepad1);
+        subsystems = new SubsystemsManager(new AllianceColor(AllianceColor.Selection.RED), hardwareMap, gamepad1);
         shooter = new Shooter(hardwareMap, Constants.shooterCoefficients);
         transfer = new Transfer(hardwareMap);
-        Constants.follower.setStartingPose(Constants.teleOpStartPose);
     }
 
     @Override
     public void start() {
         subsystems.start();
-        runShooterClose = true;
-        runShooterFar = false;
     }
 
     @Override

@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.SubsystemsManager;
 import org.firstinspires.ftc.teamcode.subsystems.Transfer;
+import org.firstinspires.ftc.teamcode.util.AllianceColor;
 
 @TeleOp(name="Meet 2 BLUE")
 public class Meet2BlueTele extends OpMode {
@@ -17,7 +18,7 @@ public class Meet2BlueTele extends OpMode {
 
     @Override
     public void init() {
-        subsystems = new SubsystemsManager(SubsystemsManager.AllianceColor.BLUE, hardwareMap, gamepad1);
+        subsystems = new SubsystemsManager(new AllianceColor(AllianceColor.Selection.BLUE), hardwareMap, gamepad1);
         shooter = new Shooter(hardwareMap, Constants.shooterCoefficients);
         transfer = new Transfer(hardwareMap);
 
@@ -37,6 +38,7 @@ public class Meet2BlueTele extends OpMode {
         telemetry.addData("hEADING: ", Constants.follower.getHeading());
         telemetry.addData("Bot X: ", Constants.follower.getPose().getX());
         telemetry.addData("Bot Y: ", Constants.follower.getPose().getY());
+        telemetry.addData("TargetHeading: ", SubsystemsManager.getTargetHeading(Constants.follower.getPose().getX(), Constants.follower.getPose().getY(), new AllianceColor(AllianceColor.Selection.BLUE)));
         subsystems.drivetrain(gamepad1);
         subsystems.intake(gamepad2);
         subsystems.shooter(gamepad2);
