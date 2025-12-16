@@ -214,12 +214,13 @@ public class SubsystemsManager {
             return MathFunctions.normalizeAngle(Math.atan2(144-y, 141-x) + Math.toRadians(90));
         }
         else {
-            double target = Math.atan2(144 - y, x) + Math.toRadians(180);
+            double target = Math.atan2(144 - y, -x) + Math.toRadians(180);
+
             if (MathFunctions.normalizeAngle(target) > Math.PI) {
                 return MathFunctions.normalizeAngle(target) - Math.PI * 2;
             }
             else if (MathFunctions.normalizeAngle(target) < -Math.PI){
-                return MathFunctions.normalizeAngle(Math.atan2(144-y, x) + Math.toRadians(180)) + Math.PI * 2;
+                return MathFunctions.normalizeAngle(target) + Math.PI * 2;
             }
         }
         return 0.0;

@@ -43,7 +43,7 @@ public class Messiest extends OpMode {
 
         savedTime = 0.0;
 
-        ArrayList<ParametricCallback> callbacks = new ArrayList<>();
+        ArrayList<PathCallback> callbacks = new ArrayList<>();
         callbacks.add(0,
                 new ParametricCallback(1,0.001, follower,
                 () -> {
@@ -59,7 +59,8 @@ public class Messiest extends OpMode {
                         })
         );
         paths.redIntakeRow1.setCallbacks(
-                (PathCallback) callbacks);
+                callbacks
+        );
     }
     @Override
     public void start() {

@@ -27,7 +27,7 @@ public class Constants {
         public static final Pose redCloseShoot = new Pose(76,76,Math.toRadians(135));
         public static final Pose blueCloseShoot = new Pose(68,72, Math.toRadians(-135));
         public static final double closeShootPower = 210;   //Targets 230, really reaches 140
-        public static final double farShootPower = 248.5;     //Targets 295, really reaches 180
+        public static final double farShootPower = 263;     //Targets 295, really reaches 180
         public static final Pose redPark = new Pose(35,30, 0);
         public static final Pose bluePark = new Pose(104,32, 0);
 

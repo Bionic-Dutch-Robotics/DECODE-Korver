@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.util.AllianceColor;
 public class Shooter {
     private PIDFController shooterPidf = null;
     public DcMotorEx shooter = null;
-    private final double powerCoefficient = 1.1;
+    private final double powerCoefficient = 1.2;
     public Shooter (HardwareMap hwMap, PIDFCoefficients shooterCoefficients) {
         shooter = hwMap.get(DcMotorEx.class, "shooter");
         shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
