@@ -51,7 +51,7 @@ public class MessiestBlue extends OpMode {
     @Override
     public void loop() {
         follower.update();
-        shooter.farShoot();
+        shooter.update(Constants.farShootPower);
         telemetry.update();
         telemetry.addData("Bot X", follower.getPose().getX());
         telemetry.addData("Bot Y", follower.getPose().getY());

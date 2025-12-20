@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.SubsystemsManager;
@@ -30,10 +31,11 @@ public class Meet2RedTele extends OpMode {
     @Override
     public void loop() {
         telemetry.update();
-        telemetry.addData("Shooter:", SubsystemsManager.shooterState.name());
+        telemetry.addData("Shooter:", subsystems.shooter.shooter.getVelocity(AngleUnit.DEGREES));
         telemetry.addData("hEADING: ", Constants.follower.getHeading());
         telemetry.addData("Bot X: ", Constants.follower.getPose().getX());
         telemetry.addData("Bot Y: ", Constants.follower.getPose().getY());
+        telemetry.addData("Bot Distance from Target: ", subsystems.shooter.getDistance(Constants.follower.getPose().getX(), Constants.follower.getPose().getY(), new AllianceColor(AllianceColor.Selection.RED)));
         subsystems.drivetrain(gamepad1);
         subsystems.intake(gamepad2);
         subsystems.shooter(gamepad2);

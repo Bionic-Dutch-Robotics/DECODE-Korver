@@ -50,7 +50,7 @@ public class ShooterManualTest extends OpMode {
         }
         else {
             headingPid.updatePosition(follower.getHeading());
-            headingPid.setTargetPosition(shootertest.getRedTargetHeading(144-follower.getPose().getX(), 148-follower.getPose().getY()));
+            headingPid.setTargetPosition(shootertest.getRedTargetHeading(141-follower.getPose().getX(), 141-follower.getPose().getY()));
             follower.setTeleOpDrive(
                     -gamepad1.left_stick_y,
                     -gamepad1.left_stick_x,

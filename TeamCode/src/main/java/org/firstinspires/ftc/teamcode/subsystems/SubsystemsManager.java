@@ -28,7 +28,7 @@ public class SubsystemsManager {
 
     public IntakeState intakeState;
     public static ShooterState shooterState;
-    private boolean goToMidField, goToFar, goToPark;
+    private boolean autoAim, goToFar, goToPark, goToMidField;
     private Pose gpThreshold;
     private Supplier<PathChain> closeShootPath, farShootPath, park;
 
@@ -67,11 +67,12 @@ public class SubsystemsManager {
                 .build();
 
         intakeState = IntakeState.STOP;
-        shooterState = ShooterState.STOP;
+        shooterState = ShooterState.AUTO_AIM;
 
-        goToMidField = false;
+        autoAim = false;
         goToFar = false;
         goToPark = false;
+        goToMidField = false;
     }
 
     public void start() {
@@ -84,7 +85,7 @@ public class SubsystemsManager {
         double strafe = -gp.left_stick_x;
         double turn = -gp.right_stick_x;
 
-        if (!goToMidField && !goToFar && !goToPark) {
+        if (!autoAim && !goToFar && !goToPark && !goToMidField) {
             follower.setTeleOpDrive(
                     forward != Math.abs(gpThreshold.getY()) - 0.03 ? forward : 0,
                     strafe != Math.abs(gpThreshold.getX()) - 0.03 ? strafe : 0,
@@ -93,54 +94,47 @@ public class SubsystemsManager {
                     allianceColor.isRed() ? 0 : Math.toRadians(180)
             );
         }
-        else if (goToMidField && !goToFar && !goToPark) {
+        else if (autoAim && !goToFar && !goToPark && !goToMidField) {
             headingPid.updatePosition(follower.getHeading());
-            headingPid.setTargetPosition(getTargetHeading(follower.getPose().getX(), follower.getPose().getY(), allianceColor));
+            headingPid.setTargetPosition(getTargetHeading(
+                    follower.getPose().getX(),
+                    follower.getPose().getY(),
+                    allianceColor
+            ));
+
             follower.setTeleOpDrive(forward, strafe, headingPid.run(), false,
-                    allianceColor.isRed() ? 0 : Math.toRadians(180));
+                    allianceColor.isRed() ? 0 : Math.toRadians(180)
+            );
         }
 
         if (gp.aWasPressed()) {
-            goToMidField = !goToMidField;
+            autoAim = !autoAim;
             goToFar = false;
             goToPark = false;
-            if (goToMidField) {
-                //double forward = -gp.left_stick_y;
-                //double strafe = -gp.left_stick_x;
-            /*goToMidField = !goToMidField;
-            goToFar = false;
-            goToPark = false;
+            goToMidField = false;
 
-            if (goToMidField) {
-                follower.breakFollowing();
-                follower.followPath(closeShootPath.get());
-                shooterState = ShooterState.CLOSE;
-            } else {
-                follower.breakFollowing();
-                follower.startTeleopDrive(true);
-            }*/
-            }
-            else {
+            if (!autoAim) {
                 headingPid.reset();
             }
 
         } else if (gp.bWasPressed()) {
             goToFar = !goToFar;
-            goToMidField = false;
+            autoAim = false;
             goToPark = false;
+            goToMidField = false;
 
             if (goToFar) {
                 follower.breakFollowing();
                 follower.followPath(farShootPath.get());
-                shooterState = ShooterState.FAR;
             } else {
                 follower.breakFollowing();
                 follower.startTeleopDrive(true);
             }
         } else if (gp.xWasPressed()) {
             goToFar = false;
-            goToMidField = false;
+            autoAim = false;
             goToPark = !goToPark;
+            goToMidField = false;
 
             if (goToPark) {
                 follower.breakFollowing();
@@ -150,25 +144,44 @@ public class SubsystemsManager {
                 follower.startTeleopDrive(true);
             }
         }
+        else if (gp.yWasPressed()) {
+                goToMidField = !goToMidField;
+                goToFar = false;
+                goToPark = false;
+                autoAim = false;
+
+            if (goToMidField) {
+                follower.breakFollowing();
+                follower.followPath(closeShootPath.get());
+            } else {
+                follower.breakFollowing();
+                follower.startTeleopDrive(true);
+            }
+        }
     }
 
     public void shooter(Gamepad gp) {
-        Pose currentPose = follower.getPose();
-        /*if (gp.yWasPressed()) {
-            shooterState = ShooterState.CLOSE;
-        } else if (gp.bWasPressed()) {
-            shooterState = ShooterState.FAR;
-        } else if (gp.xWasPressed()) {
-            shooterState = ShooterState.EJECT;
-        } else if (gp.aWasPressed()) {
-            shooterState = ShooterState.IDLE;
+        if (gp.leftBumperWasPressed()) {
+            shooterState = (shooterState == ShooterState.AUTO_AIM? shooterState = ShooterState.MANUAL : ShooterState.AUTO_AIM);
         }
-
-        if (shooterState == ShooterState.CLOSE) shooter.midFieldShoot();
-        else if (shooterState == ShooterState.FAR) shooter.farShoot();
-        else if (shooterState == ShooterState.EJECT) shooter.eject();
-        else shooter.idle();*/
-        shooter.adaptive(currentPose.getX(), currentPose.getY(), allianceColor);
+        if (shooterState == ShooterState.AUTO_AIM) {
+            Pose currentPose = follower.getPose();
+            shooter.adaptive(currentPose.getX(), currentPose.getY(), allianceColor);
+        }
+        else if (shooterState == ShooterState.MANUAL) {
+            if (gp.yWasPressed()) {
+                shooter.update(shooter.getTarget() + 10);
+            }
+            else if (gp.aWasPressed()) {
+                shooter.update(shooter.getTarget() - 10);
+            }
+            else if (gp.bWasPressed()) {
+                shooter.update(shooter.getTarget() + 1);
+            }
+            else if (gp.xWasPressed()) {
+                shooter.update(shooter.getTarget() - 1);
+            }
+        }
     }
 
     public void intake(Gamepad gp) {
@@ -192,7 +205,9 @@ public class SubsystemsManager {
     public void transfer(Gamepad gp) {
         if (gp.dpad_up) {
             transfer.reload();
-        } else transfer.feed();
+        } else {
+            transfer.feed();
+        }
     }
 
     public void emergencyResets(Gamepad gp) {
@@ -202,7 +217,7 @@ public class SubsystemsManager {
     }
 
     public enum ShooterState {
-        STOP, IDLE, CLOSE, FAR, EJECT
+        STOP, AUTO_AIM, MANUAL
     }
 
     public enum IntakeState {
@@ -211,10 +226,7 @@ public class SubsystemsManager {
 
     public static double getTargetHeading(double x, double y, org.firstinspires.ftc.teamcode.util.AllianceColor alliance) {
         if (alliance.isRed()) {
-            return MathFunctions.normalizeAngle(Math.atan2(144-y, 141-x) + Math.toRadians(90));
-        }
-        else {
-            double target = Math.atan2(144 - y, -x) + Math.toRadians(180);
+            double target = MathFunctions.normalizeAngle(Math.atan2(141-y, 141-x) + Math.toRadians(91.5));
 
             if (MathFunctions.normalizeAngle(target) > Math.PI) {
                 return MathFunctions.normalizeAngle(target) - Math.PI * 2;
@@ -222,7 +234,20 @@ public class SubsystemsManager {
             else if (MathFunctions.normalizeAngle(target) < -Math.PI){
                 return MathFunctions.normalizeAngle(target) + Math.PI * 2;
             }
+
+            return target;
         }
-        return 0.0;
+        else {
+            double target = Math.atan2(141 - y, 3-x) + Math.toRadians(90);
+
+            if (MathFunctions.normalizeAngle(target) > Math.PI) {
+                return MathFunctions.normalizeAngle(target) - Math.PI * 2;
+            }
+            else if (MathFunctions.normalizeAngle(target) < -Math.PI){
+                return MathFunctions.normalizeAngle(target) + Math.PI * 2;
+            }
+
+            return target;
+        }
     }
 }

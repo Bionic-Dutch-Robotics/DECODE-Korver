@@ -2,13 +2,13 @@ package org.firstinspires.ftc.teamcode;
 
 import static org.firstinspires.ftc.teamcode.pedroPathing.Constants.follower;
 
-import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.BezierLine;
+import com.pedropathing.geometry.Pose;
+import com.pedropathing.paths.Path;
 import com.pedropathing.paths.callbacks.ParametricCallback;
 import com.pedropathing.paths.callbacks.PathCallback;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
@@ -18,10 +18,9 @@ import org.firstinspires.ftc.teamcode.subsystems.drivetrain.autonomous.Actions;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
 
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
-@Autonomous(name ="Sleeps Auto Red")
-public class Messiest extends OpMode {
+@Autonomous(name="PRELOAD PARK RED", preselectTeleOp = "Meet 2 Red")
+public class PreloadParkRED extends OpMode {
     public static final Actions paths = new Actions(AllianceColor.Selection.RED);
     private boolean hasShotFirst, shoot;
     private Transfer transfer;
@@ -46,10 +45,10 @@ public class Messiest extends OpMode {
         ArrayList<PathCallback> callbacks = new ArrayList<>();
         callbacks.add(0,
                 new ParametricCallback(1,0.001, follower,
-                () -> {
-                    follower.setMaxPower(0.2);
-                    intake.intake();
-                }));
+                        () -> {
+                            follower.setMaxPower(0.2);
+                            intake.intake();
+                        }));
         callbacks.add(
                 1,
                 new ParametricCallback(1,0.001, follower,
@@ -86,72 +85,15 @@ public class Messiest extends OpMode {
         } else if (time > 5 && time < 6) {
             transfer.feed();
             intake.stop();
-        }
-        else if (time > 6 && time < 6.5) {
+        } else if (time > 6 && time < 6.5) {
             transfer.reload();
             intake.custom(0.85);
-        }
-        else if (time > 6.5 && time < 7.5) {
+        } else if (time > 6.5 && time < 7.5) {
             transfer.feed();
             intake.stop();
         }
-        else if (time > 7.5 && time < 7.65) {
-            intake.intake();
-            follower.followPath(paths.redIntakeRow1);
+        else if (time > 7.5 && time < 7.6) {
+            follower.followPath(new Path(new BezierLine(follower.getPose(), new Pose(90, 20))));
         }
-        else if (!follower.isBusy() && time > 12 && time < 12.5) {
-            intake.custom(0.85);
-            transfer.reload();
-        }
-        else if (time > 12.5 && time < 13.5) {
-            transfer.feed();
-            intake.stop();
-        }
-        else if (time > 13.5 && time < 14) {
-            transfer.reload();
-            intake.custom(0.85);
-        }
-        else if (time > 14 && time < 15) {
-            transfer.feed();
-            intake.stop();
-        }
-        else if (time > 15 && time < 15.5) {
-            transfer.reload();
-            intake.custom(0.85);
-        }
-        else if (time > 15.5 && time < 16.5) {
-            transfer.feed();
-            intake.stop();
-        }
-        else if (time > 16.5 && time < 16.6) {
-            intake.custom(0.85);
-            follower.followPath(paths.redIntakeRow2);
-        }
-        else if (time > 22 && time < 22.5) {
-            transfer.reload();
-            intake.custom(0.85);
-        }
-        else if (time > 22.5 && time < 23.5) {
-            transfer.feed();
-            intake.stop();
-        }
-        else if (time > 23.5 && time < 24) {
-            transfer.reload();
-            intake.custom(0.85);
-        }
-        else if (time > 24 && time < 24.5) {
-            transfer.feed();
-            intake.stop();
-        }
-
-        else if (time > 24.5 && time < 25) {
-            intake.intake();
-            follower.followPath(paths.goToLever);
-        }
-    }
-    @Override
-    public void stop() {
-        follower.update();
-        Constants.teleOpStartPose = follower.getPose().copy();
     }
 }

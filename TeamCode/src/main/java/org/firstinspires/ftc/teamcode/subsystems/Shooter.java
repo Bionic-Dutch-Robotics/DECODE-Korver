@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.pedropathing.control.PIDFCoefficients;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
@@ -15,7 +14,9 @@ import org.firstinspires.ftc.teamcode.util.AllianceColor;
 public class Shooter {
     private PIDFController shooterPidf = null;
     public DcMotorEx shooter = null;
-    private final double powerCoefficient = 1.2;
+    public final double redPowerCoefficient = 1.1;
+    public final double bluePowerCoefficient = 1.1;
+
     public Shooter (HardwareMap hwMap, PIDFCoefficients shooterCoefficients) {
         shooter = hwMap.get(DcMotorEx.class, "shooter");
         shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -30,7 +31,8 @@ public class Shooter {
     public void adaptive(double x, double y, AllianceColor alliance) {
         this.update(
                 this.getRegressionVelocity(
-                        this.getDistance(x, y, alliance)
+                        this.getDistance(x, y, alliance),
+                        alliance
                 )
         );
     }
@@ -62,10 +64,12 @@ public class Shooter {
             return Math.sqrt(Math.pow(144-x, 2) + Math.pow(144-y, 2));
         }
         else {
-            return Math.sqrt(Math.pow(x, 2) + Math.pow(144-y, 2));
+            return Math.sqrt(Math.pow(-x, 2) + Math.pow(144-y, 2));
         }
     }
-    public double getRegressionVelocity (double distance) {
-        return -0.000724792 * Math.pow(distance, 2) + 1.10181 * distance + (100.38172 * powerCoefficient);
+    public double getRegressionVelocity (double distance, AllianceColor alliance) {
+        //return 0.00365989 * Math.pow(distance, 2) + 0.217247 * distance +
+         //       (142.56245 * (alliance.isRed()? redPowerCoefficient : bluePowerCoefficient));
+        return 1.10033 * distance + 93.21422 * (alliance.isRed()? redPowerCoefficient : bluePowerCoefficient);
     }
 }
