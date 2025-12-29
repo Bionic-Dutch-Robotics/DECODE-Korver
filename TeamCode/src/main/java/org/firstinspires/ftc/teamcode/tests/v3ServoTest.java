@@ -7,29 +7,54 @@ import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 
 @TeleOp(name="Servo Test")
 public class v3ServoTest extends OpMode {
     public static Servo servo1, servo2, servo3;
+    public static Servo tiltServo;
     public static NormalizedColorSensor sensor;
     public static float gain = 0;
+    public static double tilt;
     public static float[] hsvValues;
+    public static Shooter shooter;
+    public static double shooterSpeed;
     @Override
     public void init() {
         servo1 = hardwareMap.get(Servo.class, "kicker1");
         servo2 = hardwareMap.get(Servo.class, "kicker2");
         servo3 = hardwareMap.get(Servo.class, "kicker3");
-        sensor = hardwareMap.get(NormalizedColorSensor.class, "Color Sensor 2");
+        tiltServo = hardwareMap.get(Servo.class, "tilt");
+        sensor = hardwareMap.get(NormalizedColorSensor.class, "color1");
+        shooter = new Shooter(hardwareMap, Constants.shooterCoefficients);
+        shooterSpeed = 250;
+        tilt = 0.01;
     }
 
     @Override
     public void loop() {
+        tiltServo.setPosition(tilt);
+        if (gamepad1.dpadLeftWasPressed()) {
+            tilt += 0.01;
+        }
+        else if (gamepad1.dpadRightWasPressed()){
+            tilt -= 0.01;
+        }
+        shooter.update(shooterSpeed);
+        if (gamepad1.dpadUpWasPressed()) {
+            shooterSpeed += 10;
+        }
+        if (gamepad1.dpadDownWasPressed()) {
+            shooterSpeed -= 10;
+        }
         if (gamepad1.a) {
-            servo1.setPosition(0.2);
+            servo1.setPosition(0.62);
         }
         else {
-            servo1.setPosition(0.64);
+            servo1.setPosition(0.2);
         }
 
         if (gamepad1.b) {
@@ -40,15 +65,17 @@ public class v3ServoTest extends OpMode {
         }
 
         if (gamepad1.x) {
-            servo3.setPosition(0.62);
+            servo3.setPosition(0.2);
         }
         else {
-            servo3.setPosition(0.2);
+            servo3.setPosition(0.64);
         }
         telemetry.addData("Servo1 Pos: ", servo1.getPosition());
         telemetry.addData("Servo2 Pos: ", servo2.getPosition());
         telemetry.addData("Servo3 Pos: ", servo3.getPosition());
         runColorSensor();
+        telemetry.addData("Shooter Vel: ", shooter.shooter.getVelocity(AngleUnit.DEGREES));
+        telemetry.addData("Shooter Target: ", shooter.getTarget());
         telemetry.update();
 
     }
@@ -72,7 +99,7 @@ public class v3ServoTest extends OpMode {
 
         // Tell the sensor our desired gain value (normally you would do this during initialization,
         // not during the loop)
-        sensor.setGain(gain);
+        sensor.setGain(10.0F);
 
         // Get the normalized colors from the sensor
         NormalizedRGBA colors = sensor.getNormalizedColors();

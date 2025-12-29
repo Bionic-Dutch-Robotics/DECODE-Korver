@@ -23,7 +23,7 @@ public class Constants {
         public static final Pose blueStartPose = new Pose(64, 8, Math.toRadians(90));
         public static final Pose redStartPose = new Pose(80, 8, Math.toRadians(90));
         public static final Pose farRedShoot = new Pose(86, 16, 2.78);
-        public static final Pose farBlueShoot = new Pose(58, 18, -2.7);
+        public static final Pose farBlueShoot = new Pose(64, 30, -2.7);
         public static final Pose redCloseShoot = new Pose(76,76,Math.toRadians(135));
         public static final Pose blueCloseShoot = new Pose(68,72, Math.toRadians(-135));
         public static final double closeShootPower = 210;   //Targets 230, really reaches 140
@@ -104,18 +104,18 @@ public class Constants {
             .leftRearMotorName("backLeft")
             .rightFrontMotorName("frontRight")
             .rightRearMotorName("backRight")
-            .leftFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
-            .leftRearMotorDirection(DcMotorSimple.Direction.FORWARD)
+            .leftFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
+            .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
             .rightFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
-            .rightRearMotorDirection(DcMotorSimple.Direction.REVERSE);
+            .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD);
 
     public static PinpointConstants localizerConstants = new PinpointConstants()
                 .distanceUnit(DistanceUnit.INCH)
                 .encoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)
                 .forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
-                .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED)
-                .forwardPodY(2)
-                .strafePodX(2.4);
+                .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
+                .forwardPodY(0.157480315)
+                .strafePodX(7.5590551181);
 
 
     public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1.4, 1);

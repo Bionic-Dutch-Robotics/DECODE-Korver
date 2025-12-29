@@ -14,7 +14,7 @@ public class DrivetrainTest extends OpMode {
     @Override
     public void init() {
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(Constants.redStartPose);
+        follower.setStartingPose(Constants.blueStartPose);
     }
 
     @Override

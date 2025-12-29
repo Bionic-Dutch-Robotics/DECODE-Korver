@@ -4,6 +4,7 @@ import com.pedropathing.control.PIDFController;
 import com.pedropathing.math.MathFunctions;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.pedropathing.control.PIDFCoefficients;
 
@@ -21,6 +22,7 @@ public class Shooter {
         shooter = hwMap.get(DcMotorEx.class, "shooter");
         shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         shooter.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        shooter.setDirection(DcMotorSimple.Direction.REVERSE);
         shooter.setVelocityPIDFCoefficients(shooterCoefficients.P, shooterCoefficients.I, shooterCoefficients.D, shooterCoefficients.F);
         shooterPidf = new PIDFController(shooterCoefficients);
     }
@@ -51,6 +53,7 @@ public class Shooter {
     public void farShoot() {
         update(Constants.farShootPower);
     }
+
     public void update(double targetVelocity) {
         shooterPidf.updatePosition(shooter.getVelocity(AngleUnit.DEGREES));
         shooterPidf.setTargetPosition(targetVelocity);
