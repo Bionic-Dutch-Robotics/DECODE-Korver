@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.tests;
 
 import static java.lang.Thread.sleep;
 
+import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -13,6 +15,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.subsystems.Turret;
 import org.firstinspires.ftc.teamcode.util.Artifact;
 import org.firstinspires.ftc.teamcode.util.ArtifactOrder;
 
@@ -27,16 +30,25 @@ public class transfertest extends OpMode {
     private ElapsedTime time;
     private TransferState transferState;
     private Shooter shooter;
+    private Follower follower;
+    private double shooterSpeed;
     private float gain;
-    ArrayList<Integer> targets;
+    Integer[] targets;
     private ArtifactOrder shootOrder;
+    private Turret turret;
+    private Pose currentPose;
 
     @Override
     public void init() {
         initColorSensors();
         initServos();
+
+        follower = Constants.createFollower(hardwareMap);
+        follower.setStartingPose(Constants.blueStartPose);
+
         time = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
         shooter = new Shooter(hardwareMap, Constants.shooterCoefficients);
+        shooterSpeed = 250;
 
         transferState = TransferState.IDLE;
         gain = 10.0F;
@@ -48,19 +60,27 @@ public class transfertest extends OpMode {
         MOTIF.add(2,
                 Artifact.PURPLE);
 
-        targets = new ArrayList<Integer>(3);
+        targets = new Integer[3];
         shootOrder = new ArtifactOrder(new Artifact[] {Artifact.PURPLE, Artifact.GREEN, Artifact.PURPLE});
+
+        turret = new Turret(hardwareMap, Math.PI/2);
     }
 
     @Override
     public void start() {
+        follower.startTeleopDrive(false);
         time.reset();
     }
     @Override
     public void loop() {
-        // Run servos and provide debug info
-        telemetry.update();
-        runServoRapidFire();
+        this.updateAll();
+
+        if (gamepad1.dpadUpWasPressed()) {
+            shooterSpeed += 10;
+        }
+        else if (gamepad1.dpadDownWasPressed()) {
+            shooterSpeed -= 10;
+        }
 
         telemetry.addData("Servo 1 Pos: ", kickers.get(0).getPosition());
         telemetry.addData("Servo 2 Pos: ", kickers.get(1).getPosition());
@@ -72,19 +92,15 @@ public class transfertest extends OpMode {
         telemetry.addData("Artifact selection 2: ", this.detectArtifacts().get(1));
         telemetry.addData("Artifact selection 3: ", this.detectArtifacts().get(2));
 
-        /*telemetry.addLine("Hold the Dpad Up button on gamepad 1 to increase gain, or Dpad Down to decrease it.\n");
-        telemetry.addLine("Higher gain values mean that the sensor will report larger numbers for Red, Green, and Blue, and Value\n");
-        telemetry.addData("Gain", gain);*/
-
-        if (!targets.isEmpty()) {
+        if (targets.length > 0) {
             telemetry.addData("Motif 1 Index: ",
-                    targets.get(0)
+                    targets[0]
             );
             telemetry.addData("Motif 2 Index: ",
-                    targets.get(1)
+                    targets[1]
             );
             telemetry.addData("Motif 3 Index: ",
-                    targets.get(2)
+                    targets[2]
             );
         }
     }
@@ -114,15 +130,6 @@ public class transfertest extends OpMode {
         return results;
     }
     private void runSensors() {
-
-        // Update the gain value if either of the A or B gamepad buttons is being held
-        if (gamepad1.dpad_up) {
-            // Only increase the gain by a small amount, since this loop will occur multiple times per second.
-            gain += 0.005F;
-        } else if (gamepad1.dpad_down && gain > 1) { // A gain of less than 1 will make the values smaller, which is not helpful.
-            gain -= 0.005F;
-        }
-
         // Tell the sensor our desired gain value (normally you would do this during initialization,
         // not during the loop)
         for (NormalizedColorSensor sensor : colorSensors) {
@@ -188,69 +195,36 @@ public class transfertest extends OpMode {
             }
         }
         else if (gamepad1.x) {
-            if (time.time() < 0.4) {
-                kickers.get(targets.get(0)).setPosition(0.2);
+            targets = shootOrder.get();
+            if (time.time() < servoRunToPosTime) {
+                this.kickServoUp(targets[0]);
             }
-            else if (time.time() < 0.8 && time.time() >= 0.4) {
-                kickers.get(targets.get(0)).setPosition(0.64);
+            else if (time.time() < servoRunToPosTime * 2 && time.time() >= servoRunToPosTime) {
+                this.kickServoDown(targets[0]);
             }
-            else if (time.time() < 1.2 && time.time() >= 0.8) {
-                kickers.get(targets.get(1)).setPosition(0.5);
+            else if (time.time() < servoRunToPosTime * 3 && time.time() >= servoRunToPosTime * 2) {
+                this.kickServoUp(targets[1]);
             }
-            else if (time.time() < 1.6 && time.time() >= 1.2) {
-                kickers.get(targets.get(1)).setPosition(0.96);
+            else if (time.time() < servoRunToPosTime * 4 && time.time() >= servoRunToPosTime * 3) {
+                this.kickServoDown(targets[1]);
             }
-            else if (time.time() < 2 && time.time() >= 1.6) {
-                kickers.get(targets.get(2)).setPosition(0.62);
+            else if (time.time() < servoRunToPosTime * 5 && time.time() >= servoRunToPosTime * 4) {
+                this.kickServoUp(targets[2]);
             }
-            else if (time.time() < 2.4 && time.time() >= 2) {
-                kickers.get(targets.get(2)).setPosition(0.2);
+            else if (time.time() < servoRunToPosTime * 6 && time.time() >= servoRunToPosTime * 5) {
+                this.kickServoDown(targets[2]);
             }
         }
 
         if (gamepad1.xWasPressed()) {
-            final ArrayList<Artifact> transfer = detectArtifacts();
-            ArrayList<Integer> purples = new ArrayList<>();
-            int green = 0;
-            //int motifIndex = 0;
-            // Find green; find motif green, put targets {artifactGreen, motifGreen}
-            for (int artifactIndex = 0; artifactIndex < transfer.size(); artifactIndex++) {
-                if (transfer.get(artifactIndex) == Artifact.GREEN) {
-                    for (int motifIndex = 0; motifIndex < 3; motifIndex++) {
-                            shootOrder.addPair(motifIndex, artifactIndex, transfer.get(artifactIndex));
-                    }
-                }
-                else {
-                    //store purple indexes
-                }
-            }
-            /*for (Artifact motifTarget : MOTIF) {
-                int artifactIndex = 0;
-                for (Artifact artifact : transfer) {
-                    if (artifact == motifTarget) {
-                        targets.add(
-                                motifIndex,
-                                artifactIndex
-                        );
-                        transfer.set(
-                                artifactIndex,
-                                Artifact.UNKNOWN
-                        );
-                        break;
-                    }
-                    else {
-                        targets.add(
-                                -1,
-                                artifactIndex
-                        );
-                    }
-                    artifactIndex += 1;
-                }
-
-                motifIndex += 1;
-            }*/
-
+            updateArtifacts();
+            shootOrder.search();
             time.reset();
+        }
+        else if (gamepad1.xWasReleased()) {
+            this.kickServoDown(0);
+            this.kickServoDown(1);
+            this.kickServoDown(2);
         }
     }
 
@@ -284,6 +258,70 @@ public class transfertest extends OpMode {
                 2,
                 hardwareMap.get(Servo.class, "kicker3")
         );
+    }
+
+    private void updateArtifacts() {
+        int i = 0;
+        for (NormalizedColorSensor sensor : colorSensors) {
+            NormalizedRGBA color = sensor.getNormalizedColors();
+            if (((DistanceSensor) sensor).getDistance(DistanceUnit.INCH) < 2.5) {
+                if (color.blue > color.green) {
+                    shootOrder.addPair(i, Artifact.PURPLE);
+                } else if (color.blue < color.green) {
+                    shootOrder.addPair(i, Artifact.GREEN);
+                }
+                i++;
+            }
+            else {
+                shootOrder.addPair(i, Artifact.UNKNOWN);
+            }
+        }
+    }
+
+    private void updateDrivetrain() {
+        follower.update();
+
+        follower.setTeleOpDrive(
+                -gamepad1.left_stick_y,
+                -gamepad1.left_stick_x,
+                -gamepad1.right_stick_x,
+                true
+        );
+    }
+
+    private void kickServoUp(int servoIndex) {
+        if (servoIndex == 0) {
+            kickers.get(servoIndex).setPosition(0.62);
+        }
+        else if (servoIndex == 1) {
+            kickers.get(servoIndex).setPosition(0.5);
+        }
+        else if (servoIndex == 2) {
+            kickers.get(servoIndex).setPosition(0.2);
+        }
+    }
+    private void kickServoDown(int servoIndex) {
+        if (servoIndex == 0) {
+            kickers.get(servoIndex).setPosition(0.2);
+        }
+        else if (servoIndex == 1) {
+            kickers.get(servoIndex).setPosition(0.95);
+        }
+        else if (servoIndex == 2) {
+            kickers.get(servoIndex).setPosition(0.64);
+        }
+    }
+
+    private void updateAll() {
+        updateDrivetrain();
+
+        currentPose = follower.getPose();
+        turret.autoAim(currentPose.getX(), currentPose.getY(), follower.getHeading());
+
+        telemetry.update();
+        runServoRapidFire();
+
+        shooter.update(shooterSpeed);
     }
 
     private enum TransferState {

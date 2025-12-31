@@ -1,33 +1,24 @@
 package org.firstinspires.ftc.teamcode.util;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
 
 public class ArtifactOrder {
-    public final Artifact[] MOTIF;
-    public Integer[] indexer;   //MOTIF, Indexer
+    public Artifact[] motif;
+    public Integer[] indexer;   //motif, Indexer
     public Artifact[] storedColors;
 
     public ArtifactOrder(Artifact[] motif) {
-        MOTIF = new Artifact[3];
+        this.motif = new Artifact[3];
         indexer = new Integer[3];
         storedColors = new Artifact[3];
-
-        int index = 0;
-        for (Artifact pattern : motif) {
-            MOTIF[index] = pattern;
-        }
-
-        Arrays.fill(indexer, 0);
+        this.motif = motif;
+        storeDefaultOrder();
     }
-    public void addPair(int motifIndex, int artifactIndex, Artifact color) {
-        indexer[motifIndex] = artifactIndex;
+    public void addPair(int artifactIndex, Artifact color) {
         storedColors[artifactIndex] = color;
     }
 
-    public void fireDefaults() {
+    public void storeDefaultOrder() {
         for (int i = 0; i < 3; i++) {
             indexer[i] = i;
         }
@@ -38,15 +29,15 @@ public class ArtifactOrder {
     }
 
     public Artifact[] getMotif() {
-        return MOTIF;
+        return motif;
     }
 
     public void search() {
         int motifIndex = 0;
 
-        this.fireDefaults();
+        this.storeDefaultOrder();
 
-        for (Artifact target : MOTIF) { //For every color in the motif:
+        for (Artifact target : motif) { //For every color in the motif:
             if (target == Artifact.GREEN) { // If the current target is green:
                 for (int i = 0; i < 3; i++) {   // For all currently stored Artifacts:
                     if (storedColors[i] == Artifact.GREEN) {    //If they are green:
