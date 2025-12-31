@@ -62,7 +62,13 @@ public class Vision implements VisionProcessor {
     }
 
     public Mat getBox() {
-        return box;
+
+        if (box != null) {
+            return box;
+        }
+        else {
+            return null;
+        }
     }
 
     @Override

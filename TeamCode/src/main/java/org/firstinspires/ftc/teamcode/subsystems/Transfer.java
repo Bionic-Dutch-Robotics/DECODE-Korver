@@ -1,22 +1,21 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import org.firstinspires.ftc.teamcode.util.Settings.HardwareNames;
-import org.firstinspires.ftc.teamcode.util.Settings.Positions;
-
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class Transfer {
-    private Servo transfer;
+    public Servo transfer = null;
 
     public Transfer(HardwareMap hwMap) {
-        transfer = hwMap.get(Servo.class, HardwareNames.Transfer.TRANSFER);
+
+        transfer = hwMap.get(Servo.class, "push");  //  :)
     }
 
     public void reload() {
-        transfer.setPosition(Positions.Transfer.RELOAD_POS);
+        transfer.setPosition(1);
     }
+
     public void feed() {
-        transfer.setPosition(Positions.Transfer.FEED_SHOOTER);
+        transfer.setPosition(0.85);
     }
 }

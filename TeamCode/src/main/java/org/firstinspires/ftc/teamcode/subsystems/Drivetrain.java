@@ -1,6 +1,4 @@
-/*
 package org.firstinspires.ftc.teamcode.subsystems;
-
 
 import com.pedropathing.control.FilteredPIDFController;
 import com.pedropathing.control.PIDFController;
@@ -14,7 +12,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import static org.firstinspires.ftc.teamcode.pedroPathing.Constants.followerConstants;
-import org.firstinspires.ftc.teamcode.pedroPathing.Constants.startPose;
 
 import androidx.annotation.NonNull;
 
@@ -42,7 +39,6 @@ public class Drivetrain {
      * @param hardwareMap  An OpMode HardwareMap
      * @param startingPose  The robot's starting Pose, in inches
      */
-/*
     public Drivetrain(Gamepad gamepad, HardwareMap hardwareMap, Pose startingPose)
     {
         this.follower = Constants.createFollower(hardwareMap);
@@ -52,7 +48,7 @@ public class Drivetrain {
         headingPid = new
                 PIDFController(followerConstants.coefficientsHeadingPIDF);
 
-        position = new Pose(startingPose.getX(), startPose.getY(),
+        position = new Pose(startingPose.getX(), Constants.redStartPose.getY(),
                 startingPose.getHeading());
         velocity = new Vector();
 
@@ -67,7 +63,7 @@ public class Drivetrain {
      * @param strafePower       Strafe `power` vector
      * @param turnPower         Turn `power` vector
      * @param isRobotCentric    Should the robot drive robot centric or field centric?
-     *//*
+     */
     public void drive(double forwardPower, double strafePower, double turnPower,
                     boolean isRobotCentric) {
         follower.setTeleOpDrive (
@@ -83,7 +79,7 @@ public class Drivetrain {
      * @param posMultiplier Position control coefficient. 1 is full
     speed, 0 is bricked.
      * @param goal          Target to orbit around
-     *
+     */
     private void orbit(double posMultiplier, Pose goal, Gamepad gamepad) {
         headingPid.updatePosition(position.getHeading());
         headingPid.setTargetPosition(calculateRobotCentricTargetHeading(goal));
@@ -105,14 +101,14 @@ public class Drivetrain {
 
         follower.setTeleOpDrive(drivePower.getX(), drivePower.getY(),
 drivePower.getHeading());
-        *
+        */
     }
 
     /**
      * Sets the drivetrain brake mode
      * @param brake If true, drivetrain will brake when no power is
     applied. If false, drivetrain will coast.
-     *
+     */
     public void setBrakeMode (boolean brake) {
         follower.startTeleopDrive(brake);
     }
@@ -122,7 +118,7 @@ drivePower.getHeading());
      * @param driveCoefficient  Speed coefficient. 1 is full speed, 0
     is bricked.
      * @param isAutoOrienting   Toggle Orbit
-     *
+     */
     public void runTeleOpDrive(@NonNull double forwardPower, @NonNull double strafePower, @NonNull double turnPower, double threshold,
                                double driveCoefficient, boolean isAutoOrienting, Pose orbitTarget,
                                @NonNull Gamepad gamepad) {
@@ -146,7 +142,7 @@ drivePower.getHeading());
             calculateDrive(drivePower.getX(), drivePower.getY(),
 drivePower.getHeading());
         );
-        *
+        */
         } else {
             //orbit(driveCoefficient, orbitTarget, gamepad);
         }
@@ -162,7 +158,7 @@ drivePower.getHeading());
      * @param headingThreshold  If heading power is less than this
     number, it will lock in place
      * @return  heading-locked and position-locked vectors.
-     *
+     */
     public Pose calculateDrive(double xPower, double yPower, double
             headingPower, double posThreshold, double headingThreshold) {
         xPid.updatePosition(position.getX());
@@ -204,7 +200,7 @@ drivePower.getHeading());
     /**
      * Calculates desired heading for Orbit
      * @return  Desired field-centric heading to Orbit using
-     *
+     */
     public double calculateRobotCentricTargetHeading(Pose target) {
         double adjacent = Math.abs(target.getX() - position.getX());
         double opposite = Math.abs(target.getY() - position.getY());
@@ -214,7 +210,7 @@ drivePower.getHeading());
 
     /**
      * Updates all necessary components of the Drivetrain. Call once per loop.
-     *
+     */
     public void update() {
         follower.update();
         position = follower.getPose();
@@ -224,4 +220,4 @@ drivePower.getHeading());
         yPid.updatePosition(position.getY());
         headingPid.updatePosition(position.getHeading());
     }
-}*/
+}
