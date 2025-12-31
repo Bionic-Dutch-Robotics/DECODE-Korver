@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.testbenches;
+package org.firstinspires.ftc.teamcode.tests;
 
 import com.pedropathing.follower.Follower;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
