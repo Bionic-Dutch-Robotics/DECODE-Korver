@@ -15,7 +15,7 @@ public class Intake {
     public Intake (HardwareMap hardwareMap) {
         spinner = hardwareMap.get(DcMotorEx.class, "intake");
         spinner.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
-        spinner.setDirection(DcMotorEx.Direction.REVERSE);
+        //spinner.setDirection(DcMotorEx.Direction.REVERSE);
         spinner.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 

@@ -68,7 +68,7 @@ public class v3ServoTest extends OpMode {
             servo3.setPosition(0.2);
         }
         else {
-            servo3.setPosition(0.64);
+            servo3.setPosition(0.62);
         }
         telemetry.addData("Servo1 Pos: ", servo1.getPosition());
         telemetry.addData("Servo2 Pos: ", servo2.getPosition());

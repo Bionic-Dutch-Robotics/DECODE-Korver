@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems.drivetrain.autonomous;
 
-import com.bylazar.configurables.annotations.Configurable;
+//import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
-@Configurable
 public class Actions {
     public static final Pose redRow1Target = new Pose(112, 33, 0);
     public static final Pose redRow1Control = new Pose(76, 31);
@@ -51,7 +50,9 @@ public class Actions {
 
         shoot1.setLinearHeadingInterpolation(
                 this.allianceColor.isRed() ? Constants.redStartPose.getHeading() : Constants.blueStartPose.getHeading(),
-                this.allianceColor.isRed() ? Constants.farRedShoot.getHeading() : Constants.farBlueShoot.getHeading());
+                this.allianceColor.isRed() ? Constants.farRedShoot.getHeading() : Constants.farBlueShoot.getHeading(),
+                0.8
+        );
 
         goToLever = new Path(new BezierLine(
                 this.allianceColor.isRed() ? Constants.farRedShoot : Constants.farBlueShoot,

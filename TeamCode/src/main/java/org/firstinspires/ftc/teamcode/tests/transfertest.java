@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.Turret;
 import org.firstinspires.ftc.teamcode.util.Artifact;
@@ -23,10 +24,10 @@ import java.util.ArrayList;
 
 @TeleOp(name="TRANSFER")
 public class transfertest extends OpMode {
-    private ArrayList<Servo> kickers;
-    private ArrayList<NormalizedColorSensor> colorSensors;
+    private Servo[] kickers;
+    private NormalizedColorSensor[] colorSensors;
     private static ArrayList<Artifact> MOTIF = new ArrayList<>();
-    private final double servoRunToPosTime = 3;
+    private final double servoRunToPosTime = 1.5;
     private ElapsedTime time;
     private TransferState transferState;
     private Shooter shooter;
@@ -37,11 +38,14 @@ public class transfertest extends OpMode {
     private ArtifactOrder shootOrder;
     private Turret turret;
     private Pose currentPose;
+    private boolean shoot;
+    private Intake intake;
 
     @Override
     public void init() {
         initColorSensors();
         initServos();
+        intake = new Intake(hardwareMap);
 
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(Constants.blueStartPose);
@@ -64,6 +68,8 @@ public class transfertest extends OpMode {
         shootOrder = new ArtifactOrder(new Artifact[] {Artifact.PURPLE, Artifact.GREEN, Artifact.PURPLE});
 
         turret = new Turret(hardwareMap, Math.PI/2);
+
+        shoot = false;
     }
 
     @Override
@@ -73,6 +79,12 @@ public class transfertest extends OpMode {
     }
     @Override
     public void loop() {
+        if (gamepad1.leftBumperWasPressed()) {
+            intake.intake();
+        }
+        else if (gamepad1.rightBumperWasPressed()) {
+            intake.eject();
+        }
         this.updateAll();
 
         if (gamepad1.dpadUpWasPressed()) {
@@ -82,9 +94,9 @@ public class transfertest extends OpMode {
             shooterSpeed -= 10;
         }
 
-        telemetry.addData("Servo 1 Pos: ", kickers.get(0).getPosition());
-        telemetry.addData("Servo 2 Pos: ", kickers.get(1).getPosition());
-        telemetry.addData("Servo 3 Pos: ", kickers.get(2).getPosition());
+        telemetry.addData("Servo 1 Pos: ", kickers[0].getPosition());
+        telemetry.addData("Servo 2 Pos: ", kickers[1].getPosition());
+        telemetry.addData("Servo 3 Pos: ", kickers[2].getPosition());
 
         // Explain basic gain information via telemetry
         runSensors();
@@ -103,6 +115,9 @@ public class transfertest extends OpMode {
                     targets[2]
             );
         }
+
+        telemetry.addData("Turret Target", turret.targetTicks);
+        telemetry.addData("Turret Current", turret.turret.getCurrentPosition());
     }
 
     private ArrayList<Artifact> detectArtifacts() {
@@ -171,30 +186,31 @@ public class transfertest extends OpMode {
         }*/
     }
     private void runServoRapidFire() {
-        if (gamepad1.yWasPressed()) {
+        /*if (gamepad1.yWasPressed()) {
             time.reset();
         }
         if (gamepad1.y) {
             if (time.time() < servoRunToPosTime) {
-                kickers.get(0).setPosition(0.2);
+                kickers[0].setPosition(0.2);
             }
             else if (time.time() < servoRunToPosTime * 2 && time.time() >= servoRunToPosTime) {
-                kickers.get(0).setPosition(0.64);
+                kickers[0].setPosition(0.64);
             }
             else if (time.time() < servoRunToPosTime * 3 && time.time() >= servoRunToPosTime * 2) {
-                kickers.get(1).setPosition(0.5);
+                kickers[1].setPosition(0.5);
             }
             else if (time.time() < servoRunToPosTime * 4 && time.time() >= servoRunToPosTime * 3) {
-                kickers.get(1).setPosition(0.96);
+                kickers[1].setPosition(0.96);
             }
             else if (time.time() < servoRunToPosTime * 5 && time.time() >= servoRunToPosTime * 4) {
-                kickers.get(2).setPosition(0.62);
+                kickers[2].setPosition(0.62);
             }
             else if (time.time() < servoRunToPosTime * 6 && time.time() >= servoRunToPosTime * 5) {
-                kickers.get(2).setPosition(0.2);
+                kickers[2].setPosition(0.2);
             }
-        }
-        else if (gamepad1.x) {
+        }*/
+
+        if (shoot) {
             targets = shootOrder.get();
             if (time.time() < servoRunToPosTime) {
                 this.kickServoUp(targets[0]);
@@ -217,47 +233,41 @@ public class transfertest extends OpMode {
         }
 
         if (gamepad1.xWasPressed()) {
-            updateArtifacts();
-            shootOrder.search();
-            time.reset();
-        }
-        else if (gamepad1.xWasReleased()) {
-            this.kickServoDown(0);
-            this.kickServoDown(1);
-            this.kickServoDown(2);
+            if (!shoot) {
+                updateArtifacts();
+                shootOrder.search();
+                time.reset();
+                shoot = true;
+            }
+            else {
+                shoot = false;
+                this.kickServoDown(0);
+                this.kickServoDown(1);
+                this.kickServoDown(2);
+            }
         }
     }
 
     private void initColorSensors() {
-        colorSensors = new ArrayList<>(3);
-        colorSensors.add(
-                0,
-                hardwareMap.get(NormalizedColorSensor.class, "color1")
-        );
-        colorSensors.add(
-                1,
+        colorSensors = new NormalizedColorSensor[3];
+        colorSensors[0] =
+                hardwareMap.get(NormalizedColorSensor.class, "color1");
+        colorSensors[1] =
                 hardwareMap.get(NormalizedColorSensor.class, "color2")
-        );
-        colorSensors.add(
-                2,
+        ;
+        colorSensors[2] =
                 hardwareMap.get(NormalizedColorSensor.class, "color3")
-        );
+        ;
     }
 
     private void initServos() {
-        kickers = new ArrayList<>(3);
-        kickers.add(
-                0,
-                hardwareMap.get(Servo.class, "kicker1")
-        );
-        kickers.add(
-                1,
-                hardwareMap.get(Servo.class, "kicker2")
-        );
-        kickers.add(
-                2,
-                hardwareMap.get(Servo.class, "kicker3")
-        );
+        kickers = new Servo[3];
+        kickers[0] =
+                hardwareMap.get(Servo.class, "kicker1");
+        kickers[1] =
+                hardwareMap.get(Servo.class, "kicker2");
+        kickers[2] =
+                hardwareMap.get(Servo.class, "kicker3");
     }
 
     private void updateArtifacts() {
@@ -291,24 +301,24 @@ public class transfertest extends OpMode {
 
     private void kickServoUp(int servoIndex) {
         if (servoIndex == 0) {
-            kickers.get(servoIndex).setPosition(0.62);
+            kickers[0].setPosition(0.62);
         }
         else if (servoIndex == 1) {
-            kickers.get(servoIndex).setPosition(0.5);
+            kickers[1].setPosition(0.5);
         }
         else if (servoIndex == 2) {
-            kickers.get(servoIndex).setPosition(0.2);
+            kickers[2].setPosition(0.2);
         }
     }
     private void kickServoDown(int servoIndex) {
         if (servoIndex == 0) {
-            kickers.get(servoIndex).setPosition(0.2);
+            kickers[0].setPosition(0.2);
         }
         else if (servoIndex == 1) {
-            kickers.get(servoIndex).setPosition(0.95);
+            kickers[1].setPosition(0.95);
         }
         else if (servoIndex == 2) {
-            kickers.get(servoIndex).setPosition(0.64);
+            kickers[2].setPosition(0.62);
         }
     }
 
