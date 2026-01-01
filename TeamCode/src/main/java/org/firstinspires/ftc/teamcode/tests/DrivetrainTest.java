@@ -20,6 +20,7 @@ public class DrivetrainTest extends OpMode {
     @Override
     public void start() {
         follower.startTeleopDrive(false);
+        follower.teleOpLock(true, true, true);
     }
 
     @Override

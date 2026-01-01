@@ -75,6 +75,7 @@ public class transfertest extends OpMode {
     @Override
     public void start() {
         follower.startTeleopDrive(false);
+        follower.teleOpLock(false, false, true);
         time.reset();
     }
     @Override

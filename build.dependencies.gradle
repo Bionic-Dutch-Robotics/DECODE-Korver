@@ -1,7 +1,11 @@
 repositories {
     mavenCentral()
+    mavenLocal()
     google() // Needed for androidx
     maven { url = "https://mymaven.bylazar.com/releases" }
+    maven {
+        url = 'https://www.matthewo.tech/maven/'
+    }
 }
 
 dependencies {
@@ -15,8 +19,9 @@ dependencies {
     implementation 'org.firstinspires.ftc:Vision:11.0.0'
     implementation 'androidx.appcompat:appcompat:1.2.0'
 
-    implementation 'com.pedropathing:ftc:2.0.4'
+    implementation 'com.pedropathing:ftc:LOCAL'
     implementation 'com.pedropathing:telemetry:1.0.0'
     implementation 'com.bylazar:fullpanels:1.0.10'
+    implementation 'org.team11260:fast-load:0.1.4-beta1'
 }
 
