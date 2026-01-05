@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.autos;
 
 import static org.firstinspires.ftc.teamcode.pedroPathing.Constants.follower;
 
@@ -12,8 +12,8 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.Shooter;
-import org.firstinspires.ftc.teamcode.subsystems.Transfer;
+import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
+import org.firstinspires.ftc.teamcode.subsystems.transfer.Kicker;
 import org.firstinspires.ftc.teamcode.subsystems.drivetrain.autonomous.Actions;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
 
@@ -23,7 +23,7 @@ import java.util.ArrayList;
 public class PreloadParkRED extends OpMode {
     public static final Actions paths = new Actions(AllianceColor.Selection.RED);
     private boolean hasShotFirst, shoot;
-    private Transfer transfer;
+    private Kicker transfer;
     private Shooter shooter;
     private Intake intake;
     private double savedTime;
@@ -35,7 +35,7 @@ public class PreloadParkRED extends OpMode {
         hasShotFirst = false;
         shoot = false;
 
-        transfer = new Transfer(hardwareMap);
+        transfer = new Kicker(hardwareMap);
         shooter = new Shooter(hardwareMap, Constants.shooterCoefficients);
         intake = new Intake(hardwareMap);
         //time = new ElapsedTime();
@@ -64,7 +64,7 @@ public class PreloadParkRED extends OpMode {
     @Override
     public void start() {
         resetRuntime();
-        transfer.feed();
+        ////transfer.feed();
         follower.followPath(paths.shoot1);
     }
 
@@ -74,22 +74,22 @@ public class PreloadParkRED extends OpMode {
         shooter.update(Constants.farShootPower * shooter.redPowerCoefficient);
 
         if (time > 3 && time < 3.5) {
-            transfer.reload();
+            //transfer.reload();
             intake.custom(0.81);
         } else if (time > 3.5 && time < 4.5) {
-            transfer.feed();
+            ////transfer.feed();
             intake.stop();
         } else if (time > 4.5 && time < 5) {
-            transfer.reload();
+            //transfer.reload();
             intake.custom(0.85);
         } else if (time > 5 && time < 6) {
-            transfer.feed();
+            ////transfer.feed();
             intake.stop();
         } else if (time > 6 && time < 6.5) {
-            transfer.reload();
+            //transfer.reload();
             intake.custom(0.85);
         } else if (time > 6.5 && time < 7.5) {
-            transfer.feed();
+            ////transfer.feed();
             intake.stop();
         }
         else if (time > 7.5 && time < 7.6) {

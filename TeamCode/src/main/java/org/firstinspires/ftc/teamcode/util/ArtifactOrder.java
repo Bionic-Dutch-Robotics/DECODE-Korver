@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.util;
 
-import java.util.Arrays;
-
 public class ArtifactOrder {
     public Artifact[] motif;
     public Integer[] indexer;   //motif, Indexer
@@ -25,7 +23,7 @@ public class ArtifactOrder {
         }
     }
 
-    public Integer[] get() {
+    public Integer[] getOrder() {
         return indexer;
     }
 
@@ -34,16 +32,6 @@ public class ArtifactOrder {
     }
 
     public void search() {
-        /*int motifIndex = 0;
-
-        this.storeDefaultOrder();
-
-        if (!(findStoredGreen() == findGreenMotif())) {
-            replaceIndex = findStoredGreen();
-            indexer[replaceIndex] = indexer[findGreenMotif()];
-            indexer[findGreenMotif()] = findStoredGreen();
-        }*/
-
         this.storeDefaultOrder(); // Reset to [0, 1, 2]
 
         int storedGreenAt = findStoredGreen();
@@ -56,20 +44,6 @@ public class ArtifactOrder {
             indexer[motifGreenAt] = indexer[storedGreenAt];
             indexer[storedGreenAt] = temp;
         }
-
-        /*
-        for (Artifact target : motif) { //For every color in the motif:
-                for (int i = 0; i < 3; i++) {   // For all currently stored Artifacts:
-                    if (storedColors[i] == Artifact.GREEN) {    //If they are green:
-                        replaceIndex = Arrays.binarySearch(indexer, i);    // Finds index needed of the green artifact
-                        indexer[replaceIndex] = indexer[motifIndex];           //Replace the used artifact with the one the following line replaces
-
-                        indexer[motifIndex] = i;   // Put current artifact in motif spot
-                    }
-            }
-            motifIndex += 1;
-        }
-         */
     }
 
     public int findStoredGreen() {
@@ -88,14 +62,8 @@ public class ArtifactOrder {
         }
         return -1;
     }
-}
 
-/*
-Line 41
-42: PURPLE
-43: i=0
-44: true
-45: i (0)
-46: indexer[0] = indexer[0] NOO!
-48: indexer[0] = 0
- */
+    public void setMotif(Artifact[] motif) {
+        this.motif = motif;
+    }
+}

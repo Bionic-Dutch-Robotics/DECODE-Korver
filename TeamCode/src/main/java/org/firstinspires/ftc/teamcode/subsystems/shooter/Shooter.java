@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.subsystems;
+package org.firstinspires.ftc.teamcode.subsystems.shooter;
 
 import com.pedropathing.control.PIDFController;
 import com.pedropathing.math.MathFunctions;
@@ -71,8 +71,6 @@ public class Shooter {
         }
     }
     public double getRegressionVelocity (double distance, AllianceColor alliance) {
-        //return 0.00365989 * Math.pow(distance, 2) + 0.217247 * distance +
-         //       (142.56245 * (alliance.isRed()? redPowerCoefficient : bluePowerCoefficient));
-        return 1.10033 * distance + 93.21422 * (alliance.isRed()? redPowerCoefficient : bluePowerCoefficient);
+        return 1.10033 * distance + 93.21422 * (alliance.isRed() ? redPowerCoefficient : bluePowerCoefficient);
     }
 }

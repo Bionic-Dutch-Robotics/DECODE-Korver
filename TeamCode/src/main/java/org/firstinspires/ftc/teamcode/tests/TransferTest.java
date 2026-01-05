@@ -2,8 +2,8 @@ package org.firstinspires.ftc.teamcode.tests;
 
 import static java.lang.Thread.sleep;
 
-import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.math.MathFunctions;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -13,25 +13,26 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.subsystems.shooter.Turret;
+import org.firstinspires.ftc.teamcode.subsystems.drivetrain.Drivetrain;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.Shooter;
-import org.firstinspires.ftc.teamcode.subsystems.Turret;
+import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
+import org.firstinspires.ftc.teamcode.util.AllianceColor;
 import org.firstinspires.ftc.teamcode.util.Artifact;
 import org.firstinspires.ftc.teamcode.util.ArtifactOrder;
+import static org.firstinspires.ftc.teamcode.util.Settings.Positions.Transfer.RUN_TO_POS_TIME;
 
 import java.util.ArrayList;
 
-@TeleOp(name="TRANSFER")
-public class transfertest extends OpMode {
+@TeleOp(name="Transfer")
+public class TransferTest extends OpMode {
     private Servo[] kickers;
     private NormalizedColorSensor[] colorSensors;
     private static ArrayList<Artifact> MOTIF = new ArrayList<>();
-    private final double servoRunToPosTime = 1.5;
     private ElapsedTime time;
     private TransferState transferState;
     private Shooter shooter;
-    private Follower follower;
     private double shooterSpeed;
     private float gain;
     Integer[] targets;
@@ -40,6 +41,7 @@ public class transfertest extends OpMode {
     private Pose currentPose;
     private boolean shoot;
     private Intake intake;
+    private Drivetrain dt;
 
     @Override
     public void init() {
@@ -47,8 +49,7 @@ public class transfertest extends OpMode {
         initServos();
         intake = new Intake(hardwareMap);
 
-        follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(Constants.blueStartPose);
+        dt = new Drivetrain(hardwareMap, new AllianceColor(AllianceColor.Selection.BLUE));
 
         time = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
         shooter = new Shooter(hardwareMap, Constants.shooterCoefficients);
@@ -67,26 +68,29 @@ public class transfertest extends OpMode {
         targets = new Integer[3];
         shootOrder = new ArtifactOrder(new Artifact[] {Artifact.PURPLE, Artifact.GREEN, Artifact.PURPLE});
 
-        turret = new Turret(hardwareMap, Math.PI/2);
+        turret = new Turret(hardwareMap);
 
         shoot = false;
     }
 
     @Override
     public void start() {
-        follower.startTeleopDrive(false);
-        follower.teleOpLock(false, false, true);
+        dt.startTeleOpDrive();
         time.reset();
     }
+
     @Override
     public void loop() {
-        if (gamepad1.leftBumperWasPressed()) {
+        this.updateAll();
+        if (gamepad1.left_bumper) {
             intake.intake();
         }
-        else if (gamepad1.rightBumperWasPressed()) {
+        else if (gamepad1.right_bumper) {
             intake.eject();
         }
-        this.updateAll();
+        else {
+            intake.stop();
+        }
 
         if (gamepad1.dpadUpWasPressed()) {
             shooterSpeed += 10;
@@ -117,8 +121,9 @@ public class transfertest extends OpMode {
             );
         }
 
-        telemetry.addData("Turret Target", turret.targetTicks);
-        telemetry.addData("Turret Current", turret.turret.getCurrentPosition());
+        telemetry.addData("Turret Target", turret.targetRad);
+        telemetry.addData("Turret Current", turret.turretRad);
+        telemetry.addData("Heading", MathFunctions.scale(MathFunctions.normalizeAngle(dt.getPose().getHeading()), 0, 2*Math.PI, -Math.PI, Math.PI));
     }
 
     private ArrayList<Artifact> detectArtifacts() {
@@ -187,48 +192,24 @@ public class transfertest extends OpMode {
         }*/
     }
     private void runServoRapidFire() {
-        /*if (gamepad1.yWasPressed()) {
-            time.reset();
-        }
-        if (gamepad1.y) {
-            if (time.time() < servoRunToPosTime) {
-                kickers[0].setPosition(0.2);
-            }
-            else if (time.time() < servoRunToPosTime * 2 && time.time() >= servoRunToPosTime) {
-                kickers[0].setPosition(0.64);
-            }
-            else if (time.time() < servoRunToPosTime * 3 && time.time() >= servoRunToPosTime * 2) {
-                kickers[1].setPosition(0.5);
-            }
-            else if (time.time() < servoRunToPosTime * 4 && time.time() >= servoRunToPosTime * 3) {
-                kickers[1].setPosition(0.96);
-            }
-            else if (time.time() < servoRunToPosTime * 5 && time.time() >= servoRunToPosTime * 4) {
-                kickers[2].setPosition(0.62);
-            }
-            else if (time.time() < servoRunToPosTime * 6 && time.time() >= servoRunToPosTime * 5) {
-                kickers[2].setPosition(0.2);
-            }
-        }*/
-
         if (shoot) {
-            targets = shootOrder.get();
-            if (time.time() < servoRunToPosTime) {
+            targets = shootOrder.getOrder();
+            if (time.time() < RUN_TO_POS_TIME) {
                 this.kickServoUp(targets[0]);
             }
-            else if (time.time() < servoRunToPosTime * 2 && time.time() >= servoRunToPosTime) {
+            else if (time.time() < RUN_TO_POS_TIME * 2 && time.time() >= RUN_TO_POS_TIME) {
                 this.kickServoDown(targets[0]);
             }
-            else if (time.time() < servoRunToPosTime * 3 && time.time() >= servoRunToPosTime * 2) {
+            else if (time.time() < RUN_TO_POS_TIME * 3 && time.time() >= RUN_TO_POS_TIME * 2) {
                 this.kickServoUp(targets[1]);
             }
-            else if (time.time() < servoRunToPosTime * 4 && time.time() >= servoRunToPosTime * 3) {
+            else if (time.time() < RUN_TO_POS_TIME * 4 && time.time() >= RUN_TO_POS_TIME * 3) {
                 this.kickServoDown(targets[1]);
             }
-            else if (time.time() < servoRunToPosTime * 5 && time.time() >= servoRunToPosTime * 4) {
+            else if (time.time() < RUN_TO_POS_TIME * 5 && time.time() >= RUN_TO_POS_TIME * 4) {
                 this.kickServoUp(targets[2]);
             }
-            else if (time.time() < servoRunToPosTime * 6 && time.time() >= servoRunToPosTime * 5) {
+            else if (time.time() < RUN_TO_POS_TIME * 6 && time.time() >= RUN_TO_POS_TIME * 5) {
                 this.kickServoDown(targets[2]);
             }
         }
@@ -248,7 +229,6 @@ public class transfertest extends OpMode {
             }
         }
     }
-
     private void initColorSensors() {
         colorSensors = new NormalizedColorSensor[3];
         colorSensors[0] =
@@ -290,44 +270,46 @@ public class transfertest extends OpMode {
     }
 
     private void updateDrivetrain() {
-        follower.update();
+        dt.update();
+        double forward = (Math.abs(gamepad1.left_stick_y) - 0.05) > 0 ? -gamepad1.left_stick_y : 0;
+        double strafe = (Math.abs(gamepad1.left_stick_x) - 0.05) > 0 ? -gamepad1.left_stick_x : 0;
+        double turn = (Math.abs(gamepad1.right_stick_x) - 0.05) > 0 ? -gamepad1.right_stick_x : 0;
 
-        follower.setTeleOpDrive(
-                -gamepad1.left_stick_y,
-                -gamepad1.left_stick_x,
-                -gamepad1.right_stick_x,
-                true
+        dt.teleOpDrive(
+                forward,
+                strafe,
+                turn
         );
     }
 
     private void kickServoUp(int servoIndex) {
         if (servoIndex == 0) {
-            kickers[0].setPosition(0.62);
+            kickers[0].setPosition(0.2);
         }
         else if (servoIndex == 1) {
-            kickers[1].setPosition(0.5);
+            kickers[1].setPosition(0.6);
         }
         else if (servoIndex == 2) {
-            kickers[2].setPosition(0.2);
+                kickers[2].setPosition(0.6);
         }
     }
     private void kickServoDown(int servoIndex) {
         if (servoIndex == 0) {
-            kickers[0].setPosition(0.2);
+            kickers[0].setPosition(0.62);
         }
         else if (servoIndex == 1) {
-            kickers[1].setPosition(0.95);
+            kickers[1].setPosition(1);
         }
         else if (servoIndex == 2) {
-            kickers[2].setPosition(0.62);
+            kickers[2].setPosition(0.2);
         }
     }
 
     private void updateAll() {
         updateDrivetrain();
 
-        currentPose = follower.getPose();
-        turret.autoAim(currentPose.getX(), currentPose.getY(), follower.getHeading());
+        currentPose = dt.getPose();
+        turret.loop(currentPose.getX(), currentPose.getY(), dt.getPose().getHeading());
 
         telemetry.update();
         runServoRapidFire();

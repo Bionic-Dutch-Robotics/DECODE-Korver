@@ -1,19 +1,12 @@
 package org.firstinspires.ftc.teamcode.tests;
 
-import com.pedropathing.control.FilteredPIDFController;
 import com.pedropathing.control.PIDFController;
-import com.pedropathing.follower.Follower;
-import com.pedropathing.math.MathFunctions;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
-import org.firstinspires.ftc.teamcode.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.Shooter;
-import org.firstinspires.ftc.teamcode.subsystems.Transfer;
+import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
 
 @TeleOp(name="SHOOTER Manual")
 public class ShooterManualTest extends OpMode {

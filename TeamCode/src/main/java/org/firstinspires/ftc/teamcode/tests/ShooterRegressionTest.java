@@ -1,30 +1,25 @@
 package org.firstinspires.ftc.teamcode.tests;
 
 import com.bylazar.configurables.annotations.Configurable;
-import com.pedropathing.control.PIDFCoefficients;
 import com.pedropathing.control.PIDFController;
 import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.BezierLine;
-import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.HeadingInterpolator;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.Shooter;
-import org.firstinspires.ftc.teamcode.subsystems.Transfer;
-import org.firstinspires.ftc.teamcode.util.AllianceColor;
+import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
+import org.firstinspires.ftc.teamcode.subsystems.transfer.Kicker;
 
 import java.util.function.Supplier;
 
 @Configurable
 @TeleOp(name="Shooter")
-public class shootertest extends OpMode {
+public class ShooterRegressionTest extends OpMode {
     public static Shooter shooter;
     public Intake intake;
-    public Transfer transfer;
+    public Kicker transfer;
     public Follower follower;
     public static com.pedropathing.control.PIDFController headingPid;
     public static double shooterTarget;
@@ -38,7 +33,7 @@ public class shootertest extends OpMode {
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(Constants.redStartPose);
         intake = new Intake(hardwareMap);
-        transfer = new Transfer(hardwareMap);
+        transfer = new Kicker(hardwareMap);
         runIntake = false;
         goToHeading = false;
     }
@@ -62,10 +57,10 @@ public class shootertest extends OpMode {
         }
         {
             if (gamepad1.a) {
-                transfer.reload();
+                //transfer.reload();
             }
             else {
-                transfer.feed();
+                //transfer.feed();
             }
         }
 

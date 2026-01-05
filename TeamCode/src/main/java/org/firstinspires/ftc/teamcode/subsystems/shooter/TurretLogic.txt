@@ -1,0 +1,18 @@
+Turret Pid Init
+Motor Init
+Turret goes opposite direction than motor by 140.003 ratio
+As in:    Motor Ticks * 140.003= Turret Radians, counterclockwise (good, Pedro heading is counterclockwise)
+Turret Forbidden Zone: Math.PI/2 radians to Math.PI * 1.5 radians (may never touch those angles)
+
+Normalized Heading = a number between 0 and 6.283
+
+During Loop:
+    turretRad = MathFunctions.normalizeAngle(turret.getPosition() / 140.003)
+    turretRad = MathFunctions.scale(turretRad, 0, 2pi, -pi, pi)
+    fieldCentricTurretRad = scale(normalize(turretRad - normalize(heading)), 0, 2pi, -pi, pi)
+    targetRad = scale(normalize(atan2(144-y, 0-x) - normalize(heading), -pi, pi)
+    targetRad = MathFunctions.clamp(targetRad, -pi/2, pi/2)
+
+    turretPid.updatePosition(turretRad * 140.003)
+    turretPid.setTarget(targetRad * 140.003)
+    turret.setPower(turretPid.run())

@@ -1,5 +1,5 @@
-package org.firstinspires.ftc.teamcode;
-
+package org.firstinspires.ftc.teamcode.autos;
+/*
 import static org.firstinspires.ftc.teamcode.pedroPathing.Constants.follower;
 
 import com.pedropathing.follower.Follower;
@@ -10,8 +10,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.Shooter;
-import org.firstinspires.ftc.teamcode.subsystems.Transfer;
+import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
+import org.firstinspires.ftc.teamcode.subsystems.transfer.Transfer;
 import org.firstinspires.ftc.teamcode.subsystems.drivetrain.autonomous.Actions;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
@@ -137,4 +137,4 @@ public class MessiestBlue extends OpMode {
         follower.update();
         Constants.teleOpStartPose = follower.getPose().copy();
     }
-}
+}*/

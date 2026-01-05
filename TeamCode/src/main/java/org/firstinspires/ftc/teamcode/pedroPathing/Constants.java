@@ -20,7 +20,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class Constants {
         public static final Pose blueCloseStart = new Pose(30.9436, 123.8405, -2.27);
         public static final Pose redCloseStart = new Pose(121.6233, 131.271, 2.2);
-        public static final Pose blueStartPose = new Pose(64, 8, Math.toRadians(90));
+        public static final Pose blueStartPose = new Pose(56.875, 8.5, Math.PI);
         public static final Pose redStartPose = new Pose(80, 8, Math.toRadians(90));
         public static final Pose farRedShoot = new Pose(86, 16, 2.78);
         public static final Pose farBlueShoot = new Pose(64, 30, -2.7);
@@ -31,7 +31,7 @@ public class Constants {
         public static final Pose redPark = new Pose(35,30, 0);
         public static final Pose bluePark = new Pose(100,30, 0);
 
-        public static PIDFCoefficients shooterCoefficients = new PIDFCoefficients(0.00527, 0,0.000013,0);   //SHOOTER PIDF. original P was 0.0052
+        public static PIDFCoefficients shooterCoefficients = new PIDFCoefficients(0.00527, 0,0.000013,0);
         public static Pose teleOpStartPose = null;
         public static Follower follower = null;
 
