@@ -19,10 +19,11 @@ public class MatchSettings {
     private static final String STORED_POSE_KEY = "storedPose";
     private static final String ALLIANCE_COLOR_KEY = "allianceColor";
 
-    public HashMap<String, Object> blackboard;
+    public HashMap<String, Pose> savedPoses;
+    public AllianceColor allianceColor;
 
-    public MatchSettings(HashMap<String, Object> blackboard) {
-        this.blackboard = blackboard;
+    public MatchSettings(HashMap<String, Pose> savedPoses) {
+        this.savedPoses = savedPoses;
     }
 
     /**
@@ -31,17 +32,24 @@ public class MatchSettings {
      */
     public void selectStartingPosition(Gamepad gp, Telemetry telemetry) {
         if (gp.bWasPressed()) {
-            blackboard.put(ALLIANCE_COLOR_KEY, AllianceColor.RED);
+            allianceColor = AllianceColor.RED;
         }
         else if (gp.xWasPressed()) {
-            blackboard.put(ALLIANCE_COLOR_KEY, AllianceColor.BLUE);
+            allianceColor = AllianceColor.BLUE;
         }
 
         if (gp.dpadUpWasPressed()) {
-            blackboard.put(AUTO_START_KEY, AutoStartingPosition.CLOSE);
+            if (allianceIsRed()){
+                savedPoses.put(AUTO_START_KEY, Settings.Positions.Drivetrain.Red.FAR_AUTO_START);
+            }
+            else {
+                savedPoses.put(AUTO_START_KEY, Settings.Positions.Drivetrain.Blue.FAR_AUTO_START);
+            }
         }
         else if (gp.dpadDownWasPressed()) {
-            blackboard.put(AUTO_START_KEY, AutoStartingPosition.FAR);
+            savedPoses.put(AUTO_START_KEY,
+                    allianceIsRed()? Settings.Positions.Drivetrain.Red.CLOSE_AUTO_START : Settings.Positions.Drivetrain.Blue.CLOSE_AUTO_START
+                    );
         }
         manageTelemetry(telemetry);
     }
@@ -58,5 +66,9 @@ public class MatchSettings {
     }
     public enum AutoStartingPosition {
         CLOSE, FAR
+    }
+
+    public boolean allianceIsRed() {
+        return allianceColor == AllianceColor.RED;
     }
 }
