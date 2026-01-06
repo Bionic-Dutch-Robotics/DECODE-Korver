@@ -27,7 +27,7 @@ public class Drivetrain {
                     alliance.isRed() ? Constants.redStartPose : Constants.blueStartPose
             );
         }
-        follower.teleOpLock(false, false, true);
+        //follower.teleOpLock(false, false, true);
     }
 
     public void startTeleOpDrive() {

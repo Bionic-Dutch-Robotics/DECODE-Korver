@@ -81,6 +81,15 @@ public class AprilTagTest extends LinearOpMode {
         for (AprilTagDetection detection : currentDetections) {
             if (detection.metadata != null) {
                 telemetry.addLine(String.format("\n==== (ID %d) %s", detection.id, detection.metadata.name));
+                if (detection.id == 21) {
+                    telemetry.addLine("Green Purple Purple");
+                }
+                else if (detection.id == 22) {
+                    telemetry.addLine("Purple Green Purple");
+                }
+                else if (detection.id == 23) {
+                    telemetry.addLine("Purple Purple Green");
+                }
             }
         }
 
