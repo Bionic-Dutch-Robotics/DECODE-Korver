@@ -14,17 +14,17 @@ public class ShooterManualTest extends OpMode {
     public Shooter shooter;
     public PIDFController shooterPidf;
     //public Transfer transfer;
-    //public Intake intake;
+    //public Intake run;
     //public PIDFController headingPid;
     public boolean goToHeading;
     public double shooterPower;
     @Override
     public void init() {
         shooterPidf = new PIDFController(Constants.shooterCoefficients);
-        shooter = new Shooter(hardwareMap, Constants.shooterCoefficients);
+        shooter = new Shooter(hardwareMap);
         /*follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(Constants.redStartPose);*/
-        //intake = new Intake(hardwareMap);
+        //run = new Intake(hardwareMap);
         //transfer = new Transfer(hardwareMap);
         shooterPower = 250;
         //headingPid = new PIDFController(follower.getConstants().getCoefficientsHeadingPIDF());
@@ -82,7 +82,7 @@ public class ShooterManualTest extends OpMode {
             shooterPower -= 1;
         }
 
-        //intake.intake();
+        //run.run();
 
         if (gamepad1.x) {
             //transfer.reload();

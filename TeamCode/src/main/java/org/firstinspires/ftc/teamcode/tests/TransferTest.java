@@ -52,7 +52,7 @@ public class TransferTest extends OpMode {
         dt = new Drivetrain(hardwareMap, new AllianceColor(AllianceColor.Selection.BLUE));
 
         time = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
-        shooter = new Shooter(hardwareMap, Constants.shooterCoefficients);
+        shooter = new Shooter(hardwareMap);
         shooterSpeed = 250;
 
         transferState = TransferState.IDLE;
@@ -83,7 +83,7 @@ public class TransferTest extends OpMode {
     public void loop() {
         this.updateAll();
         if (gamepad1.left_bumper) {
-            intake.intake();
+            intake.run();
         }
         else if (gamepad1.right_bumper) {
             intake.eject();

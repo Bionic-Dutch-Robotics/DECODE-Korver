@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.subsystems.drivetrain;
 
 import com.pedropathing.control.FilteredPIDFController;
 import com.pedropathing.control.PIDFController;
+import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.Path;
@@ -9,11 +10,11 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
-import static org.firstinspires.ftc.teamcode.pedroPathing.Constants.follower;
 
 public class Drivetrain {
     public FilteredPIDFController xPid, yPid;
     public PIDFController headingPid;
+    public Follower follower;
 
     /**
      * Creates a new drivetrain

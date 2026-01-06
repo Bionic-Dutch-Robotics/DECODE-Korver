@@ -29,7 +29,7 @@ public class ShooterRegressionTest extends OpMode {
     @Override
     public void init() {
         headingPid = new PIDFController(Constants.followerConstants.getCoefficientsHeadingPIDF());
-        shooter = new Shooter(hardwareMap, Constants.shooterCoefficients);
+        shooter = new Shooter(hardwareMap);
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(Constants.redStartPose);
         intake = new Intake(hardwareMap);
@@ -50,7 +50,7 @@ public class ShooterRegressionTest extends OpMode {
                 runIntake = !runIntake;
             }
             if (runIntake) {
-                intake.intake();
+                intake.run();
             } else {
                 intake.stop();
             }

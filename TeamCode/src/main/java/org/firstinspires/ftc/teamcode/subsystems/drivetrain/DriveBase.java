@@ -27,7 +27,7 @@ public class DriveBase {
     }
 
     /**
-     * Moves the drivetrain in specified direction. Forward is the intake side.
+     * Moves the drivetrain in specified direction. Forward is the run side.
      *
      */
     public void mecanumDrive(double forwardPower, double strafePower, double turnPower) {

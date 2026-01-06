@@ -1,16 +1,18 @@
 package org.firstinspires.ftc.teamcode.subsystems.shooter;
 
+import static org.firstinspires.ftc.teamcode.util.Settings.Positions.Shooter.SHOOTER_COEFFICIENTS;
+
 import com.pedropathing.control.PIDFController;
 import com.pedropathing.math.MathFunctions;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.pedropathing.control.PIDFCoefficients;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
+import org.firstinspires.ftc.teamcode.util.Settings;
 
 public class Shooter {
     private PIDFController shooterPidf = null;
@@ -18,13 +20,12 @@ public class Shooter {
     public final double redPowerCoefficient = 1.1;
     public final double bluePowerCoefficient = 1.1;
 
-    public Shooter (HardwareMap hwMap, PIDFCoefficients shooterCoefficients) {
-        shooter = hwMap.get(DcMotorEx.class, "shooter");
+    public Shooter (HardwareMap hwMap) {
+        shooter = hwMap.get(DcMotorEx.class, Settings.HardwareNames.Shooter.SHOOTER);
         shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         shooter.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         shooter.setDirection(DcMotorSimple.Direction.REVERSE);
-        shooter.setVelocityPIDFCoefficients(shooterCoefficients.P, shooterCoefficients.I, shooterCoefficients.D, shooterCoefficients.F);
-        shooterPidf = new PIDFController(shooterCoefficients);
+        shooterPidf = new PIDFController(SHOOTER_COEFFICIENTS);
     }
 
     public void eject() {

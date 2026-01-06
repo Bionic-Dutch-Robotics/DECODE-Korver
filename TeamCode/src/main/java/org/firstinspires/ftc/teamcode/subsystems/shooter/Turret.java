@@ -7,13 +7,15 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.util.Settings;
+
 public class Turret {
     public DcMotorEx turret;
     private PIDFController turretPid;
     public double turretRad, targetRad, fieldCentricTurretRad, turretPower;
 
     public Turret(HardwareMap hwMap) {
-        turret = hwMap.get(DcMotorEx.class, "turret");
+        turret = hwMap.get(DcMotorEx.class, Settings.HardwareNames.Shooter.TURRET);
         turret.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         turretPid = new PIDFController(new PIDFCoefficients(0.013, 0, 0.0001, 0.0));
 
@@ -44,8 +46,8 @@ public class Turret {
         turretPid.updatePosition(turretRad * 140.003629846);
 
         // Only apply power if we are not at limit OR moving away from limit
-        if ((turretRad <= -Math.PI/2 && turretPid.run() < 0) ||
-                (turretRad >= Math.PI/2 && turretPid.run() > 0)) {
+        if ((turretRad <= -Math.toRadians(91) /* -Math.PI/2 */ && turretPid.run() < 0) ||
+                (turretRad >= Math.toRadians(91) && turretPid.run() > 0)) {
             turretPower = 0; // stop motor at hard limit
         } else {
             turretPower = MathFunctions.clamp(turretPid.run(), -0.4, 0.4);

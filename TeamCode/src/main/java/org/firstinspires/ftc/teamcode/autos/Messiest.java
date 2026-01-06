@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.autos;
 
-import static org.firstinspires.ftc.teamcode.pedroPathing.Constants.follower;
 
+import com.pedropathing.follower.Follower;
 import com.pedropathing.paths.callbacks.ParametricCallback;
 import com.pedropathing.paths.callbacks.PathCallback;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -24,6 +24,7 @@ public class Messiest extends OpMode {
     private Shooter shooter;
     private Intake intake;
     private double savedTime;
+    public Follower follower;
 
     @Override
     public void init() {
@@ -33,7 +34,7 @@ public class Messiest extends OpMode {
         shoot = false;
 
         transfer = new Kicker(hardwareMap);
-        shooter = new Shooter(hardwareMap, Constants.shooterCoefficients);
+        shooter = new Shooter(hardwareMap);
         intake = new Intake(hardwareMap);
         //time = new ElapsedTime();
 
@@ -44,7 +45,7 @@ public class Messiest extends OpMode {
                 new ParametricCallback(1,0.001, follower,
                 () -> {
                     follower.setMaxPower(0.2);
-                    intake.intake();
+                    intake.run();
                 }));
         callbacks.add(
                 1,
@@ -92,7 +93,7 @@ public class Messiest extends OpMode {
             intake.stop();
         }
         else if (time > 7.5 && time < 7.65) {
-            intake.intake();
+            intake.run();
             follower.followPath(paths.redIntakeRow1);
         }
         else if (!follower.isBusy() && time > 12 && time < 12.5) {
@@ -141,7 +142,7 @@ public class Messiest extends OpMode {
         }
 
         else if (time > 24.5 && time < 25) {
-            intake.intake();
+            intake.run();
             follower.followPath(paths.goToLever);
         }
     }

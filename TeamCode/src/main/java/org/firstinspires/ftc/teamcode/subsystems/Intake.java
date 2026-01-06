@@ -2,8 +2,11 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import org.firstinspires.ftc.teamcode.util.Settings.HardwareNames;
+import org.firstinspires.ftc.teamcode.util.Settings.Positions;
+
 
 public class Intake {
     public DcMotorEx spinner;
@@ -13,24 +16,23 @@ public class Intake {
      * @param hardwareMap   An OpMode HardwareMap object
      */
     public Intake (HardwareMap hardwareMap) {
-        spinner = hardwareMap.get(DcMotorEx.class, "intake");
+        spinner = hardwareMap.get(DcMotorEx.class, HardwareNames.Intake.INTAKE);
         spinner.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
-        //spinner.setDirection(DcMotorEx.Direction.REVERSE);
         spinner.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     /**
      * Run the intake
      */
-    public void intake() {
-        spinner.setPower(0.75);
+    public void run() {
+        spinner.setPower(Positions.Intake.INTAKE_SPEED);
     }
 
     /**
      * Eject an artifact in the robot
      */
     public void eject() {
-        spinner.setPower(-0.75);
+        spinner.setPower(Positions.Intake.EJECT_SPEED);
     }
 
     public void stop() {

@@ -4,10 +4,12 @@ import com.pedropathing.math.MathFunctions;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.util.Settings;
+
 public class Tilt {
     private Servo tilt;
     public Tilt(HardwareMap hwMap) {
-        tilt = hwMap.get(Servo.class, "tilt");
+        tilt = hwMap.get(Servo.class, Settings.HardwareNames.Shooter.TILT_SERVO);
     }
 
     public void setTilt(double tiltAngle) {

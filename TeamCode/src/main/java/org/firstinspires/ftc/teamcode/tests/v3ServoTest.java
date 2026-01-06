@@ -24,7 +24,7 @@ public class v3ServoTest extends OpMode {
     @Override
     public void init() {
         sensor = hardwareMap.get(NormalizedColorSensor.class, "color1");
-        shooter = new Shooter(hardwareMap, Constants.shooterCoefficients);
+        shooter = new Shooter(hardwareMap);
         shooterSpeed = 150;
         tilt = 0.01;
         transfer = new Kicker(hardwareMap);

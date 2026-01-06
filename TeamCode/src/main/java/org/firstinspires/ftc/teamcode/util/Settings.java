@@ -18,8 +18,6 @@ public class Settings {
         public static class Shooter {
             public static final String SHOOTER = "shooter";
             public static final String TILT_SERVO = "tilt";
-        }
-        public static class  Turret {
             public static final String TURRET = "turret";
         }
 
@@ -32,7 +30,7 @@ public class Settings {
         }
 
         public static class Intake {
-            public static final String INTAKE = "intake";
+            public static final String INTAKE = "run";
         }
     }
 
@@ -56,9 +54,21 @@ public class Settings {
         }
 
         public static class Drivetrain {
-            public static final Pose BLUE_AUTO_START = new Pose(56.875, 8.5, Math.PI);
-            public static final Pose BLUE_MIDFIELD_SHOOT = new Pose(68,72, Math.toRadians(-135));
-            public static final Pose BLUE_FAR_SHOOT = new Pose(64, 30, -2.7);
+            public static class Blue {
+                public static final Pose FAR_AUTO_START = new Pose(56.875, 8.5, Math.PI);
+                public static final Pose MIDFIELD_SHOOT = new Pose(68, 72, Math.toRadians(-135));   //Needs to be updated
+                public static final Pose FAR_SHOOT = new Pose(64, 30, -2.7);    //Needs to be updated
+                public static final Pose CLOSE_AUTO_START = new Pose(30.9436, 123.8405, -2.27); //Needs to be updated
+                public static final Pose PARK = new Pose(100,30, 0);
+            }
+            public static class Red {
+
+                public static final Pose FAR_AUTO_START = new Pose(80, 8, Math.toRadians(90)); //Needs to be updated
+                public static final Pose CLOSE_AUTO_START = new Pose(121.6233, 131.271, 2.2);   //Needs to be updated
+                public static final Pose FAR_SHOOT = new Pose(76,76,Math.toRadians(135));    //Needs to be updated
+                public static final Pose MIDFIELD_SHOOT = new Pose(68, 72, Math.toRadians(-135));   //Needs to be updated
+                public static final Pose PARK = new Pose(35,30, 0);
+            }
         }
 
         public static class Intake {
