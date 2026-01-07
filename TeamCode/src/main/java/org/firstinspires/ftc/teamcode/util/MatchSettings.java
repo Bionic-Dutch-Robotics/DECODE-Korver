@@ -8,6 +8,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystems.Vision;
 import org.firstinspires.ftc.teamcode.subsystems.drivetrain.Drivetrain;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -23,54 +24,32 @@ public class MatchSettings {
     public static HashMap<String, Pose> savedPoses;
     public static AllianceColor allianceColor;
 
-    public static void initSelection(HardwareMap hwMap) {
+    public static void initSelection(HardwareMap hwMap, AllianceColor alliance) {
         savedPoses = new HashMap<>();
-        allianceColor = new AllianceColor(AllianceColor.Selection.BLUE);
+        allianceColor = alliance;
         vision = new Vision(hwMap);
+        dt = new Drivetrain(hwMap, allianceColor);
     }
 
     /**
      * Run this in the init loop - selects the auto configuration
-     * @param gp    OpMode or LinearOpMode Gamepad
      */
-    public static void selectStartingPosition(Gamepad gp, Telemetry telemetry, HardwareMap hwMap) {
-        if ((motif != vision.findMotif(telemetry) || motif == null) && vision.findMotif(telemetry) != null) {
+    public static void refreshMotif(Telemetry telemetry) {
+        Artifact[] detectedMotif = vision.findMotif(telemetry);
+
+        if ((motif != detectedMotif || motif == null) && detectedMotif != null) {
             motif = vision.findMotif(telemetry);
         }
 
-        if (gp.bWasPressed()) {
-            allianceColor = new AllianceColor(AllianceColor.Selection.RED);
-        }
-        else if (gp.xWasPressed()) {
-            allianceColor = new AllianceColor(AllianceColor.Selection.BLUE);
-        }
-
-        if (gp.dpadUpWasPressed()) {
-            if (allianceColor.isRed()){
-                savedPoses.put(AUTO_START_KEY, Settings.Positions.Drivetrain.Red.FAR_AUTO_START);
-            }
-            else {
-                savedPoses.put(AUTO_START_KEY, Settings.Positions.Drivetrain.Blue.FAR_AUTO_START);
-            }
-        }
-        else if (gp.dpadDownWasPressed()) {
-            savedPoses.put(
-                    AUTO_START_KEY,
-                    allianceColor.isRed() ? Settings.Positions.Drivetrain.Red.CLOSE_AUTO_START : Settings.Positions.Drivetrain.Blue.CLOSE_AUTO_START
-            );
-        }
-        else if (gp.startWasPressed()) {
-            dt = new Drivetrain(hwMap, allianceColor);
-        }
         manageTelemetry(telemetry);
     }
     private static void manageTelemetry(Telemetry telemetry) {
-        telemetry.addLine("RED      --  gamepad2: B");
+        /*telemetry.addLine("RED      --  gamepad2: B");
         telemetry.addLine("BLUE     --  gamepad2: X");
         telemetry.addLine("CLOSE    --  gamepad2: D-Pad UP");
         telemetry.addLine("FAR      --  gamepad2: D-Pad DOWN");
-        telemetry.addLine("Select   --  gamepad2: start");
-        telemetry.addData("Motif: ", motif);
+        telemetry.addLine("Select   --  gamepad2: start");*/
+        telemetry.addData("Motif: ", Arrays.toString(motif));
         telemetry.update();
     }
 }

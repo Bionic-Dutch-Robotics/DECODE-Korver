@@ -15,9 +15,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Turret;
 import org.firstinspires.ftc.teamcode.subsystems.drivetrain.Drivetrain;
-import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
+import org.firstinspires.ftc.teamcode.subsystems.shooter.Flywheel;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
 import org.firstinspires.ftc.teamcode.util.Artifact;
 import org.firstinspires.ftc.teamcode.util.ArtifactOrder;
@@ -32,7 +31,7 @@ public class TransferTest extends OpMode {
     private static ArrayList<Artifact> MOTIF = new ArrayList<>();
     private ElapsedTime time;
     private TransferState transferState;
-    private Shooter shooter;
+    private Flywheel shooter;
     private double shooterSpeed;
     private float gain;
     Integer[] targets;
@@ -52,7 +51,7 @@ public class TransferTest extends OpMode {
         dt = new Drivetrain(hardwareMap, new AllianceColor(AllianceColor.Selection.BLUE));
 
         time = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
-        shooter = new Shooter(hardwareMap);
+        shooter = new Flywheel(hardwareMap);
         shooterSpeed = 250;
 
         transferState = TransferState.IDLE;

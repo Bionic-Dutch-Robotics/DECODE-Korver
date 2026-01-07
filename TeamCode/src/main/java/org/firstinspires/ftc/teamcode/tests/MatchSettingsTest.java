@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.tests;
 
+import static android.os.SystemClock.sleep;
 import static org.firstinspires.ftc.teamcode.util.MatchSettings.motif;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.subsystems.transfer.Transfer;
+import org.firstinspires.ftc.teamcode.util.AllianceColor;
 import org.firstinspires.ftc.teamcode.util.MatchSettings;
 
 @TeleOp(name="Match Settings / Vision Test")
@@ -14,13 +16,14 @@ public class MatchSettingsTest extends OpMode {
 
     @Override
     public void init() {
-        MatchSettings.initSelection(hardwareMap);
+        MatchSettings.initSelection(hardwareMap, new AllianceColor(AllianceColor.Selection.BLUE));
         transfer = new Transfer(hardwareMap);
     }
 
     @Override
     public void init_loop() {
-        MatchSettings.selectStartingPosition(gamepad1, telemetry, hardwareMap);
+        MatchSettings.refreshMotif(telemetry);
+        sleep(5);
     }
 
     @Override

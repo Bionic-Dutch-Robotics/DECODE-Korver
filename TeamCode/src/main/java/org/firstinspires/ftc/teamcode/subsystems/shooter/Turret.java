@@ -2,17 +2,20 @@ package org.firstinspires.ftc.teamcode.subsystems.shooter;
 
 import com.pedropathing.control.PIDFCoefficients;
 import com.pedropathing.control.PIDFController;
+import com.pedropathing.geometry.Pose;
 import com.pedropathing.math.MathFunctions;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.util.AllianceColor;
 import org.firstinspires.ftc.teamcode.util.Settings;
 
 public class Turret {
     public DcMotorEx turret;
     private PIDFController turretPid;
     public double turretRad, targetRad, fieldCentricTurretRad, turretPower;
+    private Pose target;
 
     public Turret(HardwareMap hwMap) {
         turret = hwMap.get(DcMotorEx.class, Settings.HardwareNames.Shooter.TURRET);
@@ -21,6 +24,11 @@ public class Turret {
 
         turret.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         turret.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        target = new Pose();
+    }
+
+    public void setAlliance(AllianceColor alliance) {
+        target = alliance.isRed() ? new Pose(144, 144) : new Pose(0, 144);
     }
 
     public void loop(double x, double y, double heading) {
@@ -33,7 +41,7 @@ public class Turret {
         //turretRad = MathFunctions.clamp(turretRad, -Math.PI/2, Math.PI/2);
 
         // Target angle
-        targetRad = Math.atan2(144 - y, 0 - x) - MathFunctions.normalizeAngle(heading) + Math.PI/2;
+        targetRad = Math.atan2(target.getY() - y, target.getX() - x) - MathFunctions.normalizeAngle(heading) + Math.PI/2 + Math.toRadians(1.5);
         targetRad = MathFunctions.scale(
                 MathFunctions.normalizeAngle(targetRad),
                 0, Math.PI*2,

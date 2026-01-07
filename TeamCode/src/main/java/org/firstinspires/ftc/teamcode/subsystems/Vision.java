@@ -20,6 +20,7 @@ public class Vision {
         visionPortal = VisionPortal.easyCreateWithDefaults(
                 hwMap.get(WebcamName.class, "webcam1"), aprilTag
         );
+        visionPortal.close();
     }
 
     public Artifact[] findMotif(Telemetry tm) {
