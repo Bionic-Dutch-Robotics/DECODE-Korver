@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.util.Settings;
 
 import java.util.concurrent.CompletableFuture;
 
+@SuppressWarnings("all")
 public class Kicker {
     private Servo[] kickers;
     private ElapsedTime servoTimer;
@@ -47,6 +48,7 @@ public class Kicker {
                 kickServoDown(i);
             }
         }
+        this.runFireSequence.complete(null);
     }
     public void cancelSequence() {
         if (runFireSequence != null && !runFireSequence.isDone()) {
