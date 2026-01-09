@@ -37,7 +37,7 @@ public class MatchSettings {
     public static void refreshMotif(Telemetry telemetry) {
         Artifact[] detectedMotif = vision.findMotif(telemetry);
 
-        if ((motif != detectedMotif || motif == null) && detectedMotif != null) {
+        if ((motif != detectedMotif) && detectedMotif != null) {
             motif = vision.findMotif(telemetry);
         }
 

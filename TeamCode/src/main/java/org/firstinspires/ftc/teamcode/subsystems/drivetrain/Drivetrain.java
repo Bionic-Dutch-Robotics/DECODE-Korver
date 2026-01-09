@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.util.AllianceColor;
 public class Drivetrain {
     public FilteredPIDFController xPid, yPid;
     public PIDFController headingPid;
-    public Follower follower;
+    public Follower follower = null;
 
     /**
      * Creates a new drivetrain
@@ -39,10 +39,6 @@ public class Drivetrain {
      */
     public void update() {
         follower.update();
-
-        if (follower.atParametricEnd()) {
-            follower.breakFollowing();
-        }
     }
     public void teleOpDrive(double forwardPower, double strafePower, double turnPower) {
         follower.setTeleOpDrive(

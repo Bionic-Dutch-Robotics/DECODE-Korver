@@ -41,7 +41,7 @@ public class Turret {
         //turretRad = MathFunctions.clamp(turretRad, -Math.PI/2, Math.PI/2);
 
         // Target angle
-        targetRad = Math.atan2(target.getY() - y, target.getX() - x) - MathFunctions.normalizeAngle(heading) + Math.PI/2 + Math.toRadians(1.5);
+        targetRad = Math.atan2(target.getY() - y, target.getX() - x) - MathFunctions.normalizeAngle(heading) + Math.PI/2 + Math.toRadians(5);
         targetRad = MathFunctions.scale(
                 MathFunctions.normalizeAngle(targetRad),
                 0, Math.PI*2,
@@ -54,8 +54,8 @@ public class Turret {
         turretPid.updatePosition(turretRad * 140.003629846);
 
         // Only apply power if we are not at limit OR moving away from limit
-        if ((turretRad <= -Math.toRadians(91) /* -Math.PI/2 */ && turretPid.run() < 0) ||
-                (turretRad >= Math.toRadians(91) && turretPid.run() > 0)) {
+        if ((turretRad <= -Math.PI/2 /* -Math.PI/2 */ && turretPid.run() < 0) ||
+                (turretRad >= Math.PI/2 && turretPid.run() > 0)) {
             turretPower = 0; // stop motor at hard limit
         } else {
             turretPower = MathFunctions.clamp(turretPid.run(), -0.4, 0.4);

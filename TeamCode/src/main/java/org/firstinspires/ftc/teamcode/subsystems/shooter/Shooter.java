@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
 
 public class Shooter {
-    private Flywheel flywheel;
-    private Tilt tilt;
+    public Flywheel flywheel;
+    public Tilt tilt;
     private Turret turret;
 
     public Shooter(HardwareMap hwMap) {
@@ -17,8 +17,8 @@ public class Shooter {
 
     public void runLoop(double x, double y, double heading) {
         turret.loop(x, y, heading);
-        flywheel.farShoot();
-        tilt.setTilt(0.25);
+        //flywheel.farShoot();
+        //tilt.setTilt(0.25);
     }
 
     public Tilt getTilt() {

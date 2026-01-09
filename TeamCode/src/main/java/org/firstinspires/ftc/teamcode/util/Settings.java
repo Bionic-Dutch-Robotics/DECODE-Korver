@@ -30,7 +30,7 @@ public class Settings {
         }
 
         public static class Intake {
-            public static final String INTAKE = "run";
+            public static final String INTAKE = "intake";
         }
     }
 
@@ -39,8 +39,8 @@ public class Settings {
      */
     public static class Positions {
         public static class Transfer {
-            public static final double[] upPos = {0.2, 0.6, 0.6};
-            public static final double[] downPos = {0.62, 1, 0.15};
+            public static final double[] upPos = {0.2, 0.5, 0.5};
+            public static final double[] downPos = {0.62, 0.93, 0.13};
             public static final double RUN_TO_POS_TIME = 1.5;
         }
         public static class Shooter {

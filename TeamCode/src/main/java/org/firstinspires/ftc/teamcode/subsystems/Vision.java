@@ -1,8 +1,11 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import android.util.Size;
+
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.util.Artifact;
 import org.firstinspires.ftc.vision.VisionPortal;
@@ -17,11 +20,13 @@ public class Vision {
 
     public Vision (HardwareMap hwMap) {
         aprilTag = AprilTagProcessor.easyCreateWithDefaults();
-        visionPortal = VisionPortal.easyCreateWithDefaults(
-                hwMap.get(WebcamName.class, "webcam1"), aprilTag
-        );
-        visionPortal.close();
-    }
+        visionPortal = new VisionPortal.Builder()
+                .addProcessor(aprilTag)
+                .setCamera(hwMap.get(CameraName.class, "webcam1"))
+                .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
+                .enableLiveView(true)
+                .setCameraResolution(new Size(1920, 1080))
+                .build();}
 
     public Artifact[] findMotif(Telemetry tm) {
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
