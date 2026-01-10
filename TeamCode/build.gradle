@@ -19,19 +19,23 @@ buildscript {
         maven {
             url "https://repo.dairy.foundation/releases"
         }
-        /*maven {
+        maven {
+            url = "https://repo.dairy.foundation/snapshots"
+        }
+        maven {
             url "https://www.matthewo.tech/maven/"
-        }*/
+        }
     }
     dependencies {
         classpath "dev.frozenmilk:Load:0.2.4"
-        //classpath "org.team11260:fast-load-plugin:0.1.2"
+        //classpath "org.team11260:fast-load-plugin:0.1.4-beta1"
     }
 }
 
 apply from: '../build.common.gradle'
 apply from: '../build.dependencies.gradle'
 //apply plugin: "org.team11260.fast-load-plugin"
+apply plugin: 'dev.frozenmilk.sinister.sloth.load'
 
 
 android {
@@ -49,12 +53,13 @@ repositories {
     maven {
         url = "https://repo.dairy.foundation/releases"
     }
-    /*maven {
+    maven {
         url = "https://www.methewo.tech/maven/"
-    }*/
+    }
 }
 
 dependencies {
     implementation project(':FtcRobotController')
-    //implementation("org.team11260:fast-load:0.1.2")
+    implementation("dev.frozenmilk.sinister:Sloth:0.2.4")
+    //implementation("org.team11260:fast-load:0.1.4-beta1")
 }
