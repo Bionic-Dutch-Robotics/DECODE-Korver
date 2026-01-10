@@ -90,7 +90,7 @@ public class SubsystemsManager {
                     forward != Math.abs(gpThreshold.getY()) - 0.03 ? forward : 0,
                     strafe != Math.abs(gpThreshold.getX()) - 0.03 ? strafe : 0,
                     turn != Math.abs(gpThreshold.getY()) - 0.03 ? turn : 0,
-                    false,
+                    true,
                     allianceColor.isRed() ? 0 : Math.toRadians(180)
             );
         }
@@ -102,7 +102,7 @@ public class SubsystemsManager {
                     allianceColor
             ));
 
-            follower.setTeleOpDrive(forward, strafe, headingPid.run(), false,
+            follower.setTeleOpDrive(forward, strafe, headingPid.run(), true,
                     allianceColor.isRed() ? 0 : Math.toRadians(180)
             );
         }

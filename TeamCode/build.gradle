@@ -24,7 +24,7 @@ buildscript {
         }*/
     }
     dependencies {
-        classpath "dev.frozenmilk:Load:0.2.4"
+        //classpath "dev.frozenmilk:sloth-load:0.2.4"
         //classpath "org.team11260:fast-load-plugin:0.1.2"
     }
 }
