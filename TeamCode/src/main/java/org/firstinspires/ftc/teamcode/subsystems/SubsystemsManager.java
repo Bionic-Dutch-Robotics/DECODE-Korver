@@ -230,7 +230,7 @@ public class SubsystemsManager {
 
     public static double getTargetHeading(double x, double y, org.firstinspires.ftc.teamcode.util.AllianceColor alliance) {
         if (alliance.isRed()) {
-            double target = MathFunctions.normalizeAngle(Math.atan2(141-y, 141-x) + Math.toRadians(91.5));
+            double target = MathFunctions.normalizeAngle(Math.atan2(145-y, 141-x) + Math.toRadians(91.5));
 
             if (MathFunctions.normalizeAngle(target) > Math.PI) {
                 return MathFunctions.normalizeAngle(target) - Math.PI * 2;
@@ -242,7 +242,7 @@ public class SubsystemsManager {
             return target;
         }
         else {
-            double target = Math.atan2(141 - y, 3-x) + Math.toRadians(90);
+            double target = Math.atan2(145 - y, 3-x) + Math.toRadians(90);
 
             if (MathFunctions.normalizeAngle(target) > Math.PI) {
                 return MathFunctions.normalizeAngle(target) - Math.PI * 2;

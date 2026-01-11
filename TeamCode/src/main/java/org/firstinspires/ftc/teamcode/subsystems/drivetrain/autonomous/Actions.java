@@ -20,12 +20,12 @@ import java.util.Objects;
 
 @Configurable
 public class Actions {
-    public static final Pose redRow1Target = new Pose(112, 33, 0);
+    public static final Pose redRow1Target = new Pose(112, 35, 0);
     public static final Pose redRow1Control = new Pose(76, 31);
-    public static final Pose redRow2Control = new Pose(76,56.5);
-    public static final Pose redRow2Target = new Pose(110,55, 0);
+    public static final Pose redRow2Control = new Pose(76,62);
+    public static final Pose redRow2Target = new Pose(105,62, 0);
     public static final Pose redRow3Control = new Pose(76, 76);
-    public static final Pose redRow3Target = new Pose(105,80, 0);
+    public static final Pose redRow3Target = new Pose(105,78, 0);
     public static final Pose redExitTriangle = new Pose(96, 72, Math.toRadians(0));
     public static final Pose blueExitTriangle = new Pose(40, 72, Math.toRadians(180));
 
