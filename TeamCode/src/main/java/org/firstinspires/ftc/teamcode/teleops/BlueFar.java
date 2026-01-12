@@ -128,4 +128,11 @@ public class BlueFar extends OpMode {
             tiltPos -= 0.03;
         }
     }
+
+    @Override
+    public void stop() {
+        transfer.cancelFire();  //  Close the thread when the OpMode is done
+        shooter.flywheel.stop();
+
+    }
 }
