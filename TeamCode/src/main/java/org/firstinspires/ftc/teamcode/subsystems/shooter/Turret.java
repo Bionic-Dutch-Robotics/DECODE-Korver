@@ -54,14 +54,30 @@ public class Turret {
         turretPid.updatePosition(turretRad * 140.003629846);
 
         // Only apply power if we are not at limit OR moving away from limit
-        if ((turretRad <= -Math.PI/2 /* -Math.PI/2 */ && turretPid.run() < 0) ||
-                (turretRad >= Math.PI/2 && turretPid.run() > 0)) {
+        if ((turretRad <= -Math.toRadians(89) /* -Math.PI/2 */ && turretPid.run() < 0) ||
+                (turretRad >= Math.toRadians(89) && turretPid.run() > 0)) {
             turretPower = 0; // stop motor at hard limit
         } else {
             turretPower = MathFunctions.clamp(turretPid.run(), -0.4, 0.4);
         }
 
         turret.setPower(turretPower);
+    }
+
+    public void loopToo(double x, double y, double heading) {
+        turretRad = MathFunctions.scale(
+                MathFunctions.normalizeAngle(turret.getCurrentPosition() / 140.003629846),
+                0, Math.PI*2,
+                -Math.PI,Math.PI
+        );
+
+        targetRad = Math.atan2(target.getY() - y, target.getX() - x) - MathFunctions.normalizeAngle(heading) + Math.PI/2 + Math.toRadians(5);
+        targetRad = MathFunctions.scale(
+                MathFunctions.normalizeAngle(targetRad),
+                0, Math.PI*2,
+                -Math.PI, Math.PI
+        );
+        targetRad = MathFunctions.clamp(targetRad, -Math.PI/2, Math.PI/2);
     }
 
 }

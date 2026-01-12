@@ -76,11 +76,11 @@ public class BlueFar extends OpMode {
         shooter.tilt.setTilt(tiltPos);
 
         double forward =
-                (-gamepad1.left_stick_y - gamepadReference.getY()) * 1.03;
+                (-gamepad1.left_stick_y - gamepadReference.getY()) * 1.1;
         double strafe =
-                (-gamepad1.left_stick_x - gamepadReference.getX()) * 1.03;
+                (-gamepad1.left_stick_x - gamepadReference.getX()) * 1.1;
         double turn =
-                (-gamepad1.right_stick_x - gamepadReference.getHeading()) * 1.03;
+                (-gamepad1.right_stick_x - gamepadReference.getHeading()) * 1.1;
 
         dt.follower.setTeleOpDrive(
                 forward,
