@@ -90,11 +90,13 @@ public class BlueFar extends OpMode {
         );
 
         if (gamepad1.aWasPressed()) {
-            if (intake.spinner.getPower() == Settings.Positions.Intake.INTAKE_SPEED) {
-                intake.stop();
+            runIntake = !runIntake;
+
+            if (runIntake) {
+                intake.run();
             }
             else {
-                intake.run();
+                intake.stop();
             }
         }
 
@@ -120,10 +122,10 @@ public class BlueFar extends OpMode {
         }
 
         if (gamepad1.xWasPressed()) {
-            tiltPos += 0.05;
+            tiltPos += 0.03;
         }
         else if (gamepad1.yWasPressed()) {
-            tiltPos -= 0.05;
+            tiltPos -= 0.03;
         }
     }
 }
