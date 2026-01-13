@@ -16,6 +16,7 @@ public class Turret {
     private PIDFController turretPid;
     public double turretRad, targetRad, fieldCentricTurretRad, turretPower;
     private Pose target;
+    private final double fieldCentricTurretStartingPosition = -Math.PI/2;
 
     public Turret(HardwareMap hwMap) {
         turret = hwMap.get(DcMotorEx.class, Settings.HardwareNames.Shooter.TURRET);
@@ -34,7 +35,7 @@ public class Turret {
     public void loop(double x, double y, double heading) {
         // Current turret angle in radians
         turretRad = MathFunctions.scale(
-                MathFunctions.normalizeAngle(turret.getCurrentPosition() / 140.003629846),
+                MathFunctions.normalizeAngle(turret.getCurrentPosition() / 140.003629846 - fieldCentricTurretStartingPosition),
                 0, Math.PI*2,
                 -Math.PI,Math.PI
         );
@@ -66,7 +67,7 @@ public class Turret {
 
     public void loopToo(double x, double y, double heading) {
         turretRad = MathFunctions.scale(
-                MathFunctions.normalizeAngle(turret.getCurrentPosition() / 140.003629846),
+                MathFunctions.normalizeAngle(turret.getCurrentPosition() / 140.003629846 - fieldCentricTurretStartingPosition),
                 0, Math.PI*2,
                 -Math.PI,Math.PI
         );
@@ -78,6 +79,19 @@ public class Turret {
                 -Math.PI, Math.PI
         );
         targetRad = MathFunctions.clamp(targetRad, -Math.PI/2, Math.PI/2);
+
+        turretPid.setTargetPosition(targetRad * 140.003629846);
+        turretPid.updatePosition(turretRad * 140.003629846);
+
+
+        if ((turretRad <= -Math.toRadians(89) /* -Math.PI/2 */ && turretPid.run() < 0) ||
+                (turretRad >= Math.toRadians(89) && turretPid.run() > 0)) {
+            turretPower = 0; // stop motor at hard limit
+        } else {
+            turretPower = MathFunctions.clamp(turretPid.run(), -0.4, 0.4);
+        }
+
+        turret.setPower(turretPower);
     }
 
 }
