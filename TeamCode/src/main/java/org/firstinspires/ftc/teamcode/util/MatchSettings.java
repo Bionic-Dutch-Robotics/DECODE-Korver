@@ -7,15 +7,21 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystems.Vision;
 import org.firstinspires.ftc.teamcode.subsystems.drivetrain.Drivetrain;
+import org.firstinspires.ftc.teamcode.subsystems.shooter.Turret;
+import org.firstinspires.ftc.teamcode.subsystems.transfer.Transfer;
 
 import java.util.Arrays;
 import java.util.HashMap;
 
-/**
+/**     TODO: Move all hardware to dedicated file
  * Alliance and match-specific settings. Defaults are red alliance.
  */
 public class MatchSettings {
+    public static final AllianceColor BLUE = new AllianceColor(AllianceColor.Selection.BLUE);
+    public static final AllianceColor RED = new AllianceColor(AllianceColor.Selection.RED);
     public static Drivetrain dt;
+    public static Transfer transfer;
+    public static Turret turret;
     public static Artifact[] motif;
     private static Vision vision;
 
@@ -29,6 +35,9 @@ public class MatchSettings {
         allianceColor = alliance;
         vision = new Vision(hwMap);
         dt = new Drivetrain(hwMap, allianceColor);
+        turret = new Turret(hwMap);
+        turret.setAlliance(allianceColor);
+        transfer = new Transfer(hwMap);
     }
 
     /**
