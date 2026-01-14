@@ -18,7 +18,7 @@ public class Flywheel {
     private PIDFController shooterPidf = null;
     public DcMotorEx shooter = null;
     public final double redPowerCoefficient = 1.1;
-    public final double bluePowerCoefficient = 1.1;
+    public final double bluePowerCoefficient = 1.0;
 
     public Flywheel(HardwareMap hwMap) {
         shooter = hwMap.get(DcMotorEx.class, Settings.HardwareNames.Shooter.SHOOTER);
@@ -72,6 +72,6 @@ public class Flywheel {
         }
     }
     public double getRegressionVelocity (double distance, AllianceColor alliance) {
-        return 1.10033 * distance + 93.21422 * (alliance.isRed() ? redPowerCoefficient : bluePowerCoefficient);
+        return 1.84932*distance + 162.83105;
     }
 }

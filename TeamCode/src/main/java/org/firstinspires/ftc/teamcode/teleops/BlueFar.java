@@ -71,16 +71,17 @@ public class BlueFar extends OpMode {
         telemetry.update();
         telemetry.addData("Shooter vel", shooterSpeed);
         telemetry.addData("Distance to Target", shooter.flywheel.getDistance(dt.follower.getPose().getX(), dt.follower.getPose().getY(), alliance));
+        telemetry.addData("Tilt", tiltPos);
         shooter.runLoop(dt.getPose().getX(), dt.getPose().getY(), dt.getPose().getHeading());
         shooter.flywheel.update(shooterSpeed);
         shooter.tilt.setTilt(tiltPos);
 
         double forward =
-                (-gamepad1.left_stick_y - gamepadReference.getY()) * 1.1;
+                (-gamepad1.left_stick_y - gamepadReference.getY()) * 1.15;
         double strafe =
-                (-gamepad1.left_stick_x - gamepadReference.getX()) * 1.1;
+                (-gamepad1.left_stick_x - gamepadReference.getX()) * 1.15;
         double turn =
-                (-gamepad1.right_stick_x - gamepadReference.getHeading()) * 1.1;
+                (-gamepad1.right_stick_x - gamepadReference.getHeading()) * 1.15;
 
         dt.follower.setTeleOpDrive(
                 forward,
@@ -112,6 +113,7 @@ public class BlueFar extends OpMode {
         }
         if (gamepad1.dpadDownWasPressed()) {
             shooterSpeed -= 10.0;
+            shooterSpeed = shooter.flywheel.getRegressionVelocity(shooter.flywheel.getDistance(dt.follower.getPose().getX(), dt.follower.getPose().getY(), alliance), alliance);
         }
 
         if (gamepad1.dpadLeftWasPressed()) {
@@ -127,7 +129,9 @@ public class BlueFar extends OpMode {
         else if (gamepad1.yWasPressed()) {
             tiltPos -= 0.03;
         }
-    }
+    }   //430 power , 142 dist, 0.15
+        //340 power, 100 dist, 0.15 tilt
+        //240 power, 40 dist, 0
 
     @Override
     public void stop() {

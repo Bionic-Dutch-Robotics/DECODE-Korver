@@ -55,9 +55,7 @@ public class Settings {
 
         public static class Drivetrain {
             public static class Blue {
-                public static final Pose FAR_AUTO_START = new Pose(56.875, 8.5, Math.PI);
-                public static final Pose MIDFIELD_SHOOT = new Pose(68, 72, Math.toRadians(-135));   //Needs to be updated
-                public static final Pose FAR_SHOOT = new Pose(64, 30, -2.7);    //Needs to be updated
+                public static final Pose FAR_AUTO_START = new Pose(56.875, 8.5, Math.PI); Pose FAR_SHOOT = new Pose(64, 30, -2.7);    //Needs to be updated
                 public static final Pose CLOSE_AUTO_START = new Pose(30.9436, 123.8405, -2.27); //Needs to be updated
                 public static final Pose PARK = new Pose(100,30, 0);
             }

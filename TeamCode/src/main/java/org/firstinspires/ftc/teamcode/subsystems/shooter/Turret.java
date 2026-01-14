@@ -16,12 +16,12 @@ public class Turret {
     private PIDFController turretPid;
     public double turretRad, targetRad, fieldCentricTurretRad, turretPower;
     private Pose target;
-    private final double fieldCentricTurretStartingPosition = -Math.PI/2;
+    private final double fieldCentricTurretStartingPosition = Math.PI;
 
     public Turret(HardwareMap hwMap) {
         turret = hwMap.get(DcMotorEx.class, Settings.HardwareNames.Shooter.TURRET);
         turret.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        turretPid = new PIDFController(new PIDFCoefficients(0.013, 0, 0.0001, 0.0));
+        turretPid = new PIDFController(new PIDFCoefficients(0.013, 0, 0.0001, 0.05));
 
         turret.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         turret.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -42,7 +42,7 @@ public class Turret {
         //turretRad = MathFunctions.clamp(turretRad, -Math.PI/2, Math.PI/2);
 
         // Target angle
-        targetRad = Math.atan2(target.getY() - y, target.getX() - x) - MathFunctions.normalizeAngle(heading) + Math.PI/2 + Math.toRadians(5);
+        targetRad = Math.atan2(target.getY() - y, target.getX() - x) - MathFunctions.normalizeAngle(heading + fieldCentricTurretStartingPosition/2 + Math.toRadians(3));
         targetRad = MathFunctions.scale(
                 MathFunctions.normalizeAngle(targetRad),
                 0, Math.PI*2,
@@ -55,35 +55,6 @@ public class Turret {
         turretPid.updatePosition(turretRad * 140.003629846);
 
         // Only apply power if we are not at limit OR moving away from limit
-        if ((turretRad <= -Math.toRadians(89) /* -Math.PI/2 */ && turretPid.run() < 0) ||
-                (turretRad >= Math.toRadians(89) && turretPid.run() > 0)) {
-            turretPower = 0; // stop motor at hard limit
-        } else {
-            turretPower = MathFunctions.clamp(turretPid.run(), -0.4, 0.4);
-        }
-
-        turret.setPower(turretPower);
-    }
-
-    public void loopToo(double x, double y, double heading) {
-        turretRad = MathFunctions.scale(
-                MathFunctions.normalizeAngle(turret.getCurrentPosition() / 140.003629846 - fieldCentricTurretStartingPosition),
-                0, Math.PI*2,
-                -Math.PI,Math.PI
-        );
-
-        targetRad = Math.atan2(target.getY() - y, target.getX() - x) - MathFunctions.normalizeAngle(heading) + Math.PI/2 + Math.toRadians(5);
-        targetRad = MathFunctions.scale(
-                MathFunctions.normalizeAngle(targetRad),
-                0, Math.PI*2,
-                -Math.PI, Math.PI
-        );
-        targetRad = MathFunctions.clamp(targetRad, -Math.PI/2, Math.PI/2);
-
-        turretPid.setTargetPosition(targetRad * 140.003629846);
-        turretPid.updatePosition(turretRad * 140.003629846);
-
-
         if ((turretRad <= -Math.toRadians(89) /* -Math.PI/2 */ && turretPid.run() < 0) ||
                 (turretRad >= Math.toRadians(89) && turretPid.run() > 0)) {
             turretPower = 0; // stop motor at hard limit

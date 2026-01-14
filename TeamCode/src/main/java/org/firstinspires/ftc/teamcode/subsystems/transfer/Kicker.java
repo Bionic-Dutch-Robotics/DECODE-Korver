@@ -52,9 +52,11 @@ public class Kicker {
     }
     public void cancelSequence() {
         if (runFireSequence != null && !runFireSequence.isDone()) {
-            runFireSequence.cancel(true); // Cancels the future and interrupts the sleep
+            runFireSequence.complete(null);
+            //runFireSequence.cancel(true); // Cancels the future and interrupts the sleep
+            this.kickAllServosDown();
         }
-        this.kickAllServosDown();
+
     }
 
     public void kickServoUp(int servoIndex) {
