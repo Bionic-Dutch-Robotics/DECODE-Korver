@@ -17,6 +17,7 @@ public class Turret {
     public double turretRad, targetRad, fieldCentricTurretRad, turretPower;
     private Pose target;
     private final double fieldCentricTurretStartingPosition = Math.PI;
+    private AllianceColor alliance;
 
     public Turret(HardwareMap hwMap) {
         turret = hwMap.get(DcMotorEx.class, Settings.HardwareNames.Shooter.TURRET);
@@ -29,7 +30,7 @@ public class Turret {
     }
 
     public void setAlliance(AllianceColor alliance) {
-        target = alliance.isRed() ? new Pose(144, 144) : new Pose(0, 144);
+        target = alliance.isRed() ? new Pose(141, 141) : new Pose(3, 141);
     }
 
     public void loop(double x, double y, double heading) {
