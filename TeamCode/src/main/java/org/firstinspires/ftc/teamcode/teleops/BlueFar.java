@@ -112,8 +112,9 @@ public class BlueFar extends OpMode {
             shooterSpeed += 10.0;
         }
         if (gamepad1.dpadDownWasPressed()) {
-            shooterSpeed -= 10.0;
             shooterSpeed = shooter.flywheel.getRegressionVelocity(shooter.flywheel.getDistance(dt.follower.getPose().getX(), dt.follower.getPose().getY(), alliance), alliance);
+            transfer.fireSortedArtifacts();
+            tiltPos = shooter.tilt.auto(shooter.flywheel.getDistance(dt.follower.getPose().getX(), dt.follower.getPose().getY(), alliance));
         }
 
         if (gamepad1.dpadLeftWasPressed()) {
@@ -129,14 +130,18 @@ public class BlueFar extends OpMode {
         else if (gamepad1.yWasPressed()) {
             tiltPos -= 0.03;
         }
-    }   //430 power , 142 dist, 0.15
+
+        if (gamepad1.rightBumperWasPressed()) {
+            tiltPos = shooter.tilt.auto(shooter.flywheel.getDistance(dt.follower.getPose().getX(), dt.follower.getPose().getY(), alliance));
+        }
+    }   //430 power , 142 dist, 0.14
         //340 power, 100 dist, 0.15 tilt
-        //240 power, 40 dist, 0
+        //240 power, 40 dist, 0.09
 
     @Override
     public void stop() {
         transfer.cancelFire();  //  Close the thread when the OpMode is done
         shooter.flywheel.stop();
-
+        intake.stop();
     }
 }

@@ -16,4 +16,8 @@ public class Tilt {
         tiltAngle = MathFunctions.clamp(tiltAngle, 0.05, 0.5);
         this.tilt.setPosition(tiltAngle);
     }
+
+    public double auto(double distance) {
+        return -0.0000121382*Math.pow(distance, 2) + 0.00269935*distance + 0.00144725;
+    }
 }
