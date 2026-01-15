@@ -22,7 +22,7 @@ public class Turret {
     public Turret(HardwareMap hwMap) {
         turret = hwMap.get(DcMotorEx.class, Settings.HardwareNames.Shooter.TURRET);
         turret.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        turretPid = new PIDFController(new PIDFCoefficients(0.013, 0, 0.0001, 0.05));
+        turretPid = new PIDFController(new PIDFCoefficients(0.013, 0, 0.0001, 0.06));
 
         turret.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         turret.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -30,7 +30,7 @@ public class Turret {
     }
 
     public void setAlliance(AllianceColor alliance) {
-        target = alliance.isRed() ? new Pose(141, 141) : new Pose(3, 141);
+        target = alliance.isRed() ? new Pose(141, 120) : new Pose(3, 120);
     }
 
     public void loop(double x, double y, double heading) {
@@ -43,7 +43,7 @@ public class Turret {
         //turretRad = MathFunctions.clamp(turretRad, -Math.PI/2, Math.PI/2);
 
         // Target angle
-        targetRad = Math.atan2(target.getY() - y, target.getX() - x) - MathFunctions.normalizeAngle(heading + fieldCentricTurretStartingPosition/2 + Math.toRadians(3));
+        targetRad = Math.atan2(target.getY() - y, target.getX() - x) - MathFunctions.normalizeAngle(heading + fieldCentricTurretStartingPosition/2 + Math.toRadians(6));
         targetRad = MathFunctions.scale(
                 MathFunctions.normalizeAngle(targetRad),
                 0, Math.PI*2,

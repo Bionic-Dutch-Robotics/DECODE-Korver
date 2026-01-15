@@ -39,7 +39,7 @@ public class Settings {
      */
     public static class Positions {
         public static class Transfer {
-            public static final double[] upPos = {0.2, 0.5, 0.5};
+            public static final double[] upPos = {0.18, 0.5, 0.5};
             public static final double[] downPos = {0.62, 0.93, 0.13};
             public static final double RUN_TO_POS_TIME = 1.5;
         }

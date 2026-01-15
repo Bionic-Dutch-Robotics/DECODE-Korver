@@ -68,6 +68,7 @@ public class BlueFar extends OpMode {
     @Override
     public void loop() {
         dt.update();
+        shooterSpeed = shooter.flywheel.getRegressionVelocity(shooter.flywheel.getDistance(dt.follower.getPose().getX(), dt.follower.getPose().getY(), alliance), alliance);
         telemetry.update();
         telemetry.addData("Shooter vel", shooterSpeed);
         telemetry.addData("Distance to Target", shooter.flywheel.getDistance(dt.follower.getPose().getX(), dt.follower.getPose().getY(), alliance));
@@ -112,6 +113,7 @@ public class BlueFar extends OpMode {
             shooterSpeed += 10.0;
         }
         if (gamepad1.dpadDownWasPressed()) {
+            //transfer.s
             shooterSpeed = shooter.flywheel.getRegressionVelocity(shooter.flywheel.getDistance(dt.follower.getPose().getX(), dt.follower.getPose().getY(), alliance), alliance);
             transfer.fireSortedArtifacts();
             tiltPos = shooter.tilt.auto(shooter.flywheel.getDistance(dt.follower.getPose().getX(), dt.follower.getPose().getY(), alliance));
