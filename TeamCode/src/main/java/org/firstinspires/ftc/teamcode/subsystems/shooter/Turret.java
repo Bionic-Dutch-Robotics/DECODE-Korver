@@ -22,7 +22,7 @@ public class Turret {
     public Turret(HardwareMap hwMap) {
         turret = hwMap.get(DcMotorEx.class, Settings.HardwareNames.Shooter.TURRET);
         turret.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        turretPid = new PIDFController(new PIDFCoefficients(0.013, 0, 0.0001, 0.06));
+        turretPid = new PIDFController(new PIDFCoefficients(0.013, 0, 0.0001, 0.065));
 
         turret.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         turret.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

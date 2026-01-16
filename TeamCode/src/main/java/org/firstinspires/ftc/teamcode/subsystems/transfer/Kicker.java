@@ -7,13 +7,17 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.util.Settings;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 @SuppressWarnings("all")
 public class Kicker {
     private Servo[] kickers;
     private ElapsedTime servoTimer;
     private Integer[] order;
-    private CompletableFuture<Void> runFireSequence = null;
+    private ExecutorService executor = Executors.newSingleThreadExecutor();
+    private Future<?> future = null;
 
     public Kicker(HardwareMap hwMap) {
             kickers = new Servo[3];
@@ -34,7 +38,7 @@ public class Kicker {
     }
 
     public void runFireSequence ()  {
-        this.runFireSequence = CompletableFuture.runAsync(this::createFireSequence);
+        this.future = this.executor.submit(this::createFireSequence);
     }
     private void createFireSequence() {
         for (int i : this.order) {
@@ -48,12 +52,10 @@ public class Kicker {
                 kickServoDown(i);
             }
         }
-        this.runFireSequence.complete(null);
     }
     public void cancelSequence() {
-        if (runFireSequence != null && !runFireSequence.isDone()) {
-            runFireSequence.complete(null);
-            //runFireSequence.cancel(true); // Cancels the future and interrupts the sleep
+        if (future != null && !future.isDone()) {
+            future.cancel(true);
             this.kickAllServosDown();
         }
 
@@ -75,5 +77,10 @@ public class Kicker {
 
     public Double[] getServoPositions() {
         return new Double[] {kickers[0].getPosition(), kickers[1].getPosition(), kickers[2].getPosition()};
+    }
+
+    public void stop() {
+        this.cancelSequence();
+        executor.shutdown();
     }
 }

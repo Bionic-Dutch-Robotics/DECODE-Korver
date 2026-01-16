@@ -41,7 +41,7 @@ public class Settings {
         public static class Transfer {
             public static final double[] upPos = {0.18, 0.5, 0.5};
             public static final double[] downPos = {0.62, 0.93, 0.13};
-            public static final double RUN_TO_POS_TIME = 1.5;
+            public static final double RUN_TO_POS_TIME = 0.64;
         }
         public static class Shooter {
             //  Velocities are in degrees per second.
@@ -70,8 +70,8 @@ public class Settings {
         }
 
         public static class Intake {
-            public static final double INTAKE_SPEED = 0.6;
-            public static final double EJECT_SPEED = -0.6;
+            public static final double INTAKE_SPEED = 0.65;
+            public static final double EJECT_SPEED = -0.65;
         }
     }
 }
