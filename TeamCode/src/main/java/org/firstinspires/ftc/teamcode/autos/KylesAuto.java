@@ -1,14 +1,13 @@
 package org.firstinspires.ftc.teamcode.autos;
+
 import static org.firstinspires.ftc.teamcode.util.MatchSettings.dt;
 import static org.firstinspires.ftc.teamcode.util.MatchSettings.motif;
 
-import com.pedropathing.paths.callbacks.ParametricCallback;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.TelemetryManager;
 import com.bylazar.telemetry.PanelsTelemetry;
-import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.transfer.Transfer;
@@ -18,20 +17,20 @@ import org.firstinspires.ftc.teamcode.util.MatchSettings;
 
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
+import com.pedropathing.geometry.Pose;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.paths.PathChain;
-import com.pedropathing.geometry.Pose;
+import com.pedropathing.paths.callbacks.ParametricCallback;
 
 
-@Autonomous(name = "Blue Auto", preselectTeleOp = "")
+@Autonomous(name = "Blue Auto", preselectTeleOp = "Blue Far")
 @Configurable
 public class KylesAuto extends OpMode {
     private TelemetryManager panelsTelemetry;
-    public Follower follower;
     private Paths paths;
     private Transfer transfer;
     private Shooter shooter;
-    private Intake intake;
+    private static Intake intake;
     private double shooterSpeed, tiltPos;
     private final AllianceColor alliance = new AllianceColor(AllianceColor.Selection.BLUE);
 
@@ -99,11 +98,18 @@ public class KylesAuto extends OpMode {
         // Log telemetry
         panelsTelemetry.debug("Current Path", currentPathIndex);
         panelsTelemetry.debug("Intake Running", intakeRunning);
-        panelsTelemetry.debug("X", follower.getPose().getX());
-        panelsTelemetry.debug("Y", follower.getPose().getY());
-        panelsTelemetry.debug("Heading", follower.getPose().getHeading());
-        panelsTelemetry.debug("Is Busy", follower.isBusy());
+        panelsTelemetry.debug("X", dt.follower.getPose().getX());
+        panelsTelemetry.debug("Y", dt.follower.getPose().getY());
+        panelsTelemetry.debug("Heading", dt.follower.getPose().getHeading());
+        panelsTelemetry.debug("Is Busy", dt.follower.isBusy());
         panelsTelemetry.update(telemetry);
+    }
+
+    @Override
+    public void stop() {
+        dt.follower.breakFollowing();
+        dt.follower.startTeleopDrive(true);
+        dt.follower.setTeleOpDrive(0,0,0,true);
     }
 
     private void handleSubsystems() {
@@ -119,9 +125,9 @@ public class KylesAuto extends OpMode {
         // Check if we're on a shoot path (indices 1, 3, 5 = Shoot1, Shoot2, Shoot3)
         if (currentPathIndex == 1 || currentPathIndex == 3 || currentPathIndex == 5) {
             // Only run shooter/transfer when we've arrived at the shooting position
-            if (!follower.isBusy()) {
+            if (!dt.follower.isBusy()) {
                 // Spin up flywheel and update shooter
-                shooter.runLoop(follower.getPose().getX(), follower.getPose().getY(), follower.getPose().getHeading());
+                shooter.runLoop(dt.follower.getPose().getX(), dt.follower.getPose().getY(), dt.follower.getPose().getHeading());
                 shooter.flywheel.update(shooterSpeed);
                 shooter.tilt.setTilt(tiltPos);
 
@@ -174,8 +180,7 @@ public class KylesAuto extends OpMode {
                                     0.5,
                                     dt.follower,
                                     new runIntake()
-
-                                    )
+                            )
                     )
                     .build();
 
@@ -232,7 +237,7 @@ public class KylesAuto extends OpMode {
                     .build();
         }
 
-        public class runIntake implements Runnable {
+        public static class runIntake implements Runnable {
             @Override
             public void run() {
                 intake.run();
