@@ -27,7 +27,7 @@ public class Sorter {
         Artifact[] storedArtifacts = new Artifact[3];
         for (int i = 0; i < colorSensors.length; i++) {
             NormalizedRGBA color = colorSensors[i].getNormalizedColors();
-            if (((DistanceSensor) colorSensors[i]).getDistance(DistanceUnit.INCH) < 3) {
+            if (((DistanceSensor) colorSensors[i]).getDistance(DistanceUnit.INCH) < 1) {
                 if (color.blue >= color.green) {
                     storedArtifacts[i] = Artifact.PURPLE;
                 } else {
