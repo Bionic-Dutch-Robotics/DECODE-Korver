@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleops;
 
-import static org.firstinspires.ftc.teamcode.util.MatchSettings.dt;
+import static org.firstinspires.ftc.teamcode.util.Hardware.dt;
 import static org.firstinspires.ftc.teamcode.util.MatchSettings.motif;
 
 import com.pedropathing.geometry.Pose;
@@ -8,13 +8,11 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.shooter.Flywheel;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.transfer.Transfer;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
 import org.firstinspires.ftc.teamcode.util.Artifact;
 import org.firstinspires.ftc.teamcode.util.MatchSettings;
-import org.firstinspires.ftc.teamcode.util.Settings;
 
 @TeleOp(name="Blue Far")
 public class BlueFar extends OpMode {
