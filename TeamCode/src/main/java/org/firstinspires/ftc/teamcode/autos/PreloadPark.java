@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
+import org.firstinspires.ftc.teamcode.subsystems.shooter.Flywheel;
 import org.firstinspires.ftc.teamcode.subsystems.transfer.Kicker;
 import org.firstinspires.ftc.teamcode.subsystems.drivetrain.autonomous.Actions;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
@@ -20,7 +20,7 @@ public class PreloadPark extends OpMode {
     private Follower follower;
     private boolean hasShotFirst, shoot;
     private Kicker transfer;
-    private Shooter shooter;
+    private Flywheel shooter;
     private Intake intake;
     private double savedTime;
 
@@ -32,7 +32,7 @@ public class PreloadPark extends OpMode {
         shoot= false;
 
         transfer = new Kicker(hardwareMap);
-        shooter = new Shooter(hardwareMap, Constants.shooterCoefficients);
+        shooter = new Flywheel(hardwareMap);
         intake = new Intake(hardwareMap);
         //time = new ElapsedTime();
 
@@ -73,7 +73,7 @@ public class PreloadPark extends OpMode {
             intake.stop();
         }
         else if (time > 7.5 && time < 7.65) {
-            intake.intake();
+            intake.run();
             follower.followPath(new Path(new BezierLine(
                     follower.getPose(),
                     new Pose(
@@ -82,52 +82,52 @@ public class PreloadPark extends OpMode {
             )));
         }
         /*else if (!follower.isBusy() && time > 12 && time < 12.5) {
-            intake.custom(0.85);
+            run.custom(0.85);
             //transfer.reload();
         }
         else if (time > 12.5 && time < 13.5) {
             //transfer.feed();
-            intake.stop();
+            run.stop();
         }
         else if (time > 13.5 && time < 14) {
             //transfer.reload();
-            intake.custom(0.85);
+            run.custom(0.85);
         }
         else if (time > 14 && time < 15) {
             //transfer.feed();
-            intake.stop();
+            run.stop();
         }
         else if (time > 15 && time < 15.5) {
             //transfer.reload();
-            intake.custom(0.85);
+            run.custom(0.85);
         }
         else if (time > 15.5 && time < 16.5) {
             //transfer.feed();
-            intake.stop();
+            run.stop();
         }
         else if (time > 16.5 && time < 16.6) {
-            intake.custom(0.85);
+            run.custom(0.85);
             follower.followPath(paths.redIntakeRow2);
         }
         else if (time > 22 && time < 22.5) {
             //transfer.reload();
-            intake.custom(0.85);
+            run.custom(0.85);
         }
         else if (time > 22.5 && time < 23.5) {
             //transfer.feed();
-            intake.stop();
+            run.stop();
         }
         else if (time > 23.5 && time < 24) {
             //transfer.reload();
-            intake.custom(0.85);
+            run.custom(0.85);
         }
         else if (time > 24 && time < 24.5) {
             //transfer.feed();
-            intake.stop();
+            run.stop();
         }
 
         else if (time > 24.5 && time < 25) {
-            intake.intake();
+            run.run();
             follower.followPath(paths.goToLever);
         }*/
     }

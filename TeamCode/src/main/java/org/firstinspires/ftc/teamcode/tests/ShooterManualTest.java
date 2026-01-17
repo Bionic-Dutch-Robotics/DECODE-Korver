@@ -6,25 +6,25 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
-import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
+import org.firstinspires.ftc.teamcode.subsystems.shooter.Flywheel;
 
 @TeleOp(name="SHOOTER Manual")
 public class ShooterManualTest extends OpMode {
     //public Follower follower;
-    public Shooter shooter;
+    public Flywheel shooter;
     public PIDFController shooterPidf;
     //public Transfer transfer;
-    //public Intake intake;
+    //public Intake run;
     //public PIDFController headingPid;
     public boolean goToHeading;
     public double shooterPower;
     @Override
     public void init() {
         shooterPidf = new PIDFController(Constants.shooterCoefficients);
-        shooter = new Shooter(hardwareMap, Constants.shooterCoefficients);
+        shooter = new Flywheel(hardwareMap);
         /*follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(Constants.redStartPose);*/
-        //intake = new Intake(hardwareMap);
+        //run = new Intake(hardwareMap);
         //transfer = new Transfer(hardwareMap);
         shooterPower = 250;
         //headingPid = new PIDFController(follower.getConstants().getCoefficientsHeadingPIDF());
@@ -82,7 +82,7 @@ public class ShooterManualTest extends OpMode {
             shooterPower -= 1;
         }
 
-        //intake.intake();
+        //run.run();
 
         if (gamepad1.x) {
             //transfer.reload();

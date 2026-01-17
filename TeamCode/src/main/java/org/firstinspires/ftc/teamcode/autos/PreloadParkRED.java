@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.autos;
 
-import static org.firstinspires.ftc.teamcode.pedroPathing.Constants.follower;
 
+import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.Path;
@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
+import org.firstinspires.ftc.teamcode.subsystems.shooter.Flywheel;
 import org.firstinspires.ftc.teamcode.subsystems.transfer.Kicker;
 import org.firstinspires.ftc.teamcode.subsystems.drivetrain.autonomous.Actions;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
@@ -24,9 +24,10 @@ public class PreloadParkRED extends OpMode {
     public static final Actions paths = new Actions(AllianceColor.Selection.RED);
     private boolean hasShotFirst, shoot;
     private Kicker transfer;
-    private Shooter shooter;
+    private Flywheel shooter;
     private Intake intake;
     private double savedTime;
+    public Follower follower;
 
     @Override
     public void init() {
@@ -36,7 +37,7 @@ public class PreloadParkRED extends OpMode {
         shoot = false;
 
         transfer = new Kicker(hardwareMap);
-        shooter = new Shooter(hardwareMap, Constants.shooterCoefficients);
+        shooter = new Flywheel(hardwareMap);
         intake = new Intake(hardwareMap);
         //time = new ElapsedTime();
 
@@ -47,7 +48,7 @@ public class PreloadParkRED extends OpMode {
                 new ParametricCallback(1,0.001, follower,
                         () -> {
                             follower.setMaxPower(0.2);
-                            intake.intake();
+                            intake.run();
                         }));
         callbacks.add(
                 1,

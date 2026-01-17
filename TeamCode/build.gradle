@@ -62,4 +62,8 @@ dependencies {
     implementation project(':FtcRobotController')
     implementation("dev.frozenmilk.sinister:Sloth:0.2.4")
     implementation("org.team11260:fast-load:0.1.4-beta1")
+    implementation("dev.frozenmilk.dairy:Core:2.2.4")
+    implementation("dev.frozenmilk.mercurial:Mercurial:1.0.3")
+
+
 }

@@ -1,18 +1,17 @@
-package org.firstinspires.ftc.robotcontroller.external.samples;
+package org.firstinspires.ftc.teamcode.tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
-
 import java.util.List;
+
+
 @TeleOp(name = "Concept: AprilTag Easy", group = "Concept")
-@Disabled
-public class ConceptAprilTagEasy extends LinearOpMode {
+public class AprilTagTest extends LinearOpMode {
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
@@ -44,13 +43,6 @@ public class ConceptAprilTagEasy extends LinearOpMode {
 
                 // Push telemetry to the Driver Station.
                 telemetry.update();
-
-                // Save CPU resources; can resume streaming when needed.
-                if (gamepad1.dpad_down) {
-                    visionPortal.stopStreaming();
-                } else if (gamepad1.dpad_up) {
-                    visionPortal.resumeStreaming();
-                }
 
                 // Share the CPU.
                 sleep(20);
@@ -89,14 +81,18 @@ public class ConceptAprilTagEasy extends LinearOpMode {
         for (AprilTagDetection detection : currentDetections) {
             if (detection.metadata != null) {
                 telemetry.addLine(String.format("\n==== (ID %d) %s", detection.id, detection.metadata.name));
+                if (detection.id == 21) {
+                    telemetry.addLine("Green Purple Purple");
+                }
+                else if (detection.id == 22) {
+                    telemetry.addLine("Purple Green Purple");
+                }
+                else if (detection.id == 23) {
+                    telemetry.addLine("Purple Purple Green");
+                }
             }
-        }   // end for() loop
+        }
 
-        // Add "key" information to telemetry
-        telemetry.addLine("\nkey:\nXYZ = X (Right), Y (Forward), Z (Up) dist.");
-        telemetry.addLine("PRY = Pitch, Roll & Yaw (XYZ Rotation)");
-        telemetry.addLine("RBE = Range, Bearing & Elevation");
-
-    }   // end method telemetryAprilTag()
+    }
 
 }   // end class

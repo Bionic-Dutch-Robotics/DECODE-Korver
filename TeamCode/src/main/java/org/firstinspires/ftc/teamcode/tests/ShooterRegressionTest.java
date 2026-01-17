@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
+import org.firstinspires.ftc.teamcode.subsystems.shooter.Flywheel;
 import org.firstinspires.ftc.teamcode.subsystems.transfer.Kicker;
 
 import java.util.function.Supplier;
@@ -17,7 +17,7 @@ import java.util.function.Supplier;
 @Configurable
 @TeleOp(name="Shooter")
 public class ShooterRegressionTest extends OpMode {
-    public static Shooter shooter;
+    public static Flywheel shooter;
     public Intake intake;
     public Kicker transfer;
     public Follower follower;
@@ -29,7 +29,7 @@ public class ShooterRegressionTest extends OpMode {
     @Override
     public void init() {
         headingPid = new PIDFController(Constants.followerConstants.getCoefficientsHeadingPIDF());
-        shooter = new Shooter(hardwareMap, Constants.shooterCoefficients);
+        shooter = new Flywheel(hardwareMap);
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(Constants.redStartPose);
         intake = new Intake(hardwareMap);
@@ -50,7 +50,7 @@ public class ShooterRegressionTest extends OpMode {
                 runIntake = !runIntake;
             }
             if (runIntake) {
-                intake.intake();
+                intake.run();
             } else {
                 intake.stop();
             }

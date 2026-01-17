@@ -1,74 +1,64 @@
 package org.firstinspires.ftc.teamcode.util;
 
 import com.pedropathing.geometry.Pose;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.subsystems.Vision;
+import org.firstinspires.ftc.teamcode.subsystems.drivetrain.Drivetrain;
+import org.firstinspires.ftc.teamcode.subsystems.shooter.Turret;
+import org.firstinspires.ftc.teamcode.subsystems.transfer.Transfer;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
-/**
+/**     TODO: Move all hardware to dedicated file
  * Alliance and match-specific settings. Defaults are red alliance.
  */
 public class MatchSettings {
-    public static Pose autoStart, teleStart;
-
+    public static final AllianceColor BLUE = new AllianceColor(AllianceColor.Selection.BLUE);
+    public static final AllianceColor RED = new AllianceColor(AllianceColor.Selection.RED);
+    public static Drivetrain dt;
+    public static Transfer transfer;
+    public static Turret turret;
+    public static Artifact[] motif;
+    private static Vision vision;
 
     private static final String AUTO_START_KEY = "autoStartPos";
-    private static final String STORED_POSE_KEY = "storedPose";
-    private static final String ALLIANCE_COLOR_KEY = "allianceColor";
 
-    public HashMap<String, Pose> savedPoses;
-    public AllianceColor allianceColor;
+    public static HashMap<String, Pose> savedPoses;
+    public static AllianceColor allianceColor;
 
-    public MatchSettings(HashMap<String, Pose> savedPoses) {
-        this.savedPoses = savedPoses;
+    public static void initSelection(HardwareMap hwMap, AllianceColor alliance) {
+        savedPoses = new HashMap<>();
+        allianceColor = alliance;
+        vision = new Vision(hwMap);
+        dt = new Drivetrain(hwMap, allianceColor);
+        turret = new Turret(hwMap);
+        turret.setAlliance(allianceColor);
+        transfer = new Transfer(hwMap);
     }
 
     /**
      * Run this in the init loop - selects the auto configuration
-     * @param gp    OpMode or LinearOpMode Gamepad
      */
-    public void selectStartingPosition(Gamepad gp, Telemetry telemetry) {
-        if (gp.bWasPressed()) {
-            allianceColor = AllianceColor.RED;
-        }
-        else if (gp.xWasPressed()) {
-            allianceColor = AllianceColor.BLUE;
+    public static void refreshMotif(Telemetry telemetry) {
+        Artifact[] detectedMotif = vision.findMotif(telemetry);
+
+        if ((motif != detectedMotif) && detectedMotif != null) {
+            motif = vision.findMotif(telemetry);
         }
 
-        if (gp.dpadUpWasPressed()) {
-            if (allianceIsRed()){
-                savedPoses.put(AUTO_START_KEY, Settings.Positions.Drivetrain.Red.FAR_AUTO_START);
-            }
-            else {
-                savedPoses.put(AUTO_START_KEY, Settings.Positions.Drivetrain.Blue.FAR_AUTO_START);
-            }
-        }
-        else if (gp.dpadDownWasPressed()) {
-            savedPoses.put(AUTO_START_KEY,
-                    allianceIsRed()? Settings.Positions.Drivetrain.Red.CLOSE_AUTO_START : Settings.Positions.Drivetrain.Blue.CLOSE_AUTO_START
-                    );
-        }
         manageTelemetry(telemetry);
     }
-    private void manageTelemetry(Telemetry telemetry) {
-        telemetry.addLine("RED      --  gamepad2: B");
+    private static void manageTelemetry(Telemetry telemetry) {
+        /*telemetry.addLine("RED      --  gamepad2: B");
         telemetry.addLine("BLUE     --  gamepad2: X");
         telemetry.addLine("CLOSE    --  gamepad2: D-Pad UP");
         telemetry.addLine("FAR      --  gamepad2: D-Pad DOWN");
+        telemetry.addLine("Select   --  gamepad2: start");*/
+        telemetry.addData("Motif: ", Arrays.toString(motif));
         telemetry.update();
-    }
-
-    public enum AllianceColor {
-        RED, BLUE
-    }
-    public enum AutoStartingPosition {
-        CLOSE, FAR
-    }
-
-    public boolean allianceIsRed() {
-        return allianceColor == AllianceColor.RED;
     }
 }

@@ -15,11 +15,10 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.util.Settings;
 
 @Configurable
 public class Constants {
-        public static final Pose blueCloseStart = new Pose(30.9436, 123.8405, -2.27);
-        public static final Pose redCloseStart = new Pose(121.6233, 131.271, 2.2);
         public static final Pose blueStartPose = new Pose(56.875, 8.5, Math.PI);
         public static final Pose redStartPose = new Pose(80, 8, Math.toRadians(90));
         public static final Pose farRedShoot = new Pose(86, 16, 2.78);
@@ -32,8 +31,6 @@ public class Constants {
         public static final Pose bluePark = new Pose(100,30, 0);
 
         public static PIDFCoefficients shooterCoefficients = new PIDFCoefficients(0.00527, 0,0.000013,0);
-        public static Pose teleOpStartPose = null;
-        public static Follower follower = null;
 
 
 
@@ -100,10 +97,10 @@ public class Constants {
             .maxPower(1)
             .xVelocity(57.58679439514641)
             .yVelocity(45.69038835660679)
-            .leftFrontMotorName("frontLeft")
-            .leftRearMotorName("backLeft")
-            .rightFrontMotorName("frontRight")
-            .rightRearMotorName("backRight")
+            .leftFrontMotorName(Settings.HardwareNames.Drivetrain.FRONT_LEFT_DRIVE)
+            .leftRearMotorName(Settings.HardwareNames.Drivetrain.BACK_LEFT_DRIVE)
+            .rightFrontMotorName(Settings.HardwareNames.Drivetrain.FRONT_RIGHT_DRIVE)
+            .rightRearMotorName(Settings.HardwareNames.Drivetrain.BACK_RIGHT_DRIVE)
             .leftFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
             .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
             .rightFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
@@ -111,6 +108,7 @@ public class Constants {
 
     public static PinpointConstants localizerConstants = new PinpointConstants()
                 .distanceUnit(DistanceUnit.INCH)
+                .hardwareMapName(Settings.HardwareNames.Drivetrain.PINPOINT_NAME)
                 .encoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)
                 .forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
                 .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)

@@ -8,8 +8,7 @@ import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
-import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
+import org.firstinspires.ftc.teamcode.subsystems.shooter.Flywheel;
 import org.firstinspires.ftc.teamcode.subsystems.transfer.Kicker;
 
 @TeleOp(name="Servo Test")
@@ -19,12 +18,12 @@ public class v3ServoTest extends OpMode {
     public static float gain = 0;
     public static double tilt;
     public static float[] hsvValues;
-    public static Shooter shooter;
+    public static Flywheel shooter;
     public static double shooterSpeed;
     @Override
     public void init() {
         sensor = hardwareMap.get(NormalizedColorSensor.class, "color1");
-        shooter = new Shooter(hardwareMap, Constants.shooterCoefficients);
+        shooter = new Flywheel(hardwareMap);
         shooterSpeed = 150;
         tilt = 0.01;
         transfer = new Kicker(hardwareMap);
