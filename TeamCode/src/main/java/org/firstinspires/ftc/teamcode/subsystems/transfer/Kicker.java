@@ -37,7 +37,8 @@ public class Kicker {
         this.order = order;
     }
 
-    public void runFireSequence ()  {
+    public void runFireSequence (Integer[] order)  {
+        this.order = order;
         this.future = this.executor.submit(this::createFireSequence);
     }
     private void createFireSequence() {
