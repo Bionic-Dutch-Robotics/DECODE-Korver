@@ -8,6 +8,7 @@ public class Shooter {
     public Flywheel flywheel;
     public Tilt tilt;
     private Turret turret;
+    private AllianceColor alliance;
 
     public Shooter(HardwareMap hwMap) {
         flywheel = new Flywheel(hwMap);
@@ -17,8 +18,8 @@ public class Shooter {
 
     public void runLoop(double x, double y, double heading) {
         turret.loop(x, y, heading);
-        //flywheel.farShoot();
-        //tilt.setTilt(0.25);
+        flywheel.adaptive(x, y, alliance);
+        tilt.auto(flywheel.getDistance(x, y, alliance));
     }
 
     public Tilt getTilt() {
@@ -32,6 +33,8 @@ public class Shooter {
     }
 
     public void setAlliance(AllianceColor alliance) {
+
         turret.setAlliance(alliance);
+        this.alliance = alliance;
     }
 }
