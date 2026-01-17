@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.TelemetryManager;
 import com.bylazar.telemetry.PanelsTelemetry;
-import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.transfer.Transfer;
@@ -31,7 +30,7 @@ public class KylesAuto extends OpMode {
     private Paths paths;
     private Transfer transfer;
     private Shooter shooter;
-    private Intake intake;
+    public static Intake intake;
     private double shooterSpeed, tiltPos;
     private final AllianceColor alliance = new AllianceColor(AllianceColor.Selection.BLUE);
 
@@ -52,7 +51,7 @@ public class KylesAuto extends OpMode {
         shooterSpeed = 250.0;
         tiltPos = 0.0;
 
-        paths = new Paths(follower);
+        paths = new Paths(dt.follower);
 
         // Define the sequence of paths to follow
         pathSequence = new PathChain[] {
@@ -83,12 +82,12 @@ public class KylesAuto extends OpMode {
         }
 
         // Start the first path
-        follower.followPath(pathSequence[currentPathIndex]);
+        dt.follower.followPath(pathSequence[currentPathIndex]);
     }
 
     @Override
     public void loop() {
-        follower.update();
+        dt.follower.update();
 
         // ===== SUBSYSTEM CONTROL - Runs every loop =====
         handleSubsystems();
@@ -157,7 +156,7 @@ public class KylesAuto extends OpMode {
         public PathChain Shoot3;
         public PathChain Leave;
 
-        public Paths(Follower follower, Transfer transfer, Intake intake) {
+        public Paths(Follower follower) {
             Pickup1 = follower.pathBuilder().addPath(
                             new BezierCurve(
                                     new Pose(56.500, 8.500),
@@ -232,12 +231,11 @@ public class KylesAuto extends OpMode {
                     .build();
         }
 
-        public class runIntake implements Runnable {
+        public static class runIntake implements Runnable {
             @Override
             public void run() {
                 intake.run();
             }
-        }
         }
     }
 }
