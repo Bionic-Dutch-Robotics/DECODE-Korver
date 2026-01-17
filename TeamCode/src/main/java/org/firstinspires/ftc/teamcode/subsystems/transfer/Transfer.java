@@ -18,8 +18,7 @@ public class Transfer {
     }
 
     public void fireSortedArtifacts() {
-        kicker.setFireSequence(sorter.getOrder());
-        kicker.runFireSequence();
+        kicker.runFireSequence(sorter.getOrder());
     }
 
     public void cancelFire() {
