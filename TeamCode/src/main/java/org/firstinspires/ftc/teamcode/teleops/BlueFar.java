@@ -12,11 +12,13 @@ import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.transfer.Transfer;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
 import org.firstinspires.ftc.teamcode.util.Artifact;
+import org.firstinspires.ftc.teamcode.util.Controller;
 import org.firstinspires.ftc.teamcode.util.MatchSettings;
 
 @TeleOp(name="Blue Far")
 public class BlueFar extends OpMode {
     private Transfer transfer;
+    private Controller controller1;
     private Shooter shooter;
     private Intake intake;
     private final AllianceColor alliance = new AllianceColor(AllianceColor.Selection.BLUE);
@@ -30,10 +32,14 @@ public class BlueFar extends OpMode {
         Normally all MatchSettings configuration would be done in AUTO.
         This is a TEST only.
          */
-        MatchSettings.initSelection(hardwareMap, alliance);
-        transfer = new Transfer(hardwareMap);
-        intake = new Intake(hardwareMap);
-        shooter = new Shooter(hardwareMap);
+        controller1 = new Controller(gamepad1);
+
+        MatchSettings.initSelection(
+                hardwareMap,
+                alliance,
+                new Pose(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x)
+        );
+
         shooter.setAlliance(alliance);
         shooterSpeed = 250.0;
         tiltPos = 0.0;
@@ -59,6 +65,13 @@ public class BlueFar extends OpMode {
         transfer.setMotif(motif);
         dt.startTeleOpDrive();
         tiltPos = 0.0;
+
+        /*controller1.bindAction(
+                () -> gamepad1.aWasPressed(),
+                null,
+                T -> intake.run());
+
+         */
     }
 
 
@@ -76,12 +89,9 @@ public class BlueFar extends OpMode {
         shooter.flywheel.update(shooterSpeed);
         shooter.tilt.setTilt(tiltPos);
 
-        double forward =
-                (-gamepad1.left_stick_y - gamepadReference.getY()) * 1.15;
-        double strafe =
-                (-gamepad1.left_stick_x - gamepadReference.getX()) * 1.15;
-        double turn =
-                (-gamepad1.right_stick_x - gamepadReference.getHeading()) * 1.15;
+        double forward = -gamepad1.left_stick_y;
+        double strafe = -gamepad1.right_stick_x;
+        double turn = -gamepad1.right_stick_x;
 
         dt.follower.setTeleOpDrive(
                 forward,

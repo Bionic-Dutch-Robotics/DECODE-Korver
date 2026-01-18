@@ -15,18 +15,21 @@ public class Drivetrain {
     public FilteredPIDFController xPid, yPid;
     public PIDFController headingPid;
     public Follower follower = null;
+    private Pose gamepadReference, multipliers;
 
     /**
      * Creates a new drivetrain
      * @param hwMap     A HardwareMap object from an OpMode or LinearOpMode
      */
-    public Drivetrain(HardwareMap hwMap, AllianceColor alliance) {
+    public Drivetrain(HardwareMap hwMap, AllianceColor alliance, Pose gamepadReference, Pose multipliers) {
         if (follower == null) {
             follower = Constants.createFollower(hwMap);
             follower.setStartingPose(
                     alliance.isRed() ? Constants.redStartPose : Constants.blueStartPose
             );
         }
+        this.gamepadReference = gamepadReference;
+        this.multipliers = multipliers;
         //follower.teleOpLock(false, false, true);
     }
 
@@ -42,9 +45,9 @@ public class Drivetrain {
     }
     public void teleOpDrive(double forwardPower, double strafePower, double turnPower) {
         follower.setTeleOpDrive(
-                forwardPower,
-                strafePower,
-                turnPower,
+                multipliers.getY() * (forwardPower - gamepadReference.getY()),
+                multipliers.getX() * (strafePower - gamepadReference.getX()),
+                multipliers.getHeading() * (turnPower - gamepadReference.getHeading()),
                 true
         );
     }
