@@ -2,8 +2,8 @@ package org.firstinspires.ftc.teamcode.util;
 
 import static org.firstinspires.ftc.teamcode.util.Hardware.transfer;
 
-import org.firstinspires.ftc.teamcode.util.Hardware;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.pedropathing.geometry.Pose;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystems.Vision;
@@ -20,10 +20,10 @@ public class MatchSettings {
     private static Vision vision;
     public static AllianceColor allianceColor;
 
-    public static void initSelection(HardwareMap hwMap, AllianceColor alliance) {
+    public static void initSelection(HardwareMap hwMap, AllianceColor alliance, Pose gamepadReference) {
         allianceColor = alliance;
         vision = new Vision(hwMap);
-        Hardware.initialize(hwMap, alliance);
+        Hardware.initialize(hwMap, alliance, gamepadReference);
     }
 
     public static void start() {

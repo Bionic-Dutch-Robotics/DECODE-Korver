@@ -10,6 +10,8 @@ import org.firstinspires.ftc.teamcode.util.Settings.Positions;
 
 public class Intake {
     public DcMotorEx spinner;
+    private boolean isRunning = false;
+
 
     /**
      * Initializes the Intake of the robot
@@ -26,6 +28,7 @@ public class Intake {
      */
     public void run() {
         spinner.setPower(Positions.Intake.INTAKE_SPEED);
+        isRunning = true;
     }
 
     /**
@@ -33,12 +36,20 @@ public class Intake {
      */
     public void eject() {
         spinner.setPower(Positions.Intake.EJECT_SPEED);
+        isRunning = true;
     }
 
     public void stop() {
         spinner.setPower(0);
+        isRunning = false;
+    }
+    public void toggle() {
+        isRunning = !isRunning;
+        if (isRunning)  this.run();
+        else            this.stop();
     }
     public void custom(double speed) {
         spinner.setPower(speed);
+        isRunning = true;
     }
 }

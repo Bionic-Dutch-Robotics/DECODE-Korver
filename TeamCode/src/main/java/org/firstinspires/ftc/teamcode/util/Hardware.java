@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.util;
 
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
@@ -12,8 +13,8 @@ public class Hardware {
     public static Transfer transfer;
     public static Shooter shooter;
     public static Intake intake;
-    public static void initialize(HardwareMap hwMap, AllianceColor alliance) {
-        dt = new Drivetrain(hwMap, alliance);
+    public static void initialize(HardwareMap hwMap, AllianceColor alliance, Pose gamepadReference) {
+        dt = new Drivetrain(hwMap, alliance,gamepadReference, new Pose(1.15, 1.15, 1.15));
         dt.follower.setStartingPose(
                 alliance.isRed() ?
                         Settings.Positions.Drivetrain.Red.FAR_AUTO_START :
