@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.tests;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -11,6 +12,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Flywheel;
 import org.firstinspires.ftc.teamcode.subsystems.transfer.Kicker;
 
+@Disabled
 @TeleOp(name="Servo Test")
 public class v3ServoTest extends OpMode {
     private static Kicker transfer;
