@@ -32,7 +32,7 @@ public class BlueFar extends OpMode {
         Normally all MatchSettings configuration would be done in AUTO.
         This is a TEST only.
          */
-        controller1 = new Controller(gamepad1);
+        controller1 = new Controller();
 
         MatchSettings.initSelection(
                 hardwareMap,

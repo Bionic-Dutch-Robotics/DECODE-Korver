@@ -37,7 +37,6 @@ public class ControllerTest extends OpMode {
     @Override
     public void start() {
         MatchSettings.start();
-        controller1.start();
     }
     @Override
     public void loop() {

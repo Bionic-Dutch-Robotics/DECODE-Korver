@@ -12,6 +12,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 @SuppressWarnings("all")
+//TODO: Add limiting so only one fire sequence can run at a time
 public class Kicker {
     private Servo[] kickers;
     private ElapsedTime servoTimer;
