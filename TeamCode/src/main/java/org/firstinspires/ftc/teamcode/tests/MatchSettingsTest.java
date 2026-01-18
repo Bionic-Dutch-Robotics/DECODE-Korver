@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.tests;
 import static android.os.SystemClock.sleep;
 import static org.firstinspires.ftc.teamcode.util.MatchSettings.motif;
 
+import com.pedropathing.geometry.Pose;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -10,13 +12,14 @@ import org.firstinspires.ftc.teamcode.subsystems.transfer.Transfer;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
 import org.firstinspires.ftc.teamcode.util.MatchSettings;
 
+@Disabled
 @TeleOp(name="Match Settings / Vision Test")
 public class MatchSettingsTest extends OpMode {
     private Transfer transfer;
 
     @Override
     public void init() {
-        MatchSettings.initSelection(hardwareMap, new AllianceColor(AllianceColor.Selection.BLUE));
+        MatchSettings.initSelection(hardwareMap, new AllianceColor(AllianceColor.Selection.BLUE), new Pose(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x));
         transfer = new Transfer(hardwareMap);
     }
 

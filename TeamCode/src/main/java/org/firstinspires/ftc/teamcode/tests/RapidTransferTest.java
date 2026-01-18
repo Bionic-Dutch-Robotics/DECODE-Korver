@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import java.util.ArrayList;
 
+@Disabled
 @Autonomous(name="Rapid Fire")
 public class RapidTransferTest extends LinearOpMode {
     public static ArrayList<Servo> transfers;
