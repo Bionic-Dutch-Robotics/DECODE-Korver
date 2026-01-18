@@ -19,12 +19,7 @@ public class ControllerTest extends OpMode {
     @Override
     public void init() {
         MatchSettings.initSelection(hardwareMap, new AllianceColor(AllianceColor.Selection.BLUE), new Pose(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x));
-        controller1 = new Controller(gamepad1);
-    }
-
-    @Override
-    public void start() {
-        MatchSettings.start();
+        controller1 = new Controller();
 
         controller1.bindAction(
                 () -> gamepad1.aWasPressed(),
@@ -37,6 +32,12 @@ public class ControllerTest extends OpMode {
                 null,
                 T -> transfer.fireSortedArtifacts()
         );
+    }
+
+    @Override
+    public void start() {
+        MatchSettings.start();
+        controller1.start();
     }
     @Override
     public void loop() {
