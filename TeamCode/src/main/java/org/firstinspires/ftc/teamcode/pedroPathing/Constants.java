@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.pedroPathing;
 
-import com.bylazar.configurables.annotations.Configurable;
+import com.bylazar.sloth.configurables.annotations.Configurable;
 import com.pedropathing.control.FilteredPIDFCoefficients;
 import com.pedropathing.control.*;
 import com.pedropathing.follower.Follower;
@@ -37,7 +37,7 @@ public class Constants {
 
 
     public static FollowerConstants followerConstants = new FollowerConstants()
-            .mass(8)
+            .mass(9.6)
             .forwardZeroPowerAcceleration(-34.53919833757035)
             .lateralZeroPowerAcceleration(-60.56271797569653)
             .translationalPIDFCoefficients(new com.pedropathing.control.PIDFCoefficients(
