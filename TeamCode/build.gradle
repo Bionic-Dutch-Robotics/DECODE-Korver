@@ -64,6 +64,5 @@ dependencies {
     implementation("org.team11260:fast-load:0.1.4-beta1")
     //implementation("dev.frozenmilk.dairy:Core:2.2.4")
     implementation("dev.frozenmilk.mercurial:Mercurial:1.0.3")
-
-
+    implementation("com.bylazar.sloth:fullpanels:0.2.4+1.0.12")
 }
