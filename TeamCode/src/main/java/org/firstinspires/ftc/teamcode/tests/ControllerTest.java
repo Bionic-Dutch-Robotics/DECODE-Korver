@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.tests;
 
+import static org.firstinspires.ftc.teamcode.util.Hardware.dt;
 import static org.firstinspires.ftc.teamcode.util.Hardware.intake;
+import static org.firstinspires.ftc.teamcode.util.Hardware.shooter;
 import static org.firstinspires.ftc.teamcode.util.Hardware.transfer;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -14,23 +16,28 @@ import org.firstinspires.ftc.teamcode.util.MatchSettings;
 @TeleOp(name="Controller Test")
 public class ControllerTest extends OpMode {
     private Controller controller1;
+    private final AllianceColor alliance = new AllianceColor(AllianceColor.Selection.BLUE);
 
 
     @Override
     public void init() {
-        MatchSettings.initSelection(hardwareMap, new AllianceColor(AllianceColor.Selection.BLUE), new Pose(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x));
+        MatchSettings.initSelection(hardwareMap, alliance, new Pose(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x));
         controller1 = new Controller();
 
-        controller1.bindAction(
+        controller1.bind(
                 () -> gamepad1.aWasPressed(),
-                null,
-                T -> intake.toggle()
+                () -> intake.toggle()
         );
 
-        controller1.bindAction(
+        controller1.bind(
                 () -> gamepad1.xWasPressed(),
-                null,
-                T -> transfer.fireSortedArtifacts()
+                () -> transfer.fireSortedArtifacts()
+        );
+
+        controller1.bind(
+                () -> true,
+                () -> shooter.flywheel.getRegressionVelocity(shooter.flywheel.getDistance(dt.follower.getPose().getX(), dt.follower.getPose().getY(), alliance), alliance),
+                (vel) -> shooter.flywheel.update(vel)
         );
     }
 

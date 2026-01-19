@@ -8,24 +8,56 @@ import java.util.function.Supplier;
 
 @SuppressWarnings("all")
 public class Controller {
-    private ArrayList<BooleanSupplier> criterias = new ArrayList<>();
-    private ArrayList<Runnable> actions = new ArrayList<>();
+    private ArrayList<Binding> bindings = new ArrayList<>();
 
-    public <T> void bindAction(BooleanSupplier condition, Supplier<T> actionParameter, Consumer<T> action) {
-        this.criterias.add(condition);
-        this.actions.add(() -> action.accept(actionParameter.get()));
+    public <T> void bind(BooleanSupplier condition, Runnable action) {
+        bindings.add(
+                new Binding(
+                        condition,
+                        action
+                )
+        );
+    }
+    public <T> void bind(BooleanSupplier condition, Supplier<T> actionParameter, Consumer<T> action) {
+        bindings.add(
+                new Binding(
+                        condition,
+                        () -> action.accept(actionParameter.get())
+                )
+        );
     }
 
-    public <T, U> void bindAction(BooleanSupplier condition, Supplier<T> actionParameter1, Supplier<U> actionParameter2, BiConsumer<T, U> action) {
-        this.criterias.add(condition);
-        this.actions.add(() -> action.accept(actionParameter1.get(), actionParameter2.get()));
+    public <T, U> void bind(BooleanSupplier condition, Supplier<T> actionParameter1, Supplier<U> actionParameter2, BiConsumer<T, U> action) {
+        bindings.add(
+                new Binding(
+                        condition,
+                        () -> action.accept(actionParameter1.get(), actionParameter2.get())
+                )
+        );
     }
 
     public void update() {
-        for (int i = 0; i < criterias.size(); i++) {
-            if (criterias.get(i).getAsBoolean()) {
-                    this.actions.get(i).run();
+        for (Binding binding : bindings) {
+            if (binding.condition.getAsBoolean()) {
+                binding.action.run();
             }
+        }
+    }
+
+    public static class Binding {
+        private final BooleanSupplier condition;
+        private final Runnable action;
+
+        public Binding(BooleanSupplier condition, Runnable action) {
+            this.condition = condition;
+            this.action = action;
+        }
+
+        public BooleanSupplier getCondition() {
+            return condition;
+        }
+        public Runnable getAction() {
+            return action;
         }
     }
 }
