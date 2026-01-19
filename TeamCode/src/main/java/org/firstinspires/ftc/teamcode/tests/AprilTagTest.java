@@ -9,7 +9,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import java.util.List;
 
-
+@Disabled
 @TeleOp(name = "Concept: AprilTag Easy", group = "Concept")
 public class AprilTagTest extends LinearOpMode {
 

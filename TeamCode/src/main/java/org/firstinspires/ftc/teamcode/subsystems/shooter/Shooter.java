@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.util.AllianceColor;
 public class Shooter {
     public Flywheel flywheel;
     public Tilt tilt;
-    private Turret turret;
+    public Turret turret;
     private AllianceColor alliance;
 
     public Shooter(HardwareMap hwMap) {
