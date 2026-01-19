@@ -18,12 +18,10 @@ import org.firstinspires.ftc.teamcode.util.MatchSettings;
 @TeleOp(name="Blue Far")
 public class BlueFar extends OpMode {
     private Transfer transfer;
-    private Controller controller1;
     private Shooter shooter;
     private Intake intake;
     private final AllianceColor alliance = new AllianceColor(AllianceColor.Selection.BLUE);
     private double shooterSpeed, tiltPos;
-    private Pose gamepadReference;
     private boolean runIntake = false;
 
     @Override
@@ -32,7 +30,6 @@ public class BlueFar extends OpMode {
         Normally all MatchSettings configuration would be done in AUTO.
         This is a TEST only.
          */
-        controller1 = new Controller();
 
         MatchSettings.initSelection(
                 hardwareMap,
@@ -43,12 +40,6 @@ public class BlueFar extends OpMode {
         shooter.setAlliance(alliance);
         shooterSpeed = 250.0;
         tiltPos = 0.0;
-
-        gamepadReference = new Pose(
-                -gamepad1.left_stick_y,
-                -gamepad1.left_stick_x,
-                -gamepad1.right_stick_x
-        );
     }
 
     @Override
@@ -65,13 +56,6 @@ public class BlueFar extends OpMode {
         transfer.setMotif(motif);
         dt.startTeleOpDrive();
         tiltPos = 0.0;
-
-        /*controller1.bindAction(
-                () -> gamepad1.aWasPressed(),
-                null,
-                T -> intake.run());
-
-         */
     }
 
 
