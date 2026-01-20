@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode.teleops;
 
 import static org.firstinspires.ftc.teamcode.util.Hardware.dt;
+import static org.firstinspires.ftc.teamcode.util.Hardware.intake;
+import static org.firstinspires.ftc.teamcode.util.Hardware.shooter;
+import static org.firstinspires.ftc.teamcode.util.Hardware.transfer;
 import static org.firstinspires.ftc.teamcode.util.MatchSettings.motif;
 
 import com.pedropathing.geometry.Pose;
@@ -17,9 +20,6 @@ import org.firstinspires.ftc.teamcode.util.MatchSettings;
 
 @TeleOp(name="Blue Far")
 public class BlueFar extends OpMode {
-    private Transfer transfer;
-    private Shooter shooter;
-    private Intake intake;
     private final AllianceColor alliance = new AllianceColor(AllianceColor.Selection.BLUE);
     private double shooterSpeed, tiltPos;
     private boolean runIntake = false;
@@ -37,7 +37,6 @@ public class BlueFar extends OpMode {
                 new Pose(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x)
         );
 
-        shooter.setAlliance(alliance);
         shooterSpeed = 250.0;
         tiltPos = 0.0;
     }
