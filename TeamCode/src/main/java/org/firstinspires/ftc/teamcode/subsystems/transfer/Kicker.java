@@ -19,6 +19,7 @@ public class Kicker {
     private Integer[] order;
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private Future<?> future = null;
+    private boolean isBusy = false;
 
     public Kicker(HardwareMap hwMap) {
             kickers = new Servo[3];
@@ -40,7 +41,11 @@ public class Kicker {
 
     public void runFireSequence (Integer[] order)  {
         this.order = order;
-        this.future = this.executor.submit(() -> {
+        this.future = this.executor.submit(this::createFireSequence);
+        this.cancelSequence();
+        this.future = this.executor.submit(this::createFireSequence);
+    }
+    private void createFireSequence() {
             for (int i : this.order) {
                 servoTimer.reset();
                 while (servoTimer.time() < Settings.Positions.Transfer.RUN_TO_POS_TIME) {
@@ -51,26 +56,30 @@ public class Kicker {
                 while (servoTimer.time() < Settings.Positions.Transfer.RUN_TO_POS_TIME) {
                     kickServoDown(i);
                 }
-            }
-        });
+        }
+        isBusy = false;
     }
 
     public void cancelSequence() {
         if (future != null && !future.isDone()) {
             future.cancel(true);
             this.kickAllServosDown();
+            this.isBusy = false;
         }
     }
 
     public void kickServoUp(int servoIndex) {
+        this.cancelSequence();
             kickers[servoIndex].setPosition(Settings.Positions.Transfer.upPos[servoIndex]);
     }
 
     public void kickServoDown(int servoIndex) {
+        this.cancelSequence();
             kickers[servoIndex].setPosition(Settings.Positions.Transfer.downPos[servoIndex]);
     }
 
     public void kickAllServosDown() {
+        this.cancelSequence();
             for (int i = 0; i < kickers.length; i++) {
                 this.kickServoDown(i);
             }
