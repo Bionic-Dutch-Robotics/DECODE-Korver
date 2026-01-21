@@ -54,7 +54,7 @@ public class TransferTest extends OpMode {
 
         time = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
         shooter = new Flywheel(hardwareMap);
-        shooterSpeed = 250;
+        shooterSpeed = 10;
 
         transferState = TransferState.IDLE;
         gain = 10.0F;

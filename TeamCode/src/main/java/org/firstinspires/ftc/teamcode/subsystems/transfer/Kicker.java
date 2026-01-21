@@ -19,7 +19,6 @@ public class Kicker {
     private Integer[] order;
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private Future<?> future = null;
-    private boolean isBusy = false;
 
     public Kicker(HardwareMap hwMap) {
             kickers = new Servo[3];
@@ -41,11 +40,7 @@ public class Kicker {
 
     public void runFireSequence (Integer[] order)  {
         this.order = order;
-        this.future = this.executor.submit(this::createFireSequence);
-    }
-    private void createFireSequence() {
-        if (!isBusy) {
-            isBusy = true;
+        this.future = this.executor.submit(() -> {
             for (int i : this.order) {
                 servoTimer.reset();
                 while (servoTimer.time() < Settings.Positions.Transfer.RUN_TO_POS_TIME) {
@@ -57,37 +52,28 @@ public class Kicker {
                     kickServoDown(i);
                 }
             }
-            isBusy = false;
-        }
+        });
     }
+
     public void cancelSequence() {
         if (future != null && !future.isDone()) {
             future.cancel(true);
             this.kickAllServosDown();
-            isBusy = false;
         }
     }
 
     public void kickServoUp(int servoIndex) {
-        if (!isBusy) {
             kickers[servoIndex].setPosition(Settings.Positions.Transfer.upPos[servoIndex]);
-        }
     }
 
     public void kickServoDown(int servoIndex) {
-        if (!isBusy) {
             kickers[servoIndex].setPosition(Settings.Positions.Transfer.downPos[servoIndex]);
-        }
     }
 
     public void kickAllServosDown() {
-        if (!isBusy) {
-            isBusy = true;
             for (int i = 0; i < kickers.length; i++) {
                 this.kickServoDown(i);
             }
-            isBusy = false;
-        }
     }
 
     public Double[] getServoPositions() {
@@ -95,11 +81,10 @@ public class Kicker {
     }
 
     public boolean isBusy() {
-        return this.isBusy;
+        return false;
     }
 
     public void stop() {
-        isBusy = false;
         this.cancelSequence();
         executor.shutdown();
         executor = null;

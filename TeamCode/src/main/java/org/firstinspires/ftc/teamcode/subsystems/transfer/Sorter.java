@@ -44,6 +44,7 @@ public class Sorter {
     }
 
     public Integer[] getOrder() {
+        this.getStoredArtifacts();
         order.search();
         return order.getOrder();
     }
