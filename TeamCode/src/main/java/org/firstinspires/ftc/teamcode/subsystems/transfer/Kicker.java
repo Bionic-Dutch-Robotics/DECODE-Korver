@@ -42,10 +42,10 @@ public class Kicker {
     public void runFireSequence (Integer[] order)  {
         this.order = order;
         this.future = this.executor.submit(this::createFireSequence);
+        this.cancelSequence();
+        this.future = this.executor.submit(this::createFireSequence);
     }
     private void createFireSequence() {
-        if (!isBusy) {
-            isBusy = true;
             for (int i : this.order) {
                 servoTimer.reset();
                 while (servoTimer.time() < Settings.Positions.Transfer.RUN_TO_POS_TIME) {
@@ -56,38 +56,33 @@ public class Kicker {
                 while (servoTimer.time() < Settings.Positions.Transfer.RUN_TO_POS_TIME) {
                     kickServoDown(i);
                 }
-            }
-            isBusy = false;
         }
+        isBusy = false;
     }
+
     public void cancelSequence() {
         if (future != null && !future.isDone()) {
             future.cancel(true);
             this.kickAllServosDown();
-            isBusy = false;
+            this.isBusy = false;
         }
     }
 
     public void kickServoUp(int servoIndex) {
-        if (!isBusy) {
+        this.cancelSequence();
             kickers[servoIndex].setPosition(Settings.Positions.Transfer.upPos[servoIndex]);
-        }
     }
 
     public void kickServoDown(int servoIndex) {
-        if (!isBusy) {
+        this.cancelSequence();
             kickers[servoIndex].setPosition(Settings.Positions.Transfer.downPos[servoIndex]);
-        }
     }
 
     public void kickAllServosDown() {
-        if (!isBusy) {
-            isBusy = true;
+        this.cancelSequence();
             for (int i = 0; i < kickers.length; i++) {
                 this.kickServoDown(i);
             }
-            isBusy = false;
-        }
     }
 
     public Double[] getServoPositions() {
@@ -95,11 +90,10 @@ public class Kicker {
     }
 
     public boolean isBusy() {
-        return this.isBusy;
+        return false;
     }
 
     public void stop() {
-        isBusy = false;
         this.cancelSequence();
         executor.shutdown();
         executor = null;

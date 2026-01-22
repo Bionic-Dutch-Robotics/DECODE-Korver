@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.pedroPathing;
 
-import com.bylazar.sloth.configurables.annotations.Configurable;
+import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.control.FilteredPIDFCoefficients;
 import com.pedropathing.control.*;
 import com.pedropathing.follower.Follower;
