@@ -6,6 +6,7 @@ import com.pedropathing.control.*;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.follower.FollowerConstants;
 import com.pedropathing.ftc.FollowerBuilder;
+import com.pedropathing.ftc.drivetrains.Mecanum;
 import com.pedropathing.ftc.drivetrains.MecanumConstants;
 import com.pedropathing.ftc.localization.constants.PinpointConstants;
 import com.pedropathing.geometry.Pose;
@@ -92,7 +93,6 @@ public class Constants {
             .useSecondaryHeadingPIDF(false)
             .useSecondaryTranslationalPIDF(false);
 
-
     public static MecanumConstants driveConstants = new MecanumConstants()
             .maxPower(1.0)
             .xVelocity(58.94098332923229)
@@ -121,7 +121,7 @@ public class Constants {
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)
                 .pathConstraints(pathConstraints)
-                .mecanumDrivetrain(driveConstants)
+                .setDrivetrain(new Mecanum(hardwareMap, driveConstants))
                 .pinpointLocalizer(localizerConstants)
                 .build();
     }

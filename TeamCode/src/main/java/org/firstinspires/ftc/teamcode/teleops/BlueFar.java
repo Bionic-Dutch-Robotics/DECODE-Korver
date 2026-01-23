@@ -34,7 +34,7 @@ public class BlueFar extends OpMode {
         MatchSettings.initSelection(
                 hardwareMap,
                 alliance,
-                new Pose(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x)
+                new Pose(-gamepad1.left_stick_x, -gamepad1.left_stick_y, -gamepad1.right_stick_x)
         );
 
         shooterSpeed = 250.0;
