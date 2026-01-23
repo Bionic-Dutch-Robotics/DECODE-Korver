@@ -38,49 +38,49 @@ public class Constants {
 
     public static FollowerConstants followerConstants = new FollowerConstants()
             .mass(9.6)
-            .forwardZeroPowerAcceleration(-34.53919833757035)
-            .lateralZeroPowerAcceleration(-60.56271797569653)
+            .forwardZeroPowerAcceleration(34.53919833757035)
+            .lateralZeroPowerAcceleration(60.56271797569653)
             .translationalPIDFCoefficients(new com.pedropathing.control.PIDFCoefficients(
-                    0.115,
                     0,
-                    0.01,
-                    0.02
+                    0,
+                    0.0,
+                    0.0
             ))
             .translationalPIDFSwitch(4)
             .drivePIDFCoefficients(new FilteredPIDFCoefficients(
-                    0.07,
+                    0.0,
                     0,
-                    0.02,
+                    0.0,
                     0,
                     0
             ))
             .secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(
-                    0.4,
+                    0,
                     0,
                     0.005,
                     0.0006
             ))
             .headingPIDFCoefficients(new PIDFCoefficients(
-                    1.5,
+                    0.0,
                     0.001,
                     0.08,
                     0.0
             ))
             .secondaryHeadingPIDFCoefficients(new PIDFCoefficients(
-                    2.5,
+                    0.0,
                     0,
                     0.1,
                     0.0005
             ))
             .drivePIDFCoefficients(new FilteredPIDFCoefficients(
-                    0.3,
+                    0.0,
                     0,
                     0.00035,
                     0.6,
                     0.015
             ))
             .secondaryDrivePIDFCoefficients(new FilteredPIDFCoefficients(
-                    0.02,
+                    0.0,
                     0,
                     0.000005,
                     0.6,
@@ -94,7 +94,7 @@ public class Constants {
 
 
     public static MecanumConstants driveConstants = new MecanumConstants()
-            .maxPower(1)
+            .maxPower(0.5)
             .xVelocity(57.58679439514641)
             .yVelocity(45.69038835660679)
             .leftFrontMotorName(Settings.HardwareNames.Drivetrain.FRONT_LEFT_DRIVE)
@@ -116,7 +116,7 @@ public class Constants {
                 .strafePodX(7.5590551181);
 
 
-    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1.4, 1);
+    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 0.5);
 
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)

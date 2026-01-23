@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.util.MatchSettings;
 import org.firstinspires.ftc.teamcode.util.Settings;
 
 
-public class stateMachineLogic extends OpMode {
+public class StateMachineLogic extends OpMode {
     private AutoState auto;
     private final AllianceColor alliance =new AllianceColor(AllianceColor.Selection.BLUE);
     @Override
