@@ -62,6 +62,7 @@ public class BlueFar extends OpMode {
     @Override
     public void loop() {
         dt.update();
+        telemetry.addData("X", gamepad1.left_stick_x);
         shooter.tilt.auto(shooter.flywheel.getDistance(dt.follower.getPose().getX(), dt.follower.getPose().getY(), alliance));
         shooterSpeed = shooter.flywheel.getRegressionVelocity(shooter.flywheel.getDistance(dt.follower.getPose().getX(), dt.follower.getPose().getY(), alliance), alliance);
         telemetry.update();
@@ -76,11 +77,10 @@ public class BlueFar extends OpMode {
         double strafe = -gamepad1.right_stick_x;
         double turn = -gamepad1.right_stick_x;
 
-        dt.follower.setTeleOpDrive(
+        dt.teleOpDrive(
                 forward,
                 strafe,
-                turn,
-                true
+                turn
         );
 
         if (gamepad1.aWasPressed()) {

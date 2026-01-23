@@ -30,7 +30,7 @@ public class Turret {
     }
 
     public void setAlliance(AllianceColor alliance) {
-        target = alliance.isRed() ? new Pose(141, 120) : new Pose(3, 120);
+        target = alliance.isRed() ? new Pose(141, 120) : new Pose(3, 135);
     }
 
     public void loop(double x, double y, double heading) {
