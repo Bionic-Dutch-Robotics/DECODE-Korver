@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.util;
 
 import static org.firstinspires.ftc.teamcode.util.Hardware.transfer;
 
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.pedropathing.geometry.Pose;
 
@@ -20,8 +21,13 @@ public class MatchSettings {
     private static Vision vision;
     public static AllianceColor allianceColor;
 
-    public static void initSelection(HardwareMap hwMap, AllianceColor alliance, Pose gamepadReference) {
+    public static void initSelection(HardwareMap hwMap, AllianceColor alliance, Gamepad gamepad1) {
         allianceColor = alliance;
+        Pose gamepadReference = new Pose(
+                -gamepad1.left_stick_x,
+                -gamepad1.left_stick_y,
+                -gamepad1.right_stick_x
+        );
         vision = new Vision(hwMap);
         Hardware.initialize(hwMap, alliance, gamepadReference);
     }
@@ -31,6 +37,7 @@ public class MatchSettings {
             motif = new Artifact[] {Artifact.PURPLE, Artifact.GREEN, Artifact.PURPLE};
         }
         transfer.setMotif(motif);
+        transfer.start();
     }
 
     /**

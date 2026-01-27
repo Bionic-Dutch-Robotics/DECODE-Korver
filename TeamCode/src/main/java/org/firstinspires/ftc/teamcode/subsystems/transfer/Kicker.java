@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.util.Settings;
 
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -41,7 +40,6 @@ public class Kicker {
 
     public void runFireSequence (Integer[] order)  {
         this.order = order;
-        this.future = this.executor.submit(this::createFireSequence);
         this.cancelSequence();
         this.future = this.executor.submit(this::createFireSequence);
     }
@@ -69,12 +67,10 @@ public class Kicker {
     }
 
     public void kickServoUp(int servoIndex) {
-        this.cancelSequence();
             kickers[servoIndex].setPosition(Settings.Positions.Transfer.upPos[servoIndex]);
     }
 
     public void kickServoDown(int servoIndex) {
-        this.cancelSequence();
             kickers[servoIndex].setPosition(Settings.Positions.Transfer.downPos[servoIndex]);
     }
 

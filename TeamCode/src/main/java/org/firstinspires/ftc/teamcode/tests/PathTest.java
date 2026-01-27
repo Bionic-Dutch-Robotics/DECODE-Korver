@@ -27,8 +27,8 @@ public class PathTest extends OpMode {
 
     @Override
     public void start() {
-        path = new Path(new BezierLine(follower.getPose(), new Pose(72,72)));
-        path.setHeadingInterpolation(HeadingInterpolator.linear(Math.PI, 0, 0.8));
+        path = new Path(new BezierLine(Constants.blueStartPose, new Pose(72,72)));
+        path.setHeadingInterpolation(HeadingInterpolator.linear(Math.PI, 0));
         follower.followPath(path);
     }
 
@@ -39,9 +39,5 @@ public class PathTest extends OpMode {
         telemetry.addData("Y", follower.getPose().getY());
         telemetry.addData("Theta", follower.getHeading());
         telemetry.update();
-
-        if (!follower.isBusy()) {
-            follower.followPath(path);
-        }
     }
 }

@@ -36,7 +36,7 @@ public class KylesAuto extends OpMode {
     @Override
     public void init() {
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
-        MatchSettings.initSelection(hardwareMap, alliance, new Pose(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x));
+        MatchSettings.initSelection(hardwareMap, alliance, gamepad1);
 
         // Create follower and set starting pose (matches the first point of Pickup1 path)
         //Pose startPose = new Pose(56.500, 8.500, Math.toRadians(180));
@@ -70,7 +70,7 @@ public class KylesAuto extends OpMode {
         MatchSettings.start();
 
         // Start the first path
-        dt.follower.followPath(pathSequence[currentPathIndex]);
+        dt.follower.followPath(pathSequence[0]);
     }
 
     @Override
