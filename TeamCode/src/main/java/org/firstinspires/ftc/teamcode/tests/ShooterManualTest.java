@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Flywheel;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.transfer.Transfer;
@@ -25,15 +26,17 @@ public class ShooterManualTest extends OpMode {
     //public PIDFController headingPid;
     public boolean goToHeading;
     public double shooterPower;
+    private Intake intake;
     private Transfer transfer;
     @Override
     public void init() {
+        intake = new Intake(hardwareMap);
         transfer = new Transfer(hardwareMap);
         transfer.setMotif(new Artifact[] {Artifact.PURPLE, Artifact.GREEN, Artifact.PURPLE});
         transfer.start();
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(Constants.blueStartPose);
-        shooterPidf = new PIDFController(Constants.shooterCoefficients);
+        shooterPidf = new PIDFController(Settings.Positions.Shooter.SHOOTER_COEFFICIENTS);
         shooter = new Shooter(hardwareMap);
         shooter.setAlliance(new AllianceColor(AllianceColor.Selection.BLUE));
         shooter.turret.setAlliance(new AllianceColor(AllianceColor.Selection.BLUE));
@@ -71,7 +74,9 @@ public class ShooterManualTest extends OpMode {
 
         //shooterPidf.updatePosition(shooter.getVelocity(AngleUnit.DEGREES));
         //shooterPidf.setTargetPosition(shooterPower);
-        shooter.tilt.auto(shooter.flywheel.getDistance(follower.getPose().getX(), follower.getPose().getY(), new AllianceColor(AllianceColor.Selection.BLUE)));
+        //shooter.tilt.setTilt(
+        //        shooter.tilt.auto(shooter.flywheel.getDistance(follower.getPose().getX(), follower.getPose().getY(), new AllianceColor(AllianceColor.Selection.BLUE))
+        //));
         shooter.turret.loop(follower.getPose().getX(), follower.getPose().getY(), follower.getHeading());
         shooter.flywheel.update(shooterPower);
 
@@ -89,12 +94,11 @@ public class ShooterManualTest extends OpMode {
         }
 
         //run.run();
-
         if (gamepad1.xWasPressed()) {
             transfer.fireSortedArtifacts();
         }
         else {
-            //transfer.feed();
+            intake.run();
         }
 
         /*telemetry.addData("Distance: ", Math.sqrt(
@@ -102,6 +106,7 @@ public class ShooterManualTest extends OpMode {
         ));*/
         telemetry.addData("Shooter Velocity: ", shooter.flywheel.shooter.getVelocity(AngleUnit.DEGREES));
         telemetry.addData("Shooter Target: ", shooterPower);
+        telemetry.addData("Distance: ", shooter.flywheel.getDistance(follower.getPose().getX(), follower.getPose().getY(), new AllianceColor(AllianceColor.Selection.BLUE)));
         telemetry.update();
     }
 
