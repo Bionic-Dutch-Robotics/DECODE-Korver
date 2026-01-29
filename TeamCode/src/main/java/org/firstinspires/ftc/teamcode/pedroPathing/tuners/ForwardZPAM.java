@@ -25,9 +25,10 @@ import java.util.ArrayList;
  * @author Baron Henderson - 20077 The Indubitables
  * @author Aaron Yang - 10158 Scott's Bots
  * @author Harrison Womack - 10158 Scott's Bots
+ * @author Atharv Gurnani - 13085 Bionic Dutch
  * @version 1.0, 3/13/2024
  */
-@TeleOp(name="ForwardZPAM", group="tuners")
+@TeleOp(name="Forward ZPAM Tuner", group="tuners")
 public class ForwardZPAM extends OpMode {
     static ArrayList<String> changes = new ArrayList<>();
     private Follower follower;

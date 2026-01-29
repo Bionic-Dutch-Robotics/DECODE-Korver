@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
  * @author Harrison Womack - 10158 Scott's Bots
  * @version 1.0, 3/12/2024
  */
-@TeleOp(name="TranslationalPIDF", group="tuners")
+@TeleOp(name="Translational PIDF Tuner", group="tuners")
 public class TranslationalPIDF extends OpMode {
     public static double DISTANCE = 40;
     private boolean forward = true;

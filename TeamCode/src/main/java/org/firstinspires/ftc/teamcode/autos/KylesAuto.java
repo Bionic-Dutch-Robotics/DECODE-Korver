@@ -70,7 +70,7 @@ public class KylesAuto extends OpMode {
         MatchSettings.start();
 
         // Start the first path
-        dt.follower.followPath(pathSequence[0]);
+        dt.follower.followPath(pathSequence[currentPathIndex]);
     }
 
     @Override
