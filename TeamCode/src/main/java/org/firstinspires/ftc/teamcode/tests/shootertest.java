@@ -112,7 +112,7 @@ public class shootertest extends OpMode {
     }
 
     public static double getRegressionVelocity (double distance) {
-        return -0.000724792 * Math.pow(distance, 2) + 1.10181 * distance + 100.38172;
+        return 0.558815*distance + 89.297;
     }
     public static double getDistance(double x, double y) {
         return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
