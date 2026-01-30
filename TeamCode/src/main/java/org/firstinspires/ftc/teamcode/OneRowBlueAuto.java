@@ -2,11 +2,10 @@ package org.firstinspires.ftc.teamcode;
 
 import static org.firstinspires.ftc.teamcode.pedroPathing.Constants.follower;
 
-import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.BezierLine;
+import com.pedropathing.paths.Path;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
@@ -14,12 +13,9 @@ import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.Transfer;
 import org.firstinspires.ftc.teamcode.subsystems.drivetrain.autonomous.Actions;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
-import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-import java.util.concurrent.TimeUnit;
-
-@Autonomous(name ="Sleeps Auto Blue", preselectTeleOp = "Meet 2 BLUE")
-public class MessiestBlue extends OpMode {
+@Autonomous(name="One Row Blue")
+public class OneRowBlueAuto extends OpMode {
     public static final Actions paths = new Actions(AllianceColor.Selection.BLUE);
     private boolean hasShotFirst, shoot;
     private Transfer transfer;
@@ -41,12 +37,15 @@ public class MessiestBlue extends OpMode {
 
         savedTime = 0.0;
     }
+
     @Override
     public void start() {
         resetRuntime();
         transfer.feed();
         follower.followPath(paths.shoot1);
     }
+
+
 
     @Override
     public void loop() {
@@ -107,31 +106,14 @@ public class MessiestBlue extends OpMode {
             intake.stop();
         }
         else if (time > 16.5 && time < 16.6) {
-            intake.custom(0.85);
-            follower.followPath(paths.redIntakeRow2);
-        }
-        else if (time > 22 && time < 22.5) {
-            transfer.reload();
-            intake.custom(0.85);
-        }
-        else if (time > 22.5 && time < 23.5) {
-            transfer.feed();
-            intake.stop();
-        }
-        else if (time > 23.5 && time < 24) {
-            transfer.reload();
-            intake.custom(0.85);
-        }
-        else if (time > 24 && time < 24.5) {
-            transfer.feed();
-            intake.stop();
-        }
-
-        else if (time > 24.5 && time < 25) {
-            intake.intake();
-            follower.followPath(paths.goToLever);
+            intake.custom(0);
+            follower.followPath(new Path(
+                    new BezierLine(
+                            follower.getPose(), Constants.redPark)
+            ));
         }
     }
+
     @Override
     public void stop() {
         follower.update();

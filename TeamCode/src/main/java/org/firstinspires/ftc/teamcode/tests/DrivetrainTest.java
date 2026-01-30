@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.testbenches;
+package org.firstinspires.ftc.teamcode.tests;
 
 import com.pedropathing.follower.Follower;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -14,7 +14,7 @@ public class DrivetrainTest extends OpMode {
     @Override
     public void init() {
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(Constants.redStartPose);
+        follower.setStartingPose(Constants.blueStartPose);
     }
 
     @Override

@@ -20,12 +20,15 @@ buildscript {
             url "https://repo.dairy.foundation/releases"
         }
         maven {
+            url = "https://repo.dairy.foundation/snapshots"
+        }
+        maven {
             url "https://www.matthewo.tech/maven/"
         }
     }
     dependencies {
         classpath "dev.frozenmilk:Load:0.2.4"
-        //classpath "org.team11260:fast-load-plugin:0.1.2"
+        //classpath "org.team11260:fast-load-plugin:0.1.4-beta1"
     }
 }
 

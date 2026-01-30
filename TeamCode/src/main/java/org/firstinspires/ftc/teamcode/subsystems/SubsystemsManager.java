@@ -238,7 +238,7 @@ public class SubsystemsManager {
             return target;
         }
         else {
-            double target = Math.atan2(141 - y, 3-x) + Math.toRadians(90);
+            double target = Math.atan2(145 - y, 3-x) + Math.toRadians(90);
 
             if (MathFunctions.normalizeAngle(target) > Math.PI) {
                 return MathFunctions.normalizeAngle(target) - Math.PI * 2;

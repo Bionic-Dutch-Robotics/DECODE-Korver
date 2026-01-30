@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode;
 import static org.firstinspires.ftc.teamcode.pedroPathing.Constants.follower;
 
 import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.BezierLine;
+import com.pedropathing.paths.Path;
 import com.pedropathing.paths.callbacks.ParametricCallback;
 import com.pedropathing.paths.callbacks.PathCallback;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -146,7 +148,7 @@ public class Messiest extends OpMode {
 
         else if (time > 24.5 && time < 25) {
             intake.intake();
-            follower.followPath(paths.goToLever);
+            follower.followPath(new Path(new BezierLine(follower.getPose(), Constants.bluePark)));
         }
     }
     @Override
