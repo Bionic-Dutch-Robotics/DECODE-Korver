@@ -52,12 +52,12 @@ public class Drivetrain {
         );
     }
 
-    public void lineToPose(Pose target) {
+    public void lineToPose(Pose target, double currentHeading) {
+        Path path = new Path(new BezierLine(follower::getPose, target));
+        path.setLinearHeadingInterpolation(currentHeading, target.getHeading());
         follower.breakFollowing();
         follower.followPath(
-                new Path(
-                        new BezierLine(follower::getPose, target)
-                )
+                path
         );
     }
 

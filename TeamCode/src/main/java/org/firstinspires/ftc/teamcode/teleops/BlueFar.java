@@ -10,12 +10,8 @@ import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
-import org.firstinspires.ftc.teamcode.subsystems.transfer.Transfer;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
 import org.firstinspires.ftc.teamcode.util.Artifact;
-import org.firstinspires.ftc.teamcode.util.Controller;
 import org.firstinspires.ftc.teamcode.util.MatchSettings;
 
 @TeleOp(name="Blue Far")
@@ -34,7 +30,7 @@ public class BlueFar extends OpMode {
         MatchSettings.initSelection(
                 hardwareMap,
                 alliance,
-                new Pose(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x)
+                gamepad1
         );
 
         shooterSpeed = 250.0;
@@ -62,6 +58,7 @@ public class BlueFar extends OpMode {
     @Override
     public void loop() {
         dt.update();
+        telemetry.addData("X", gamepad1.left_stick_x);
         shooter.tilt.auto(shooter.flywheel.getDistance(dt.follower.getPose().getX(), dt.follower.getPose().getY(), alliance));
         shooterSpeed = shooter.flywheel.getRegressionVelocity(shooter.flywheel.getDistance(dt.follower.getPose().getX(), dt.follower.getPose().getY(), alliance), alliance);
         telemetry.update();
@@ -73,14 +70,13 @@ public class BlueFar extends OpMode {
         shooter.tilt.setTilt(tiltPos);
 
         double forward = -gamepad1.left_stick_y;
-        double strafe = -gamepad1.right_stick_x;
+        double strafe = -gamepad1.left_stick_x;
         double turn = -gamepad1.right_stick_x;
 
-        dt.follower.setTeleOpDrive(
+        dt.teleOpDrive(
                 forward,
                 strafe,
-                turn,
-                true
+                turn
         );
 
         if (gamepad1.aWasPressed()) {

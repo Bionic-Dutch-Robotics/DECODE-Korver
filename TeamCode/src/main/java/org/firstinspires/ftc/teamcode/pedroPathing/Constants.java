@@ -6,6 +6,7 @@ import com.pedropathing.control.*;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.follower.FollowerConstants;
 import com.pedropathing.ftc.FollowerBuilder;
+import com.pedropathing.ftc.drivetrains.Mecanum;
 import com.pedropathing.ftc.drivetrains.MecanumConstants;
 import com.pedropathing.ftc.localization.constants.PinpointConstants;
 import com.pedropathing.geometry.Pose;
@@ -38,65 +39,36 @@ public class Constants {
 
     public static FollowerConstants followerConstants = new FollowerConstants()
             .mass(9.6)
-            .forwardZeroPowerAcceleration(34.53919833757035)
-            .lateralZeroPowerAcceleration(60.56271797569653)
+            .forwardZeroPowerAcceleration(-39.082554597030864)
+            .lateralZeroPowerAcceleration(-71.21712910009308)
             .translationalPIDFCoefficients(new com.pedropathing.control.PIDFCoefficients(
+                    0.3,
                     0,
-                    0,
-                    0.0,
-                    0.0
-            ))
-            .translationalPIDFSwitch(4)
-            .drivePIDFCoefficients(new FilteredPIDFCoefficients(
-                    0.0,
-                    0,
-                    0.0,
-                    0,
-                    0
-            ))
-            .secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(
-                    0,
-                    0,
-                    0.005,
-                    0.0006
+                    0.025,
+                    0.024
             ))
             .headingPIDFCoefficients(new PIDFCoefficients(
-                    0.0,
-                    0.001,
-                    0.08,
-                    0.0
-            ))
-            .secondaryHeadingPIDFCoefficients(new PIDFCoefficients(
-                    0.0,
-                    0,
-                    0.1,
-                    0.0005
+                    1.78,
+                    0.00,
+                    0.055,
+                    0.025
             ))
             .drivePIDFCoefficients(new FilteredPIDFCoefficients(
-                    0.0,
+                    0.75,
                     0,
-                    0.00035,
+                    0.005,
                     0.6,
-                    0.015
+                    0.025
             ))
-            .secondaryDrivePIDFCoefficients(new FilteredPIDFCoefficients(
-                    0.0,
-                    0,
-                    0.000005,
-                    0.6,
-                    0.01
-            ))
-            .drivePIDFSwitch(15)
             .centripetalScaling(0.0005)
             .useSecondaryDrivePIDF(false)
             .useSecondaryHeadingPIDF(false)
             .useSecondaryTranslationalPIDF(false);
 
-
     public static MecanumConstants driveConstants = new MecanumConstants()
-            .maxPower(0.5)
-            .xVelocity(57.58679439514641)
-            .yVelocity(45.69038835660679)
+            .maxPower(1.0)
+            .xVelocity(58.94098332923229)
+            .yVelocity(45.84543639656127)
             .leftFrontMotorName(Settings.HardwareNames.Drivetrain.FRONT_LEFT_DRIVE)
             .leftRearMotorName(Settings.HardwareNames.Drivetrain.BACK_LEFT_DRIVE)
             .rightFrontMotorName(Settings.HardwareNames.Drivetrain.FRONT_RIGHT_DRIVE)
@@ -116,12 +88,12 @@ public class Constants {
                 .strafePodX(7.5590551181);
 
 
-    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 0.5);
+    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
 
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)
                 .pathConstraints(pathConstraints)
-                .mecanumDrivetrain(driveConstants)
+                .setDrivetrain(new Mecanum(hardwareMap, driveConstants))
                 .pinpointLocalizer(localizerConstants)
                 .build();
     }

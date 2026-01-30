@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.tests;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
+import com.pedropathing.geometry.Pose;
+import com.pedropathing.paths.HeadingInterpolator;
 import com.pedropathing.paths.Path;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -11,11 +13,11 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.drivetrain.autonomous.Actions;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
 
-@Disabled
 @Autonomous(name="Path Test")
 public class PathTest extends OpMode {
     private Actions paths;
     private Follower follower;
+    private Path path;
     @Override
     public void init() {
         paths = new Actions(AllianceColor.Selection.BLUE);
@@ -25,20 +27,17 @@ public class PathTest extends OpMode {
 
     @Override
     public void start() {
-        follower.followPath(paths.shoot1);
+        path = new Path(new BezierLine(Constants.blueStartPose, new Pose(72,72)));
+        path.setHeadingInterpolation(HeadingInterpolator.linear(Math.PI, 0));
+        follower.followPath(path);
     }
 
     @Override
     public void loop() {
-        if (time < 5) {
-            follower.update();
-            telemetry.addData("X", follower.getPose().getX());
-            telemetry.addData("Y", follower.getPose().getY());
-            telemetry.addData("Theta", follower.getHeading());
-            telemetry.update();
-        }
-        else {
-            follower.holdPoint(Constants.farBlueShoot);
-        }
+        follower.update();
+        telemetry.addData("X", follower.getPose().getX());
+        telemetry.addData("Y", follower.getPose().getY());
+        telemetry.addData("Theta", follower.getHeading());
+        telemetry.update();
     }
 }

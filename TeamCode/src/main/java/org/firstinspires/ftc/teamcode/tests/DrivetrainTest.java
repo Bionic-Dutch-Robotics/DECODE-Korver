@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Disabled
 @TeleOp(name="Drivetrain Test")
 public class DrivetrainTest extends OpMode {
 

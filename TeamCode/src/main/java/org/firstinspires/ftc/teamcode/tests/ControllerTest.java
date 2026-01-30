@@ -21,7 +21,7 @@ public class ControllerTest extends OpMode {
 
     @Override
     public void init() {
-        MatchSettings.initSelection(hardwareMap, alliance, new Pose(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x));
+        MatchSettings.initSelection(hardwareMap, alliance, gamepad1);
         controller1 = new Controller();
 
         controller1.bind(
