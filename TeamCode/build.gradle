@@ -60,6 +60,6 @@ repositories {
 
 dependencies {
     implementation project(':FtcRobotController')
-    implementation("dev.frozenmilk.sinister:Sloth:0.2.4")
-    //implementation("org.team11260:fast-load:0.1.4-beta1")
+    //implementation("org.team11260:fast-load:0.1.2")
+    implementation("com.bylazar.sloth:fullpanels:0.2.4+1.0.12")
 }

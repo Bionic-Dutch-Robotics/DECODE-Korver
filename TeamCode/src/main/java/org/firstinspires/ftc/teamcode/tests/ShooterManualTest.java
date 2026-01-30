@@ -60,7 +60,8 @@ public class ShooterManualTest extends OpMode {
                     -gamepad1.left_stick_y,
                     -gamepad1.left_stick_x,
                     headingPid.run(),
-                    false
+                    false,
+                    0
             );
         }*/
         /*if (gamepad1.leftBumperWasPressed()) {

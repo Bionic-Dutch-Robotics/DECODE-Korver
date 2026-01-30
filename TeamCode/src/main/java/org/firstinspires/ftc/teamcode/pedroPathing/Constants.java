@@ -31,7 +31,7 @@ public class Constants {
         public static final Pose redPark = new Pose(35,30, 0);
         public static final Pose bluePark = new Pose(100,30, 0);
 
-        public static PIDFCoefficients shooterCoefficients = new PIDFCoefficients(0.00527, 0,0.000013,0);   //SHOOTER PIDF. original P was 0.0052
+        public static PIDFCoefficients shooterCoefficients = new PIDFCoefficients(0.03, 0,0.000013,0);   //SHOOTER PIDF. original P was 0.0052
         public static Pose teleOpStartPose = null;
         public static Follower follower = null;
 

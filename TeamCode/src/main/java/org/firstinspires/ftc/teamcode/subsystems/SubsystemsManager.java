@@ -90,7 +90,7 @@ public class SubsystemsManager {
                     forward != Math.abs(gpThreshold.getY()) - 0.03 ? forward : 0,
                     strafe != Math.abs(gpThreshold.getX()) - 0.03 ? strafe : 0,
                     turn != Math.abs(gpThreshold.getY()) - 0.03 ? turn : 0,
-                    false,
+                    true,
                     allianceColor.isRed() ? 0 : Math.toRadians(180)
             );
         }
@@ -102,11 +102,7 @@ public class SubsystemsManager {
                     allianceColor
             ));
 
-            follower.setTeleOpDrive(
-                    forward != Math.abs(gpThreshold.getY()) - 0.03 ? forward : 0,
-                    strafe != Math.abs(gpThreshold.getX()) - 0.03 ? strafe : 0,
-                    headingPid.run(),
-                    false,
+            follower.setTeleOpDrive(forward, strafe, headingPid.run(), true,
                     allianceColor.isRed() ? 0 : Math.toRadians(180)
             );
         }
@@ -230,7 +226,7 @@ public class SubsystemsManager {
 
     public static double getTargetHeading(double x, double y, org.firstinspires.ftc.teamcode.util.AllianceColor alliance) {
         if (alliance.isRed()) {
-            double target = MathFunctions.normalizeAngle(Math.atan2(145-y, 141-x) + Math.toRadians(91.5));
+            double target = MathFunctions.normalizeAngle(Math.atan2(138-y, 138-x) + Math.toRadians(91.5));
 
             if (MathFunctions.normalizeAngle(target) > Math.PI) {
                 return MathFunctions.normalizeAngle(target) - Math.PI * 2;
