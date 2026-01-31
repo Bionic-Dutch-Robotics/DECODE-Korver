@@ -14,8 +14,8 @@ import org.firstinspires.ftc.teamcode.util.AllianceColor;
 public class Shooter {
     private PIDFController shooterPidf = null;
     public DcMotorEx shooter = null;
-    public final double redPowerCoefficient = 1.1;
-    public final double bluePowerCoefficient = 1.1;
+    public final double redPowerCoefficient = 1.0;
+    public final double bluePowerCoefficient = 1.0;
 
     public Shooter (HardwareMap hwMap, PIDFCoefficients shooterCoefficients) {
         shooter = hwMap.get(DcMotorEx.class, "shooter");

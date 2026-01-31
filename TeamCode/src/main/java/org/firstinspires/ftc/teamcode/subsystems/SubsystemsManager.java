@@ -90,7 +90,7 @@ public class SubsystemsManager {
                     forward != Math.abs(gpThreshold.getY()) - 0.03 ? forward : 0,
                     strafe != Math.abs(gpThreshold.getX()) - 0.03 ? strafe : 0,
                     turn != Math.abs(gpThreshold.getY()) - 0.03 ? turn : 0,
-                    true,
+                    false,
                     allianceColor.isRed() ? 0 : Math.toRadians(180)
             );
         }
@@ -102,7 +102,7 @@ public class SubsystemsManager {
                     allianceColor
             ));
 
-            follower.setTeleOpDrive(forward, strafe, headingPid.run(), true,
+            follower.setTeleOpDrive(forward, strafe, headingPid.run(), false,
                     allianceColor.isRed() ? 0 : Math.toRadians(180)
             );
         }
@@ -192,12 +192,21 @@ public class SubsystemsManager {
         } else if (gp.dpadLeftWasPressed()) {
             intakeState = IntakeState.STOP;
         }
+        else if (gp.dpadRightWasPressed()) {
+            intakeState = IntakeState.SLOW;
+        }
+
 
         if (intakeState == IntakeState.FEED) {
             intake.intake();
-        } else if (intakeState == IntakeState.EJECT) {
+        }
+        else if (intakeState == IntakeState.EJECT) {
             intake.eject();
-        } else {
+        }
+        else if (intakeState == IntakeState.SLOW) {
+            intake.custom(0.25);
+        }
+        else if (intakeState == IntakeState.STOP) {
             intake.stop();
         }
     }
@@ -221,12 +230,12 @@ public class SubsystemsManager {
     }
 
     public enum IntakeState {
-        STOP, EJECT, FEED
+        STOP, EJECT, FEED, SLOW
     }
 
     public static double getTargetHeading(double x, double y, org.firstinspires.ftc.teamcode.util.AllianceColor alliance) {
         if (alliance.isRed()) {
-            double target = MathFunctions.normalizeAngle(Math.atan2(138-y, 138-x) + Math.toRadians(91.5));
+            double target = MathFunctions.normalizeAngle(Math.atan2(135-y, 135-x) + Math.toRadians(90.5));
 
             if (MathFunctions.normalizeAngle(target) > Math.PI) {
                 return MathFunctions.normalizeAngle(target) - Math.PI * 2;
@@ -238,7 +247,7 @@ public class SubsystemsManager {
             return target;
         }
         else {
-            double target = Math.atan2(141 - y, 3-x) + Math.toRadians(90);
+            double target = Math.atan2(135 - y, 9-x) + Math.toRadians(90.5);
 
             if (MathFunctions.normalizeAngle(target) > Math.PI) {
                 return MathFunctions.normalizeAngle(target) - Math.PI * 2;
