@@ -26,6 +26,7 @@ public class MessiestBlue extends OpMode {
     private Shooter shooter;
     private Intake intake;
     private double savedTime;
+    private final AllianceColor alliance = new AllianceColor(AllianceColor.Selection.BLUE);
 
     @Override
     public void init() {
@@ -51,7 +52,7 @@ public class MessiestBlue extends OpMode {
     @Override
     public void loop() {
         follower.update();
-        shooter.update(Constants.farShootPower * shooter.bluePowerCoefficient);
+        shooter.update(shooter.getRegressionVelocity(shooter.getDistance(Constants.farBlueShoot.getX(), Constants.farBlueShoot.getY(), alliance), alliance));
         telemetry.update();
         telemetry.addData("Bot X", follower.getPose().getX());
         telemetry.addData("Bot Y", follower.getPose().getY());

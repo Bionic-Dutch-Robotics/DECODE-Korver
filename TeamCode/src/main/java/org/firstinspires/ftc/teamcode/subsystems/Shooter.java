@@ -4,7 +4,6 @@ import com.pedropathing.control.PIDFController;
 import com.pedropathing.math.MathFunctions;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.pedropathing.control.PIDFCoefficients;
 
@@ -15,14 +14,14 @@ import org.firstinspires.ftc.teamcode.util.AllianceColor;
 public class Shooter {
     private PIDFController shooterPidf = null;
     public DcMotorEx shooter = null;
-    public final double redPowerCoefficient = 1.1;
-    public final double bluePowerCoefficient = 1.065;
+    public final double redPowerCoefficient = 1.0;
+    public final double bluePowerCoefficient = 1.0;
 
     public Shooter (HardwareMap hwMap, PIDFCoefficients shooterCoefficients) {
         shooter = hwMap.get(DcMotorEx.class, "shooter");
         shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         shooter.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        shooter.setDirection(DcMotorSimple.Direction.FORWARD);
+        shooter.setDirection(DcMotorEx.Direction.FORWARD);
         shooter.setVelocityPIDFCoefficients(shooterCoefficients.P, shooterCoefficients.I, shooterCoefficients.D, shooterCoefficients.F);
         shooterPidf = new PIDFController(shooterCoefficients);
     }

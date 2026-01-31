@@ -23,7 +23,7 @@ public class Intake {
      * Run the intake
      */
     public void intake() {
-        spinner.setPower(0.75);
+        spinner.setPower(0.8);
     }
 
     /**

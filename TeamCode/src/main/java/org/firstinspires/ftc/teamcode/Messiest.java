@@ -28,6 +28,7 @@ public class Messiest extends OpMode {
     private boolean hasShotFirst, shoot;
     private Transfer transfer;
     private Shooter shooter;
+    private final AllianceColor alliance = new AllianceColor(AllianceColor.Selection.RED);
     private Intake intake;
     private double savedTime;
 
@@ -74,7 +75,7 @@ public class Messiest extends OpMode {
     @Override
     public void loop() {
         follower.update();
-        shooter.update(Constants.farShootPower * shooter.redPowerCoefficient);
+        shooter.update(shooter.getRegressionVelocity(shooter.getDistance(Constants.farRedShoot.getX(), Constants.farRedShoot.getY(), alliance), alliance));
 
         if (time > 3 && time < 3.5) {
             transfer.reload();
