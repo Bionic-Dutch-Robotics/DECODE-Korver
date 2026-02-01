@@ -24,6 +24,7 @@ public class SubsystemsManager {
     public Intake intake;
     public Shooter shooter;
     public Transfer transfer;
+    public double shooterMult = 1.0;
     public AllianceColor allianceColor;
 
     public IntakeState intakeState;
@@ -162,25 +163,35 @@ public class SubsystemsManager {
 
     public void shooter(Gamepad gp) {
         if (gp.leftBumperWasPressed()) {
-            shooterState = (shooterState == ShooterState.AUTO_AIM? shooterState = ShooterState.MANUAL : ShooterState.AUTO_AIM);
+            shooterState = (shooterState == ShooterState.AUTO_AIM? ShooterState.MANUAL : ShooterState.AUTO_AIM);
         }
         if (shooterState == ShooterState.AUTO_AIM) {
+
             Pose currentPose = follower.getPose();
-            shooter.adaptive(currentPose.getX(), currentPose.getY(), allianceColor);
+            shooter.adaptive(currentPose.getX(), currentPose.getY(), allianceColor, shooterMult);
+
+            if (gp.aWasPressed()) {
+                shooterMult -= 0.025;
+            }
+            else if (gp.yWasPressed()) {
+                shooterMult += 0.025;
+            }
         }
         else if (shooterState == ShooterState.MANUAL) {
+            double shooterPower = shooter.getTarget();
             if (gp.yWasPressed()) {
-                shooter.update(shooter.getTarget() + 10);
+                shooterPower = shooter.getTarget() + 10;
             }
             else if (gp.aWasPressed()) {
-                shooter.update(shooter.getTarget() - 10);
+                shooterPower = shooter.getTarget() - 10;
             }
             else if (gp.bWasPressed()) {
-                shooter.update(shooter.getTarget() + 1);
+                shooterPower = shooter.getTarget() + 1;
             }
             else if (gp.xWasPressed()) {
-                shooter.update(shooter.getTarget() - 1);
+                shooterPower = shooter.getTarget() - 10;
             }
+            shooter.update(shooterPower);
         }
     }
 

@@ -31,6 +31,7 @@ public class Meet2RedTele extends OpMode {
     @Override
     public void loop() {
         telemetry.update();
+        telemetry.addData("Distance", subsystems.shooterMult);
         telemetry.addData("Shooter:", subsystems.shooter.shooter.getVelocity(AngleUnit.DEGREES));
         telemetry.addData("hEADING: ", Constants.follower.getHeading());
         telemetry.addData("Bot X: ", Constants.follower.getPose().getX());

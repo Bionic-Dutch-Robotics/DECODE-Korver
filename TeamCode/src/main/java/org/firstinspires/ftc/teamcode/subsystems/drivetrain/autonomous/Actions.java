@@ -20,19 +20,19 @@ import java.util.Objects;
 
 @Configurable
 public class Actions {
-    public static final Pose redRow1Target = new Pose(112, 35, 0);
-    public static final Pose redRow1Control = new Pose(76, 31);
+    public static final Pose redRow1Target = new Pose(112, 37, 0);
+    public static final Pose redRow1Control = new Pose(76, 35);
     public static final Pose redRow2Control = new Pose(76,62);
-    public static final Pose redRow2Target = new Pose(105,62, 0);
+    public static final Pose redRow2Target = new Pose(105,61, 0);
     public static final Pose redRow3Control = new Pose(76, 76);
     public static final Pose redRow3Target = new Pose(105,78, 0);
     public static final Pose redExitTriangle = new Pose(96, 72, Math.toRadians(0));
     public static final Pose blueExitTriangle = new Pose(40, 72, Math.toRadians(180));
 
-    public static final Pose blueRow1Target = new Pose(28, 39, Math.toRadians(180));
-    public static final Pose blueRow1Control = new Pose(68, 37);
-    public static final Pose blueRow2Control = new Pose(68, 61);
-    public static final Pose blueRow2Target = new Pose(28, 63, Math.toRadians(180));
+    public static final Pose blueRow1Target = new Pose(28, 42, Math.toRadians(180));
+    public static final Pose blueRow1Control = new Pose(68, 39);
+    public static final Pose blueRow2Control = new Pose(64, 63);
+    public static final Pose blueRow2Target = new Pose(33, 66, Math.toRadians(180));
     public static final Pose blueRow3Control = new Pose(68,78);
     public static final Pose blueRow3Target = new Pose(28, 86, Math.toRadians(180));
     public final Path shoot1, goToLever;

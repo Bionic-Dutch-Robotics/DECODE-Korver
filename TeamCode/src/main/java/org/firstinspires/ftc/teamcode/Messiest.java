@@ -28,9 +28,14 @@ public class Messiest extends OpMode {
     private boolean hasShotFirst, shoot;
     private Transfer transfer;
     private Shooter shooter;
+    private double multiplier = 1.0;
     private final AllianceColor alliance = new AllianceColor(AllianceColor.Selection.RED);
     private Intake intake;
     private double savedTime;
+    private final double FLYWHEEL_SPINUP_TIME = 0.5;
+    private final double KICK_TIME = 0.5;
+    private final double START_TIME = 2.0;
+    private final double PATH_TIME_1 = 7;
 
     @Override
     public void init() {
@@ -55,16 +60,29 @@ public class Messiest extends OpMode {
                 }));
         callbacks.add(
                 1,
-                new ParametricCallback(1,0.001, follower,
+                new ParametricCallback(1,0.025, follower,
                         () -> {
                             follower.setMaxPower(1);
-                            intake.custom(0.1);
+                            intake.custom(0.45);
                         })
         );
         paths.redIntakeRow1.setCallbacks(
                 callbacks
         );
     }
+
+    @Override
+    public void init_loop() {
+        telemetry.addData("Multiplier", multiplier);
+        telemetry.update();
+        if (gamepad2.aWasPressed()) {
+            multiplier -= 0.02;
+        }
+        else if (gamepad2.yWasPressed()) {
+            multiplier += 0.02;
+        }
+    }
+
     @Override
     public void start() {
         resetRuntime();
@@ -75,79 +93,79 @@ public class Messiest extends OpMode {
     @Override
     public void loop() {
         follower.update();
-        shooter.update(shooter.getRegressionVelocity(shooter.getDistance(Constants.farRedShoot.getX(), Constants.farRedShoot.getY(), alliance), alliance));
+        shooter.update(shooter.getRegressionVelocity(shooter.getDistance(Constants.farRedShoot.getX(), Constants.farRedShoot.getY(), alliance), alliance) * multiplier);
 
-        if (time > 3 && time < 3.5) {
+        if (time > START_TIME && time < START_TIME+FLYWHEEL_SPINUP_TIME) {
             transfer.reload();
             intake.custom(0.81);
-        } else if (time > 3.5 && time < 4.5) {
+        } else if (time > START_TIME+FLYWHEEL_SPINUP_TIME && time < START_TIME+FLYWHEEL_SPINUP_TIME+KICK_TIME) {
             transfer.feed();
             intake.stop();
-        } else if (time > 4.5 && time < 5) {
+        } else if (time > START_TIME+FLYWHEEL_SPINUP_TIME+KICK_TIME && time < START_TIME+FLYWHEEL_SPINUP_TIME*2+KICK_TIME) {
             transfer.reload();
             intake.custom(0.85);
-        } else if (time > 5 && time < 6) {
+        } else if (time > START_TIME+FLYWHEEL_SPINUP_TIME*2+KICK_TIME && time < START_TIME+FLYWHEEL_SPINUP_TIME*2+KICK_TIME*2) {
             transfer.feed();
             intake.stop();
         }
-        else if (time > 6 && time < 6.5) {
+        else if (time > START_TIME+FLYWHEEL_SPINUP_TIME*2+KICK_TIME*2 && time < START_TIME+FLYWHEEL_SPINUP_TIME*3+KICK_TIME*2) {
             transfer.reload();
             intake.custom(0.85);
         }
-        else if (time > 6.5 && time < 7.5) {
+        else if (time > START_TIME+FLYWHEEL_SPINUP_TIME*3+KICK_TIME*2 && time < START_TIME+FLYWHEEL_SPINUP_TIME*3+KICK_TIME*3) {
             transfer.feed();
             intake.stop();
         }
-        else if (time > 7.5 && time < 7.65) {
+        else if (time > START_TIME+FLYWHEEL_SPINUP_TIME*3+KICK_TIME*3 && time < START_TIME+FLYWHEEL_SPINUP_TIME*3+KICK_TIME*3+0.3) {
             intake.intake();
             follower.followPath(paths.redIntakeRow1);
         }
-        else if (!follower.isBusy() && time > 12 && time < 12.5) {
+        else if (time > START_TIME+FLYWHEEL_SPINUP_TIME*3+KICK_TIME*3+0.3+5 && time < START_TIME+FLYWHEEL_SPINUP_TIME*3+KICK_TIME*4+0.3+5) {
             intake.custom(0.85);
             transfer.reload();
         }
-        else if (time > 12.5 && time < 13.5) {
+        else if (time > START_TIME+FLYWHEEL_SPINUP_TIME*3+KICK_TIME*4+0.3+5 && time < START_TIME+FLYWHEEL_SPINUP_TIME*3+KICK_TIME*5+0.3+5) {
             transfer.feed();
             intake.stop();
         }
-        else if (time > 13.5 && time < 14) {
+        else if (time > START_TIME+FLYWHEEL_SPINUP_TIME*3+KICK_TIME*5+0.3+5 && time < START_TIME+FLYWHEEL_SPINUP_TIME*3+KICK_TIME*6+0.3+5) {
             transfer.reload();
             intake.custom(0.85);
         }
-        else if (time > 14 && time < 15) {
+        else if (time > START_TIME+FLYWHEEL_SPINUP_TIME*3+KICK_TIME*6+0.3+5 && time < START_TIME+FLYWHEEL_SPINUP_TIME*7+KICK_TIME*6+0.3+5) {    //stoped here
             transfer.feed();
             intake.stop();
         }
-        else if (time > 15 && time < 15.5) {
+        else if (time > START_TIME+FLYWHEEL_SPINUP_TIME*7+KICK_TIME*6+0.3+5&& time < START_TIME+FLYWHEEL_SPINUP_TIME*7+KICK_TIME*7+0.3+5) {
             transfer.reload();
             intake.custom(0.85);
         }
-        else if (time > 15.5 && time < 16.5) {
+        else if (time > START_TIME+FLYWHEEL_SPINUP_TIME*7+KICK_TIME*7+0.3+5 && time < START_TIME+FLYWHEEL_SPINUP_TIME*8+KICK_TIME*7+0.3+5) {
             transfer.feed();
             intake.stop();
         }
-        else if (time > 16.5 && time < 16.6) {
+        else if (time > START_TIME+FLYWHEEL_SPINUP_TIME*8+KICK_TIME*7+0.3+5 && time < START_TIME+FLYWHEEL_SPINUP_TIME*8+KICK_TIME*7+0.6+5) {
             intake.custom(0.85);
             follower.followPath(paths.redIntakeRow2);
         }
-        else if (time > 22 && time < 22.5) {
+        else if (time > START_TIME+FLYWHEEL_SPINUP_TIME*8+KICK_TIME*7+0.6+11 && time < START_TIME+FLYWHEEL_SPINUP_TIME*8+KICK_TIME*8+0.6+11) {
             transfer.reload();
             intake.custom(0.85);
         }
-        else if (time > 22.5 && time < 23.5) {
+        else if (time > START_TIME+FLYWHEEL_SPINUP_TIME*8+KICK_TIME*8+0.6+11 && time < START_TIME+FLYWHEEL_SPINUP_TIME*8+KICK_TIME*9+0.6+11) {
             transfer.feed();
             intake.stop();
         }
-        else if (time > 23.5 && time < 24) {
+        else if (time > START_TIME+FLYWHEEL_SPINUP_TIME*8+KICK_TIME*9+0.6+11 && time < START_TIME+FLYWHEEL_SPINUP_TIME*9+KICK_TIME*9+0.6+11) {
             transfer.reload();
             intake.custom(0.85);
         }
-        else if (time > 24 && time < 24.5) {
+        else if (time > START_TIME+FLYWHEEL_SPINUP_TIME*9+KICK_TIME*9+0.6+11 && time < START_TIME+FLYWHEEL_SPINUP_TIME*10+KICK_TIME*9+0.6+11) {
             transfer.feed();
             intake.stop();
         }
 
-        else if (time > 24.5 && time < 25) {
+        else if (time > START_TIME+FLYWHEEL_SPINUP_TIME*10+KICK_TIME*9+0.6+11 && time < START_TIME+FLYWHEEL_SPINUP_TIME*10+KICK_TIME*9+0.9+11) {
             intake.intake();
             follower.followPath(new Path(new BezierLine(follower.getPose(), Constants.bluePark)));
         }

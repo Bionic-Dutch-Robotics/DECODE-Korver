@@ -15,7 +15,7 @@ public class Shooter {
     private PIDFController shooterPidf = null;
     public DcMotorEx shooter = null;
     public final double redPowerCoefficient = 1.0;
-    public final double bluePowerCoefficient = 1.0;
+    public final double bluePowerCoefficient = 0.94;
 
     public Shooter (HardwareMap hwMap, PIDFCoefficients shooterCoefficients) {
         shooter = hwMap.get(DcMotorEx.class, "shooter");
@@ -29,12 +29,13 @@ public class Shooter {
     public void eject() {
         shooter.setPower(-0.1);
     }
-    public void adaptive(double x, double y, AllianceColor alliance) {
+    public void adaptive(double x, double y, AllianceColor alliance, double multiplier) {
         this.update(
                 this.getRegressionVelocity(
                         this.getDistance(x, y, alliance),
                         alliance
                 )
+                * multiplier
         );
     }
 
