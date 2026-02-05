@@ -44,11 +44,7 @@ public class BlueFar extends OpMode {
 
     @Override
     public void start() {
-        if (motif == null) {
-            motif = new Artifact[] {Artifact.PURPLE, Artifact.GREEN, Artifact.PURPLE};
-        }
-
-        transfer.setMotif(motif);
+        MatchSettings.start();
         dt.startTeleOpDrive();
         tiltPos = 0.0;
     }
