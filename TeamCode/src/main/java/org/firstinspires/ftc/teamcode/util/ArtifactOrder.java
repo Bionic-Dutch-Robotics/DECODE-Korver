@@ -40,15 +40,15 @@ public class ArtifactOrder {
         if (storedGreenAt != -1 && motifGreenAt != -1 && storedGreenAt != motifGreenAt) {
             // We need the value at motifGreenAt to move to storedGreenAt
             // and the value currently at storedGreenAt to move to motifGreenAt
-            int temp = indexer[motifGreenAt];
-            indexer[motifGreenAt] = indexer[storedGreenAt];
+            int temp = indexer[motifGreenAt].intValue();
+            indexer[motifGreenAt] = indexer[storedGreenAt].intValue();
             indexer[storedGreenAt] = temp;
         }
     }
 
     public int findStoredGreen() {
         for (int i = 0; i < 3; i++) {
-            if (storedColors[i] == Artifact.GREEN) {
+            if (storedColors[i].equals(Artifact.GREEN)) {
                 return i;
             }
         }
@@ -56,7 +56,7 @@ public class ArtifactOrder {
     }
     public int findGreenMotif() {
         for (int i = 0; i < 3; i++) {
-            if (motif[i] == Artifact.GREEN) {
+            if (motif[i].equals(Artifact.GREEN)) {
                 return i;
             }
         }

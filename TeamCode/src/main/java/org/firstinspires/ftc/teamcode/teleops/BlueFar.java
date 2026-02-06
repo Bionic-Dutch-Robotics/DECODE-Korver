@@ -13,6 +13,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
 import org.firstinspires.ftc.teamcode.util.Artifact;
 import org.firstinspires.ftc.teamcode.util.MatchSettings;
+import org.opencv.core.Mat;
+
+import java.util.Arrays;
 
 @TeleOp(name="Blue Far")
 public class BlueFar extends OpMode {
@@ -44,11 +47,7 @@ public class BlueFar extends OpMode {
 
     @Override
     public void start() {
-        if (motif == null) {
-            motif = new Artifact[] {Artifact.PURPLE, Artifact.GREEN, Artifact.PURPLE};
-        }
-
-        transfer.setMotif(motif);
+        MatchSettings.start();
         dt.startTeleOpDrive();
         tiltPos = 0.0;
     }
@@ -58,8 +57,11 @@ public class BlueFar extends OpMode {
     @Override
     public void loop() {
         dt.update();
-        telemetry.addData("X", gamepad1.left_stick_x);
-        shooter.tilt.auto(shooter.flywheel.getDistance(dt.follower.getPose().getX(), dt.follower.getPose().getY(), alliance));
+        telemetry.addData("tilt", tiltPos);
+        telemetry.addData("Color Sensors", Arrays.toString(transfer.sorter.getStoredArtifacts()));
+        telemetry.addData("Motif", Arrays.toString(transfer.sorter.getMotif()));
+        telemetry.addData("Order", Arrays.toString(transfer.sorter.getOrder()));
+        tiltPos = shooter.tilt.auto(shooter.flywheel.getDistance(dt.follower.getPose().getX(), dt.follower.getPose().getY(), alliance));
         shooterSpeed = shooter.flywheel.getRegressionVelocity(shooter.flywheel.getDistance(dt.follower.getPose().getX(), dt.follower.getPose().getY(), alliance), alliance);
         telemetry.update();
         telemetry.addData("Shooter vel", shooterSpeed);
@@ -67,7 +69,7 @@ public class BlueFar extends OpMode {
         telemetry.addData("Tilt", tiltPos);
         shooter.runLoop(dt.getPose().getX(), dt.getPose().getY(), dt.getPose().getHeading());
         shooter.flywheel.update(shooterSpeed);
-        shooter.tilt.setTilt(tiltPos);
+        shooter.tilt.setTilt(shooter.tilt.auto(shooter.flywheel.getDistance(dt.follower.getPose().getX(), dt.follower.getPose().getY(), alliance)));
 
         double forward = -gamepad1.left_stick_y;
         double strafe = -gamepad1.left_stick_x;

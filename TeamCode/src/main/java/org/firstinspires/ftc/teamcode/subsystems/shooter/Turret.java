@@ -30,7 +30,7 @@ public class Turret {
     }
 
     public void setAlliance(AllianceColor alliance) {
-        target = alliance.isRed() ? new Pose(141, 120) : new Pose(3, 135);
+        target = alliance.isRed() ? new Pose(141, 120) : new Pose(0, 144);
     }
 
     public void loop(double x, double y, double heading) {
@@ -43,7 +43,7 @@ public class Turret {
         //turretRad = MathFunctions.clamp(turretRad, -Math.PI/2, Math.PI/2);
 
         // Target angle
-        targetRad = Math.atan2(target.getY() - y, target.getX() - x) - MathFunctions.normalizeAngle(heading + fieldCentricTurretStartingPosition/2 + Math.toRadians(6));
+        targetRad = Math.atan2(target.getY() - y, target.getX() - x) - MathFunctions.normalizeAngle(heading + fieldCentricTurretStartingPosition/2 + Math.toRadians(27));
         targetRad = MathFunctions.scale(
                 MathFunctions.normalizeAngle(targetRad),
                 0, Math.PI*2,
@@ -56,8 +56,8 @@ public class Turret {
         turretPid.updatePosition(turretRad * 140.003629846);
 
         // Only apply power if we are not at limit OR moving away from limit
-        if ((turretRad <= -Math.toRadians(89) /* -Math.PI/2 */ && turretPid.run() < 0) ||
-                (turretRad >= Math.toRadians(89) && turretPid.run() > 0)) {
+        if ((turretRad <= -Math.toRadians(90) /* -Math.PI/2 */ && turretPid.run() < 0) ||
+                (turretRad >= Math.toRadians(90) && turretPid.run() > 0)) {
             turretPower = 0; // stop motor at hard limit
         } else {
             turretPower = MathFunctions.clamp(turretPid.run(), -0.7, 0.7);
