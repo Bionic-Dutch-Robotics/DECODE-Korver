@@ -4,136 +4,64 @@ import static org.firstinspires.ftc.teamcode.util.Hardware.dt;
 import static org.firstinspires.ftc.teamcode.util.Hardware.intake;
 import static org.firstinspires.ftc.teamcode.util.Hardware.shooter;
 import static org.firstinspires.ftc.teamcode.util.Hardware.transfer;
-import static org.firstinspires.ftc.teamcode.util.MatchSettings.motif;
 
-import com.pedropathing.geometry.Pose;
+import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
 import org.firstinspires.ftc.teamcode.util.Artifact;
 import org.firstinspires.ftc.teamcode.util.MatchSettings;
-import org.opencv.core.Mat;
 
-import java.util.Arrays;
+import java.util.List;
 
-@TeleOp(name="Blue Far")
+@TeleOp(name="Blue")
 public class BlueFar extends OpMode {
-    private final AllianceColor alliance = new AllianceColor(AllianceColor.Selection.BLUE);
-    private double shooterSpeed, tiltPos;
-    private boolean runIntake = false;
+    private List<LynxModule> allHubs = null;
 
     @Override
     public void init() {
-        /*
-        Normally all MatchSettings configuration would be done in AUTO.
-        This is a TEST only.
-         */
-
-        MatchSettings.initSelection(
-                hardwareMap,
-                alliance,
-                gamepad1
-        );
-
-        shooterSpeed = 250.0;
-        tiltPos = 0.0;
-    }
-
-    @Override
-    public void init_loop() {
-        MatchSettings.refreshMotif(telemetry);
-    }
-
-    @Override
-    public void start() {
+        allHubs = hardwareMap.getAll(LynxModule.class);
+        MatchSettings.initSelection(hardwareMap, new AllianceColor(AllianceColor.Selection.BLUE), gamepad1);
         MatchSettings.start();
         dt.startTeleOpDrive();
-        tiltPos = 0.0;
+
+        for (LynxModule module : allHubs) {
+            module.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
+        }
     }
-
-
 
     @Override
     public void loop() {
+        for (LynxModule module : allHubs) {
+            module.getBulkData();
+        }
+
         dt.update();
-        telemetry.addData("tilt", tiltPos);
-        telemetry.addData("Color Sensors", Arrays.toString(transfer.sorter.getStoredArtifacts()));
-        telemetry.addData("Motif", Arrays.toString(transfer.sorter.getMotif()));
-        telemetry.addData("Order", Arrays.toString(transfer.sorter.getOrder()));
-        tiltPos = shooter.tilt.auto(shooter.flywheel.getDistance(dt.follower.getPose().getX(), dt.follower.getPose().getY(), alliance));
-        shooterSpeed = shooter.flywheel.getRegressionVelocity(shooter.flywheel.getDistance(dt.follower.getPose().getX(), dt.follower.getPose().getY(), alliance), alliance);
-        telemetry.update();
-        telemetry.addData("Shooter vel", shooterSpeed);
-        telemetry.addData("Distance to Target", shooter.flywheel.getDistance(dt.follower.getPose().getX(), dt.follower.getPose().getY(), alliance));
-        telemetry.addData("Tilt", tiltPos);
-        shooter.runLoop(dt.getPose().getX(), dt.getPose().getY(), dt.getPose().getHeading());
-        shooter.flywheel.update(shooterSpeed);
-        shooter.tilt.setTilt(shooter.tilt.auto(shooter.flywheel.getDistance(dt.follower.getPose().getX(), dt.follower.getPose().getY(), alliance)));
-
-        double forward = -gamepad1.left_stick_y;
-        double strafe = -gamepad1.left_stick_x;
-        double turn = -gamepad1.right_stick_x;
-
-        dt.teleOpDrive(
-                forward,
-                strafe,
-                turn
+        intake.run();
+        shooter.turret.loop(
+                dt.follower.getPose().getX(),
+                dt.follower.getPose().getY(),
+                dt.follower.getHeading()
+        );
+        shooter.flywheel.adaptive(
+                dt.follower.getPose().getX(),
+                dt.follower.getPose().getY(),
+                new AllianceColor(AllianceColor.Selection.BLUE)
         );
 
+        dt.teleOpDrive(
+                -gamepad1.left_stick_y,
+                -gamepad1.left_stick_x,
+                -gamepad1.right_stick_x
+        );
         if (gamepad1.aWasPressed()) {
-            runIntake = !runIntake;
-
-            if (runIntake) {
-                intake.run();
-            }
-            else {
-                intake.stop();
-            }
-        }
-
-        if (gamepad1.bWasPressed()) {
+            /*transfer.kicker.setFireSequence(
+                    transfer.sorter.getOrder()
+            );
+            transfer.kicker.createFireSequence();*/
             transfer.fireSortedArtifacts();
-        }
-        if (gamepad1.dpadUpWasPressed()) {
-            transfer.cancelFire();
-        }
 
-        if (gamepad1.leftBumperWasPressed()) {
-            shooterSpeed += 10.0;
         }
-        if (gamepad1.dpadDownWasPressed()) {
-            //transfer.s
-            shooterSpeed = shooter.flywheel.getRegressionVelocity(shooter.flywheel.getDistance(dt.follower.getPose().getX(), dt.follower.getPose().getY(), alliance), alliance);
-            transfer.fireSortedArtifacts();
-            tiltPos = shooter.tilt.auto(shooter.flywheel.getDistance(dt.follower.getPose().getX(), dt.follower.getPose().getY(), alliance));
-        }
-
-        if (gamepad1.dpadLeftWasPressed()) {
-            shooterSpeed += 1.0;
-        }
-        if (gamepad1.dpadRightWasPressed()) {
-            shooterSpeed -= 1.0;
-        }
-
-        if (gamepad1.xWasPressed()) {
-            tiltPos += 0.03;
-        }
-        else if (gamepad1.yWasPressed()) {
-            tiltPos -= 0.03;
-        }
-
-        if (gamepad1.rightBumperWasPressed()) {
-            tiltPos = shooter.tilt.auto(shooter.flywheel.getDistance(dt.follower.getPose().getX(), dt.follower.getPose().getY(), alliance));
-        }
-    }   //430 power , 142 dist, 0.14
-        //340 power, 100 dist, 0.15 tilt
-        //240 power, 40 dist, 0.09
-
-    @Override
-    public void stop() {
-        transfer.cancelFire();  //  Close the thread when the OpMode is done
-        shooter.flywheel.stop();
-        intake.stop();
     }
 }
