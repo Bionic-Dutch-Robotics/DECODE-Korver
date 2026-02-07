@@ -6,7 +6,7 @@
 
 buildscript {
     ext {
-        kotlin_version = '2.2.21'
+        kotlin_version = '2.2.21'//2.2.21
     }
     repositories {
         mavenCentral()

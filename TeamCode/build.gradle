@@ -60,6 +60,25 @@ repositories {
     maven {
         url = "https://www.methewo.tech/maven/"
     }
+    maven {
+        url = 'https://jitpack.io'
+    }
+}
+
+android {
+    namespace = 'org.firstinspires.ftc.teamcode'
+
+    kotlinOptions {
+        jvmTarget='1.8'
+    }
+    compileSdk 34
+    defaultConfig {
+        minSdk 24
+    }
+
+    packagingOptions {
+        jniLibs.useLegacyPackaging true
+    }
 }
 
 dependencies {
