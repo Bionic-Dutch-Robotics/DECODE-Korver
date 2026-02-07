@@ -35,8 +35,8 @@ public class DrivetrainTest extends OpMode {
                 true
         );
 
-        telemetry.addData("Bot X: ", follower.getPose().getX());
-        telemetry.addData("Bot Y: ", follower.getPose().getY());
+        telemetry.addData("Bot Strafe: ", follower.getPose().getX());
+        telemetry.addData("Bot Forward: ", follower.getPose().getY());
         telemetry.addData("Bot Heading: ", follower.getHeading());
     }
 }

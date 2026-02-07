@@ -19,7 +19,7 @@ public class MatchSettingsTest extends OpMode {
 
     @Override
     public void init() {
-        MatchSettings.initSelection(hardwareMap, new AllianceColor(AllianceColor.Selection.BLUE), new Pose(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x));
+        MatchSettings.initSelection(hardwareMap, new AllianceColor(AllianceColor.Selection.BLUE), gamepad1);
         transfer = new Transfer(hardwareMap);
     }
 
