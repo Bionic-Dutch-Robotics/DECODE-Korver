@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.shooter.Flywheel;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.transfer.Transfer;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
@@ -28,6 +27,7 @@ public class ShooterManualTest extends OpMode {
     public double shooterPower;
     private Intake intake;
     private Transfer transfer;
+    private double tiltAngle = 0.15;
     @Override
     public void init() {
         intake = new Intake(hardwareMap);
@@ -54,6 +54,13 @@ public class ShooterManualTest extends OpMode {
     }
     @Override
     public void loop() {
+        shooter.tilt.setTilt(tiltAngle);
+        if (gamepad1.leftBumperWasPressed()) {
+            tiltAngle += 0.01;
+        }
+        else if (gamepad1.rightBumperWasPressed()) {
+            tiltAngle -= 0.01;
+        }
         follower.update();
         if (!goToHeading) {
             follower.setTeleOpDrive(
@@ -77,6 +84,8 @@ public class ShooterManualTest extends OpMode {
         //shooter.tilt.setTilt(
         //        shooter.tilt.auto(shooter.flywheel.getDistance(follower.getPose().getX(), follower.getPose().getY(), new AllianceColor(AllianceColor.Selection.BLUE))
         //));
+
+
         shooter.turret.loop(follower.getPose().getX(), follower.getPose().getY(), follower.getHeading());
         shooter.flywheel.update(shooterPower);
 
@@ -97,13 +106,7 @@ public class ShooterManualTest extends OpMode {
         if (gamepad1.xWasPressed()) {
             transfer.fireSortedArtifacts();
         }
-        else {
-            intake.run();
-        }
-
-        /*telemetry.addData("Distance: ", Math.sqrt(
-                Math.pow(144-follower.getPose().getX(), 2) + Math.pow(144-follower.getPose().getY(), 2)
-        ));*/
+        intake.run();
         telemetry.addData("Shooter Velocity: ", shooter.flywheel.shooter.getVelocity(AngleUnit.DEGREES));
         telemetry.addData("Shooter Target: ", shooterPower);
         telemetry.addData("Distance: ", shooter.flywheel.getDistance(follower.getPose().getX(), follower.getPose().getY(), new AllianceColor(AllianceColor.Selection.BLUE)));
