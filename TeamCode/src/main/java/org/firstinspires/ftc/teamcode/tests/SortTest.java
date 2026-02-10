@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.teleops;
+package org.firstinspires.ftc.teamcode.tests;
 
 import static org.firstinspires.ftc.teamcode.util.Hardware.dt;
 import static org.firstinspires.ftc.teamcode.util.Hardware.intake;
@@ -15,8 +15,8 @@ import org.firstinspires.ftc.teamcode.util.MatchSettings;
 
 import java.util.List;
 
-@TeleOp(name="Blue")
-public class BlueFar extends OpMode {
+@TeleOp(name="Sort")
+public class SortTest extends OpMode {
     private List<LynxModule> allHubs = null;
 
     @Override

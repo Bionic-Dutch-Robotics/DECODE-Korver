@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems.transfer;
 
+import static org.firstinspires.ftc.teamcode.util.Settings.Positions.Transfer.RUN_TO_POS_TIME;
+
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -13,9 +15,10 @@ import java.util.concurrent.Future;
 @SuppressWarnings("all")
 //TODO: Add limiting so only one fire sequence can run at a time
 public class Kicker {
-    private Servo[] kickers;
+    private volatile Servo[] kickers;
+    private boolean run = false;
     private ElapsedTime servoTimer;
-    private Integer[] order;
+    private volatile Integer[] order;
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private Future<?> future = null;
     private boolean isBusy = false;
@@ -43,19 +46,25 @@ public class Kicker {
         this.cancelSequence();
         this.future = this.executor.submit(this::createFireSequence);
     }
-    private void createFireSequence() {
-            for (int i : this.order) {
-                servoTimer.reset();
-                while (servoTimer.time() < Settings.Positions.Transfer.RUN_TO_POS_TIME) {
-                    kickServoUp(i);
-                }
+    public void createFireSequence() {
+        for (int i=0; i < order.length; i++) {
+            servoTimer.reset();
+            kickServoUp(order[i]);
+            try {
+                Thread.sleep((long) (RUN_TO_POS_TIME * 1000));
+            } catch (InterruptedException ignored) {
+            }
 
-                servoTimer.reset();
-                while (servoTimer.time() < Settings.Positions.Transfer.RUN_TO_POS_TIME) {
-                    kickServoDown(i);
-                }
+            servoTimer.reset();
+            kickServoDown(order[i]);
+            try {
+                Thread.sleep((long) (RUN_TO_POS_TIME * 1000));
+            } catch (InterruptedException ignored) {
+            }
         }
-        isBusy = false;
+    }
+    public void toggleRunSequence() {
+
     }
 
     public void cancelSequence() {
