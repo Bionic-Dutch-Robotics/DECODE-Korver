@@ -6,9 +6,11 @@ import org.firstinspires.ftc.teamcode.subsystems.Intake
 
 @TeleOp(name="KOTLIN :)")
 class KotlinTest : OpMode() {
-    var intake: Intake = Intake(hardwareMap)
+    lateinit var intake: Intake;
+
 
     override fun init (){
+        intake = Intake(hardwareMap)
         telemetry.addLine("IT WORKS")
         telemetry.update()
     }
