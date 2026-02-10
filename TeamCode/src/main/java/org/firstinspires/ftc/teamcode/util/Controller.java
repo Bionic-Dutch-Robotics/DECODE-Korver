@@ -36,6 +36,14 @@ public class Controller {
         );
     }
 
+    public void removeBindingFromCondition(BooleanSupplier condition) {
+        for (int i=0; i < bindings.size(); i++) {
+            if (bindings.get(i).getCondition().equals(condition)) {
+                bindings.remove(i);
+            }
+        }
+    }
+
     public void update() {
         for (Binding binding : bindings) {
             if (binding.condition.getAsBoolean()) {
