@@ -17,7 +17,7 @@ class HeadingLockTest : OpMode() {
             gamepad1
         )
         MatchSettings.start()
-        dt.follower.startHeadingLock()
+        //dt.follower.startHeadingLock()
         dt.follower.startTeleopDrive()
     }
 
