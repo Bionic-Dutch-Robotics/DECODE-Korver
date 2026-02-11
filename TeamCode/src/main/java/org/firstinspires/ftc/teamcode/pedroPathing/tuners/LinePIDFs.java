@@ -17,9 +17,10 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
  * @author Anyi Lin - 10158 Scott's Bots
  * @author Aaron Yang - 10158 Scott's Bots
  * @author Harrison Womack - 10158 Scott's Bots
+ * @author Atharv Gurnani - 13085 Bionic Dutch
  * @version 1.0, 3/12/2024
  */
-@TeleOp(name="LinePIDFs", group = "tuners")
+@TeleOp(name="Line Test", group = "tuners")
 public class LinePIDFs extends OpMode {
     public static double DISTANCE = 40;
     private Follower follower;

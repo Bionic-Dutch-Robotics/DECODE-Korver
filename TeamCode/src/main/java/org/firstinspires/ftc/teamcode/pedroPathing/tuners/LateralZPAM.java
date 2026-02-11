@@ -25,9 +25,10 @@ import java.util.ArrayList;
  * @author Aaron Yang - 10158 Scott's Bots
  * @author Harrison Womack - 10158 Scott's Bots
  * @author Baron Henderson - 20077 The Indubitables
+ * @author Atharv Gurnani - 13085 Bionic Dutch
  * @version 1.0, 3/13/2024
  */
-@TeleOp(name="LateralZPAM", group="tuners")
+@TeleOp(name="Lateral ZPAM Tuner", group="tuners")
 public class LateralZPAM extends OpMode {
     private final ArrayList<Double> accelerations = new ArrayList<>();
     public static double VELOCITY = 30;

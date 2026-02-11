@@ -24,9 +24,10 @@ import java.util.ArrayList;
  * @author Aaron Yang - 10158 Scott's Bots
  * @author Harrison Womack - 10158 Scott's Bots
  * @author Baron Henderson - 20077 The Indubitables
+ * @author Chetan Vanam - 13085 Bionic Dutch
  * @version 1.0, 3/13/2024
  */
-@TeleOp(name="ForwardVelocity", group="tuners")
+@TeleOp(name="Forward Velocity Tuner", group="tuners")
 public class ForwardVlocity extends OpMode {
     private final ArrayList<Double> velocities = new ArrayList<>();
     static ArrayList<String> changes = new ArrayList<>();

@@ -105,6 +105,9 @@ public class LateralVlocity extends OpMode {
             telemetry.addLine("\n");
             telemetry.addLine("Press A to set the Lateral Velocity temporarily (while robot remains on).");
             telemetry.update();
+            telemetry.addData("Bot X: ", follower.getPose().getX());
+            telemetry.addData("Bot Y: ", follower.getPose().getY());
+            telemetry.addData("Bot Heading: ", follower.getHeading());
 
             if (gamepad1.aWasPressed()) {
                 follower.setYVelocity(average);
