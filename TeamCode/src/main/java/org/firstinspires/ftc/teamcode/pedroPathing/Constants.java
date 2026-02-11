@@ -49,12 +49,11 @@ public class Constants {
             ))
             .translationalPIDFSwitch(4)
             .drivePIDFCoefficients(new FilteredPIDFCoefficients(
-                    0.025,
+                    .6,
                     0,
-                    0.00001,
+                    0.025,
                     0.6,
-                    0.01
-            ))
+                    0.024))
             .secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(
                     0,
                     0,
@@ -72,13 +71,6 @@ public class Constants {
                     0,
                     0.1,
                     0.0005
-            ))
-            .drivePIDFCoefficients(new FilteredPIDFCoefficients(
-                    0.0,
-                    0,
-                    0.00035,
-                    0.6,
-                    0.015
             ))
             .secondaryDrivePIDFCoefficients(new FilteredPIDFCoefficients(
                     0.0,
@@ -116,7 +108,7 @@ public class Constants {
                 .strafePodX(0.157480315);
 
 
-    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
+    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1.65, 1);
 
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)

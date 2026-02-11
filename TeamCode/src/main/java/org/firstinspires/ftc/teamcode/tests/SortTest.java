@@ -56,11 +56,13 @@ public class SortTest extends OpMode {
                 -gamepad1.right_stick_x
         );
         if (gamepad1.aWasPressed()) {
-            /*transfer.kicker.setFireSequence(
-                    transfer.sorter.getOrder()
+            transfer.kicker.setFireSequence(
+                    new Integer[] {
+                            2, 1, 0
+                    }
             );
-            transfer.kicker.createFireSequence();*/
-            transfer.fireSortedArtifacts();
+            transfer.kicker.createFireSequence();
+            //transfer.fireSortedArtifacts();
 
         }
     }

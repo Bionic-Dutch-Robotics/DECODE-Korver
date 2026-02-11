@@ -26,8 +26,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
  * @version 1.0, 3/13/2024
  */
 @TeleOp(name="Centripetal Coefficient Tuner", group="tuners")
-public class Centripetaluner {
-public class CentripetalTuner extends OpMode {
+
+public class Centripetaluner extends OpMode {
     public  double DISTANCE = 20;
     private boolean forward = true;
 
@@ -88,4 +88,4 @@ public class CentripetalTuner extends OpMode {
         telemetry.update();
     }
 }
-}
+
