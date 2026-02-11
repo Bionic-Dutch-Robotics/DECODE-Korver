@@ -15,12 +15,10 @@ import org.firstinspires.ftc.teamcode.util.AllianceColor;
 
 @Autonomous(name="Path Test")
 public class PathTest extends OpMode {
-    private Actions paths;
     private Follower follower;
     private Path path;
     @Override
     public void init() {
-        paths = new Actions(AllianceColor.Selection.BLUE);
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(Constants.blueStartPose);
     }
