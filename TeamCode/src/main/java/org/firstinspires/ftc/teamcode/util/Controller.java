@@ -8,11 +8,11 @@ import java.util.function.Supplier;
 
 @SuppressWarnings("all")
 public class Controller {
-    private ArrayList<Binding> bindings = new ArrayList<>();
+    private ArrayList<Command> bindings = new ArrayList<>();
 
     public <T> void bind(BooleanSupplier condition, Runnable action) {
         bindings.add(
-                new Binding(
+                new Command (
                         condition,
                         action
                 )
@@ -20,7 +20,7 @@ public class Controller {
     }
     public <T> void bind(BooleanSupplier condition, Supplier<T> actionParameter, Consumer<T> action) {
         bindings.add(
-                new Binding(
+                new Command(
                         condition,
                         () -> action.accept(actionParameter.get())
                 )
@@ -29,7 +29,7 @@ public class Controller {
 
     public <T, U> void bind(BooleanSupplier condition, Supplier<T> actionParameter1, Supplier<U> actionParameter2, BiConsumer<T, U> action) {
         bindings.add(
-                new Binding(
+                new Command(
                         condition,
                         () -> action.accept(actionParameter1.get(), actionParameter2.get())
                 )
@@ -38,34 +38,29 @@ public class Controller {
 
     public void removeBindingFromCondition(BooleanSupplier condition) {
         for (int i=0; i < bindings.size(); i++) {
-            if (bindings.get(i).getCondition().equals(condition)) {
+            if (bindings.get(i).getEvent().equals(condition)) {
+                bindings.get(i).kill();
                 bindings.remove(i);
             }
         }
     }
 
     public void update() {
-        for (Binding binding : bindings) {
-            if (binding.condition.getAsBoolean()) {
-                binding.action.run();
+        for (Command command : bindings) {
+            if (command.eventHasOccurred()) {
+                command.runAction();
             }
         }
     }
 
-    public static class Binding {
-        private final BooleanSupplier condition;
-        private final Runnable action;
-
-        public Binding(BooleanSupplier condition, Runnable action) {
-            this.condition = condition;
-            this.action = action;
-        }
-
-        public BooleanSupplier getCondition() {
-            return condition;
-        }
-        public Runnable getAction() {
-            return action;
+    /**
+     * Run in OpMode.stop()
+     */
+    public void stop() {
+        for (int i=0; i < bindings.size(); i++) {
+            bindings.get(i).kill();
+            bindings.remove(i);
         }
     }
 }
+
