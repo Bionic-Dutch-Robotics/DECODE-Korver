@@ -26,6 +26,7 @@ public class Intake extends Subsystem {
 
     @Override
     public void init(HardwareMap hardwareMap, AllianceColor alliance) {
+        super.init();
         spinner = hardwareMap.get(DcMotorEx.class, HardwareNames.Intake.INTAKE);
         spinner.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
         spinner.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

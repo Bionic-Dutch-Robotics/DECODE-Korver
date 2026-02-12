@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.util;
+package org.firstinspires.ftc.teamcode.util.control;
 
 import java.util.ArrayList;
 import java.util.function.BiConsumer;

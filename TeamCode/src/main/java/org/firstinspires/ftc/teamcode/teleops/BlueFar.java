@@ -46,9 +46,7 @@ public class BlueFar extends OpMode {
         );
         shooter.flywheel.adaptive(
                 dt.follower.getPose().getX(),
-                dt.follower.getPose().getY(),
-                new AllianceColor(AllianceColor.Selection.BLUE)
-        );
+                dt.follower.getPose().getY());
 
         dt.teleOpDrive(
                 -gamepad1.left_stick_y,

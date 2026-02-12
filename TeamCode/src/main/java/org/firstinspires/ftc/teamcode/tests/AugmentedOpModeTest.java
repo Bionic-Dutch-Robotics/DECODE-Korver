@@ -3,16 +3,17 @@ package org.firstinspires.ftc.teamcode.tests;
 import com.pedropathing.geometry.Pose;
 
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.LynxHubs;
 import org.firstinspires.ftc.teamcode.subsystems.Subsystem;
 import org.firstinspires.ftc.teamcode.subsystems.drivetrain.Drivetrain;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
-import org.firstinspires.ftc.teamcode.util.AugmentedOpMode;
-import org.firstinspires.ftc.teamcode.util.Command;
-import org.firstinspires.ftc.teamcode.util.Controller;
+import org.firstinspires.ftc.teamcode.util.control.AugmentedOpMode;
+import org.firstinspires.ftc.teamcode.util.control.Command;
 
 public class AugmentedOpModeTest extends AugmentedOpMode {
     private Drivetrain dt;
     private Intake intake;
+    private LynxHubs hubs;
 
     @Override
     public void init() {
@@ -30,8 +31,10 @@ public class AugmentedOpModeTest extends AugmentedOpMode {
                         )
                 }
         );
+
         this.registerSubsystems(
                 new Subsystem[]{
+                        hubs,
                         dt,
                         intake
                 }

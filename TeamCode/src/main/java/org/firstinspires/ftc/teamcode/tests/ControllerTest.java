@@ -7,10 +7,9 @@ import static org.firstinspires.ftc.teamcode.util.Hardware.transfer;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.pedropathing.geometry.Pose;
 
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
-import org.firstinspires.ftc.teamcode.util.Controller;
+import org.firstinspires.ftc.teamcode.util.control.Controller;
 import org.firstinspires.ftc.teamcode.util.MatchSettings;
 
 @TeleOp(name="Controller Test")
