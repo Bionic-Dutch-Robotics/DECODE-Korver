@@ -10,6 +10,9 @@ import java.util.function.Supplier;
 public class Controller {
     private ArrayList<Command> bindings = new ArrayList<>();
 
+    public void bind(Command command) {
+        bindings.add(command);
+    }
     public <T> void bind(BooleanSupplier condition, Runnable action) {
         bindings.add(
                 new Command (
@@ -57,6 +60,13 @@ public class Controller {
      * Run in OpMode.stop()
      */
     public void stop() {
+        for (int i=0; i < bindings.size(); i++) {
+            bindings.get(i).kill();
+            bindings.remove(i);
+        }
+    }
+
+    public void removeAllBindings() {
         for (int i=0; i < bindings.size(); i++) {
             bindings.get(i).kill();
             bindings.remove(i);

@@ -11,14 +11,14 @@ public class Shooter {
     private AllianceColor alliance;
 
     public Shooter(HardwareMap hwMap) {
-        flywheel = new Flywheel(hwMap);
+        flywheel = new Flywheel(hwMap, new AllianceColor(AllianceColor.Selection.BLUE));
         tilt = new Tilt(hwMap);
         turret = new Turret(hwMap);
     }
 
     public void runLoop(double x, double y, double heading) {
         turret.loop(x, y, heading);
-        flywheel.adaptive(x, y, alliance);
+        flywheel.adaptive(x, y);
         tilt.auto(flywheel.getDistance(x, y, alliance));
     }
 

@@ -19,19 +19,21 @@ public class Flywheel {
     public DcMotorEx shooter = null;
     public final double redPowerCoefficient = 1.1;
     public final double bluePowerCoefficient = 1.0;
+    private AllianceColor alliance;
 
-    public Flywheel(HardwareMap hwMap) {
+    public Flywheel(HardwareMap hwMap, AllianceColor alliance) {
         shooter = hwMap.get(DcMotorEx.class, Settings.HardwareNames.Shooter.SHOOTER);
         shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         shooter.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         shooter.setDirection(DcMotorSimple.Direction.REVERSE);
         shooterPidf = new PIDFController(SHOOTER_COEFFICIENTS);
+        this.alliance = alliance;
     }
 
     public void eject() {
         shooter.setPower(-0.1);
     }
-    public void adaptive(double x, double y, AllianceColor alliance) {
+    public void adaptive(double x, double y) {
         this.update(
                 this.getRegressionVelocity(
                         this.getDistance(x, y, alliance),

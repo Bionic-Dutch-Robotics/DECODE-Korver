@@ -4,11 +4,12 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.util.AllianceColor;
 import org.firstinspires.ftc.teamcode.util.Settings.HardwareNames;
 import org.firstinspires.ftc.teamcode.util.Settings.Positions;
 
 
-public class Intake {
+public class Intake extends Subsystem {
     public DcMotorEx spinner;
     private boolean isRunning = false;
 
@@ -22,6 +23,16 @@ public class Intake {
         spinner.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
         spinner.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
+
+    @Override
+    public void init(HardwareMap hardwareMap, AllianceColor alliance) {
+        spinner = hardwareMap.get(DcMotorEx.class, HardwareNames.Intake.INTAKE);
+        spinner.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
+        spinner.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+    @Override
+    public void loop() {} // nothing to update
 
     /**
      * Run the intake
@@ -39,6 +50,7 @@ public class Intake {
         isRunning = true;
     }
 
+    @Override
     public void stop() {
         spinner.setPower(0);
         isRunning = false;
