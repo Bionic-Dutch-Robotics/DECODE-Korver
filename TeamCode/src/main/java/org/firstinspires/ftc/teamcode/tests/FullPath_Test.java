@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.tests;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
+import com.pedropathing.geometry.FinetunedBezierCurve;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.HeadingInterpolator;
 import com.pedropathing.paths.Path;
@@ -54,7 +55,7 @@ public class FullPath_Test extends OpMode {
                     new Path(
                             new BezierCurve(
                                     new Pose(54.200, 79.600),
-                                    new Pose(76.0, 90.50),
+                                    new Pose(76.0, 89.50),
                                     new Pose(18.600, 83.600)
                             )
                     )
@@ -72,7 +73,7 @@ public class FullPath_Test extends OpMode {
                     new Path(
                             new BezierCurve(
                                     new Pose(54.300, 79.400),
-                                    new Pose(64.100, 42.900),
+                                    new Pose(64.100, 39.00),
                                     new Pose(17.600, 35.300)
                             )
                     )
@@ -140,7 +141,8 @@ public class FullPath_Test extends OpMode {
         telemetry.update();
 
         if (gamepad1.aWasPressed()) {
-            index += 1;
+            if (index <= 5)  index += 1;
+            else            index = 0;
             follower.followPath(paths[index]);
         }
     }

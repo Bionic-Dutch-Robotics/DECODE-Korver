@@ -1,15 +1,13 @@
 package org.firstinspires.ftc.teamcode.pedroPathing.tuners;
 
-import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.draw;
-import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.drawOnlyCurrent;
-import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
-
-
+import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.Path;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
+import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 /**
  * This is the Centripetal Tuner OpMode. It runs the robot in a specified distance
@@ -22,20 +20,21 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
  * @author Anyi Lin - 10158 Scott's Bots
  * @author Aaron Yang - 10158 Scott's Bots
  * @author Harrison Womack - 10158 Scott's Bots
- * @author Atharv Gurnnai - 13085 Bionic Dutch
+ * @author Atharv Gurnani - 13085 Bionic Dutch
  * @version 1.0, 3/13/2024
  */
 @TeleOp(name="Centripetal Coefficient Tuner", group="tuners")
-
 public class Centripetaluner extends OpMode {
     public  double DISTANCE = 20;
     private boolean forward = true;
+    private Follower follower;
 
     private Path forwards;
     private Path backwards;
 
     @Override
     public void init() {
+        follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(new Pose(72, 72));
     }
 
@@ -50,7 +49,6 @@ public class Centripetaluner extends OpMode {
         telemetry.addLine("Make sure you have enough room.");
         telemetry.update();
         follower.update();
-        drawOnlyCurrent();
     }
 
     @Override
@@ -64,6 +62,8 @@ public class Centripetaluner extends OpMode {
         backwards.reverseHeadingInterpolation();
 
         follower.followPath(forwards);
+        Drawing.init();
+        Drawing.drawRobot(follower.getPose());
     }
 
     /**
@@ -73,7 +73,7 @@ public class Centripetaluner extends OpMode {
     @Override
     public void loop() {
         follower.update();
-        draw();
+        Drawing.drawDebug(follower);
         if (!follower.isBusy()) {
             if (forward) {
                 forward = false;
