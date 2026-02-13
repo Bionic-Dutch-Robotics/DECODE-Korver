@@ -47,19 +47,39 @@ public class Constants {
                     0.025,
                     0.024
             ))
+            .translationalPIDFSwitch(4)
+            .drivePIDFCoefficients(new FilteredPIDFCoefficients(
+                    .6,
+                    0,
+                    0.025,
+                    0.6,
+                    0.024))
+            .secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(
+                    0,
+                    0,
+                    0.005,
+                    0.0006
+            ))
             .headingPIDFCoefficients(new PIDFCoefficients(
                     1.78,
                     0.00,
                     0.055,
                     0.025
             ))
-            .drivePIDFCoefficients(new FilteredPIDFCoefficients(
-                    0.75,
+            .secondaryHeadingPIDFCoefficients(new PIDFCoefficients(
+                    0.0,
                     0,
-                    0.005,
-                    0.6,
-                    0.025
+                    0.1,
+                    0.0005
             ))
+            .secondaryDrivePIDFCoefficients(new FilteredPIDFCoefficients(
+                    0.0,
+                    0,
+                    0.000005,
+                    0.6,
+                    0.01
+            ))
+            .drivePIDFSwitch(15)
             .centripetalScaling(0.0005)
             .useSecondaryDrivePIDF(false)
             .useSecondaryHeadingPIDF(false)
@@ -84,11 +104,11 @@ public class Constants {
                 .encoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)
                 .forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
                 .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
-                .forwardPodY(0.157480315)
-                .strafePodX(7.5590551181);
+                .forwardPodY(-7.5590551181)
+                .strafePodX(0.157480315);
 
 
-    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
+    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1.65, 1);
 
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)

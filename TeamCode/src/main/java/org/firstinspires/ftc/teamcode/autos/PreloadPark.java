@@ -32,7 +32,7 @@ public class PreloadPark extends OpMode {
         shoot= false;
 
         transfer = new Kicker(hardwareMap);
-        shooter = new Flywheel(hardwareMap);
+        shooter = new Flywheel(hardwareMap, new AllianceColor(AllianceColor.Selection.BLUE));
         intake = new Intake(hardwareMap);
         //time = new ElapsedTime();
 

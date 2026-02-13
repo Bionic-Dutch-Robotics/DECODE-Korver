@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@TeleOp(name="ForwardTuner")
+@TeleOp(name="Forward Encoder Tuner", group="tuners")
 public class ForwardTner extends OpMode {
     private Follower follower;
     public static double DISTANCE = 48;

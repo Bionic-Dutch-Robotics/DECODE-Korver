@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Flywheel;
 import org.firstinspires.ftc.teamcode.subsystems.transfer.Kicker;
+import org.firstinspires.ftc.teamcode.util.AllianceColor;
 
 import java.util.function.Supplier;
 
@@ -29,7 +30,7 @@ public class ShooterRegressionTest extends OpMode {
     @Override
     public void init() {
         headingPid = new PIDFController(Constants.followerConstants.getCoefficientsHeadingPIDF());
-        shooter = new Flywheel(hardwareMap);
+        shooter = new Flywheel(hardwareMap, new AllianceColor(AllianceColor.Selection.BLUE));
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(Constants.redStartPose);
         intake = new Intake(hardwareMap);

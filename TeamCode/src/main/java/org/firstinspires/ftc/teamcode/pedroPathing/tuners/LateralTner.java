@@ -19,9 +19,10 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
  *
  * @author Anyi Lin - 10158 Scott's Bots
  * @author Baron Henderson - 20077 The Indubitables
+ * @author Atharv Gurnani - 13085 Bionic Dutch
  * @version 2.0, 6/26/2025
  */
-@TeleOp(name="LateralTuner", group="tuners")
+@TeleOp(name="Lateral Encoder Tuner", group="tuners")
 public class LateralTner extends OpMode {
     public static double DISTANCE = 48;
     private Follower follower;

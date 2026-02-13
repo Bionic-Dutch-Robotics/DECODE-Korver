@@ -9,9 +9,10 @@ import com.pedropathing.paths.Path;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.subsystems.Subsystem;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
 
-public class Drivetrain {
+public class Drivetrain extends Subsystem {
     public FilteredPIDFController xPid, yPid;
     public PIDFController headingPid;
     public Follower follower = null;
@@ -31,6 +32,34 @@ public class Drivetrain {
         this.gamepadReference = gamepadReference;
         this.multipliers = multipliers;
         //follower.teleOpLock(false, false, true);
+    }
+
+    @Override
+    public void init(HardwareMap hardwareMap, AllianceColor alliance) {
+        super.init();
+        if (follower == null) {
+            follower = Constants.createFollower(hardwareMap);
+            follower.setStartingPose(alliance.isRed() ? Constants.redStartPose : Constants.blueStartPose);
+        }
+    }
+    public void setReferences(Pose gamepadReference, Pose multipliers) {
+        this.gamepadReference = gamepadReference;
+        this.multipliers = multipliers;
+    }
+
+    @Override
+    public void loop() {
+        follower.update();
+    }
+
+    @Override
+    public void stop() {
+        follower.breakFollowing();
+        follower.startTeleopDrive(true);
+        follower.setTeleOpDrive(
+                0,0,0
+        );
+        follower.update();
     }
 
     public void startTeleOpDrive() {

@@ -11,6 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Flywheel;
 import org.firstinspires.ftc.teamcode.subsystems.transfer.Kicker;
+import org.firstinspires.ftc.teamcode.util.AllianceColor;
 
 @Disabled
 @TeleOp(name="Servo Test")
@@ -25,7 +26,7 @@ public class v3ServoTest extends OpMode {
     @Override
     public void init() {
         sensor = hardwareMap.get(NormalizedColorSensor.class, "color1");
-        shooter = new Flywheel(hardwareMap);
+        shooter = new Flywheel(hardwareMap, new AllianceColor(AllianceColor.Selection.BLUE));
         shooterSpeed = 150;
         tilt = 0.01;
         transfer = new Kicker(hardwareMap);

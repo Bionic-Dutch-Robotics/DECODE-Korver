@@ -18,9 +18,10 @@ public class Sorter {
         colorSensors = new NormalizedColorSensor[3];
         for (int i = 0; i < colorSensors.length; i++) {
             colorSensors[i] = hwMap.get(NormalizedColorSensor.class, Settings.HardwareNames.Sorter.COLOR_SENSORS[i]);
+            colorSensors[i].setGain(10.0F);
         }
 
-        order = new ArtifactOrder(new Artifact[] {Artifact.GREEN, Artifact.PURPLE, Artifact.GREEN});
+        order = new ArtifactOrder(new Artifact[] {Artifact.PURPLE, Artifact.PURPLE, Artifact.GREEN});
     }
 
     public Artifact[] getStoredArtifacts() {

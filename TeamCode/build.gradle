@@ -36,6 +36,7 @@ apply from: '../build.common.gradle'
 apply from: '../build.dependencies.gradle'
 apply plugin: "org.team11260.fast-load-plugin"
 apply plugin: 'dev.frozenmilk.sinister.sloth.load'
+apply plugin: 'org.jetbrains.kotlin.android'
 
 
 android {
@@ -47,6 +48,9 @@ android {
         }
         jniLibs.useLegacyPackaging true
     }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
 }
 
 repositories {
@@ -55,6 +59,25 @@ repositories {
     }
     maven {
         url = "https://www.methewo.tech/maven/"
+    }
+    maven {
+        url = 'https://jitpack.io'
+    }
+}
+
+android {
+    namespace = 'org.firstinspires.ftc.teamcode'
+
+    kotlinOptions {
+        jvmTarget='1.8'
+    }
+    compileSdk 34
+    defaultConfig {
+        minSdk 24
+    }
+
+    packagingOptions {
+        jniLibs.useLegacyPackaging true
     }
 }
 

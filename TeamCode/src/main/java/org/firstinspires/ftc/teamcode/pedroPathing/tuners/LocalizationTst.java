@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@TeleOp(name="Localization")
+@TeleOp(name="Localization Test")
 public class LocalizationTst extends OpMode {
     private Follower follower;
     @Override

@@ -1,5 +1,10 @@
 package org.firstinspires.ftc.teamcode.autos;
 
+import static org.firstinspires.ftc.teamcode.util.Hardware.dt;
+import static org.firstinspires.ftc.teamcode.util.Hardware.intake;
+import static org.firstinspires.ftc.teamcode.util.Hardware.shooter;
+import static org.firstinspires.ftc.teamcode.util.Hardware.transfer;
+
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
@@ -9,15 +14,17 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.subsystems.drivetrain.Drivetrain;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
+import org.firstinspires.ftc.teamcode.util.MatchSettings;
 
 @Autonomous(name="Drivetrain Only")
 public class DrivetrainOnlyAuto extends OpMode {
     private Path path;
-    private Drivetrain dt;
+    private AutoState state;
 
     @Override
     public void init() {
-        dt = new Drivetrain(hardwareMap, new AllianceColor(AllianceColor.Selection.BLUE), new Pose(-gamepad1.left_stick_x, -gamepad1.left_stick_y, -gamepad1.right_stick_x), new Pose(1.15, 1.15, 1.15));
+        MatchSettings.initSelection(hardwareMap, new AllianceColor(AllianceColor.Selection.BLUE), gamepad1);
+        MatchSettings.start();
     }
 
     @Override
@@ -25,19 +32,30 @@ public class DrivetrainOnlyAuto extends OpMode {
         path = new Path(
                 new BezierCurve(
                         dt.follower.getPose(),
-                        new Pose(75, 35),
+                        new Pose(45, 32),
                         new Pose(25,30,dt.follower.getPose().getHeading())
                 )
         );
         path.setConstantHeadingInterpolation(Math.PI);
         dt.follower.followPath(path);
+        state = AutoState.INTAKE;
     }
 
     @Override
     public void loop() {
+        shooter.flywheel.adaptive(
+                dt.follower.getPose().getX(),
+                dt.follower.getPose().getY()
+        );
+        shooter.turret.loop(
+                dt.follower.getPose().getX(),
+                dt.follower.getPose().getX(),
+                dt.follower.getHeading()
+        );
         dt.update();
 
-        if (!dt.follower.isBusy()) {
+        if (!dt.follower.isBusy() && state.equals(AutoState.INTAKE)) {
+            intake.run();
             dt.follower.breakFollowing();
             Path path1 = new Path(
                     new BezierLine(
@@ -49,6 +67,16 @@ public class DrivetrainOnlyAuto extends OpMode {
             dt.follower.followPath(
                     path1
             );
+            state = AutoState.SHOOT;
         }
+        else if (!dt.follower.isBusy() && state.equals(AutoState.SHOOT)) {
+            dt.follower.breakFollowing();
+            intake.stop();
+            transfer.fireSortedArtifacts();
+        }
+    }
+    enum AutoState {
+        INTAKE,
+        SHOOT
     }
 }

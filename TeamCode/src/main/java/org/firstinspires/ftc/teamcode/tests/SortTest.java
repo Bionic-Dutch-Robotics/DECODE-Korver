@@ -1,10 +1,11 @@
-package org.firstinspires.ftc.teamcode.teleops;
+package org.firstinspires.ftc.teamcode.tests;
 
 import static org.firstinspires.ftc.teamcode.util.Hardware.dt;
 import static org.firstinspires.ftc.teamcode.util.Hardware.intake;
 import static org.firstinspires.ftc.teamcode.util.Hardware.shooter;
 import static org.firstinspires.ftc.teamcode.util.Hardware.transfer;
 
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -15,8 +16,8 @@ import org.firstinspires.ftc.teamcode.util.MatchSettings;
 
 import java.util.List;
 
-@TeleOp(name="Blue")
-public class BlueFar extends OpMode {
+@TeleOp(name="Sort")
+public class SortTest extends OpMode {
     private List<LynxModule> allHubs = null;
 
     @Override
@@ -39,14 +40,10 @@ public class BlueFar extends OpMode {
 
         dt.update();
         intake.run();
-        shooter.turret.loop(
-                dt.follower.getPose().getX(),
-                dt.follower.getPose().getY(),
-                dt.follower.getHeading()
+        shooter.runLoop(
+                dt.follower.getPose(),
+                dt.follower.getVelocity()
         );
-        shooter.flywheel.adaptive(
-                dt.follower.getPose().getX(),
-                dt.follower.getPose().getY());
 
         dt.teleOpDrive(
                 -gamepad1.left_stick_y,
@@ -55,7 +52,9 @@ public class BlueFar extends OpMode {
         );
         if (gamepad1.aWasPressed()) {
             /*transfer.kicker.setFireSequence(
-                    transfer.sorter.getOrder()
+                    new Integer[] {
+                            2, 1, 0
+                    }
             );
             transfer.kicker.createFireSequence();*/
             transfer.fireSortedArtifacts();
