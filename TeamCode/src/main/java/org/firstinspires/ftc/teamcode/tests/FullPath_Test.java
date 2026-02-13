@@ -54,7 +54,7 @@ public class FullPath_Test extends OpMode {
                 new PathChain(
                     new Path(
                             new BezierCurve(
-                                    new Pose(54.200, 79.600),
+                                    shootPos,
                                     new Pose(76.0, 89.50),
                                     new Pose(18.600, 83.600)
                             )
@@ -72,7 +72,7 @@ public class FullPath_Test extends OpMode {
                 new PathChain(
                     new Path(
                             new BezierCurve(
-                                    new Pose(54.300, 79.400),
+                                    shootPos,
                                     new Pose(64.100, 39.00),
                                     new Pose(17.600, 35.300)
                             )
