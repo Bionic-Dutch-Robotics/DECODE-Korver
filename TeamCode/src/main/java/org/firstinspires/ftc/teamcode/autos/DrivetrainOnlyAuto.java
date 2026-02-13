@@ -45,8 +45,7 @@ public class DrivetrainOnlyAuto extends OpMode {
     public void loop() {
         shooter.flywheel.adaptive(
                 dt.follower.getPose().getX(),
-                dt.follower.getPose().getY(),
-                new AllianceColor(AllianceColor.Selection.BLUE)
+                dt.follower.getPose().getY()
         );
         shooter.turret.loop(
                 dt.follower.getPose().getX(),

@@ -5,6 +5,7 @@ import static org.firstinspires.ftc.teamcode.util.Hardware.intake;
 import static org.firstinspires.ftc.teamcode.util.Hardware.shooter;
 import static org.firstinspires.ftc.teamcode.util.Hardware.transfer;
 
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -39,15 +40,9 @@ public class SortTest extends OpMode {
 
         dt.update();
         intake.run();
-        shooter.turret.loop(
-                dt.follower.getPose().getX(),
-                dt.follower.getPose().getY(),
-                dt.follower.getHeading()
-        );
-        shooter.flywheel.adaptive(
-                dt.follower.getPose().getX(),
-                dt.follower.getPose().getY(),
-                new AllianceColor(AllianceColor.Selection.BLUE)
+        shooter.runLoop(
+                dt.follower.getPose(),
+                dt.follower.getVelocity()
         );
 
         dt.teleOpDrive(
@@ -56,13 +51,13 @@ public class SortTest extends OpMode {
                 -gamepad1.right_stick_x
         );
         if (gamepad1.aWasPressed()) {
-            transfer.kicker.setFireSequence(
+            /*transfer.kicker.setFireSequence(
                     new Integer[] {
                             2, 1, 0
                     }
             );
-            transfer.kicker.createFireSequence();
-            //transfer.fireSortedArtifacts();
+            transfer.kicker.createFireSequence();*/
+            transfer.fireSortedArtifacts();
 
         }
     }

@@ -34,7 +34,7 @@ public class TiltTest extends OpMode {
         shooter.tilt.setTilt(
                 servoPos
         );
-        shooter.flywheel.adaptive(dt.follower.getPose().getX(), dt.follower.getPose().getY(), alliance);
+        shooter.flywheel.adaptive(dt.follower.getPose().getX(), dt.follower.getPose().getY());
         shooter.turret.loop(dt.follower.getPose().getX(), dt.follower.getPose().getY(), dt.follower.getHeading());
         dt.teleOpDrive(
                 -gamepad1.left_stick_y,

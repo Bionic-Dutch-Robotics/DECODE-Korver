@@ -108,7 +108,9 @@ public class KylesAuto extends OpMode {
             // Only run shooter/transfer when we've arrived at the shooting position
             if (!dt.follower.isBusy()) {
                 // Spin up flywheel and update shooter
-                shooter.runLoop(dt.follower.getPose().getX(), dt.follower.getPose().getY(), dt.follower.getPose().getHeading());
+                shooter.runLoop(dt.follower.getPose(),
+                        dt.follower.getVelocity()
+                );
                 shooter.flywheel.update(shooterSpeed);
                 shooter.tilt.setTilt(tiltPos);
 
