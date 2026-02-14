@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.tests;
 
+import static org.firstinspires.ftc.teamcode.util.Hardware.intake;
+import static org.firstinspires.ftc.teamcode.util.Hardware.shooter;
+import static org.firstinspires.ftc.teamcode.util.Hardware.transfer;
+
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
@@ -16,6 +20,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.drivetrain.autonomous.Actions;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
+import org.firstinspires.ftc.teamcode.util.MatchSettings;
 
 @Autonomous(name="Full Path Test")
 public class FullPath_Test extends OpMode {
@@ -26,7 +31,10 @@ public class FullPath_Test extends OpMode {
     @Override
     public void init() {
         follower = Constants.createFollower(hardwareMap);
+        MatchSettings.initSelection(hardwareMap, new AllianceColor(AllianceColor.Selection.BLUE), gamepad1);
+        MatchSettings.start();
         follower.setStartingPose(Constants.blueStartPose);
+        transfer.start();
     }
 
     @Override
@@ -91,49 +99,75 @@ public class FullPath_Test extends OpMode {
         paths[0].setCallbacks(
                 new ParametricCallback(
                         0, 0.6, follower,
-                        () -> follower.setMaxPower(0.55)
+                        () -> {
+                            follower.setMaxPower(0.55);
+                            intake.run();
+                        }
                 )
         );
         paths[1].getPath(0).setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180));
         paths[1].setCallbacks(
                 new ParametricCallback(
                         0, 0, follower,
-                        () -> follower.setMaxPower(1)
+                        () -> {
+                            follower.setMaxPower(1);
+                            intake.stop();
+                        }
+                ),
+                new ParametricCallback(
+                        0, 0.96, follower,
+                        ()-> {
+                            transfer.fireSortedArtifacts();
+                        }
                 )
         );
         paths[2].getPath(0).setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180));
         paths[2].setCallbacks(
                 new ParametricCallback(
                         0, 0.6, follower,
-                        () -> follower.setMaxPower(0.65)
+                        () -> {
+                            follower.setMaxPower(0.65);
+                            intake.run();
+                        }
                 )
         );
         paths[3].getPath(0).setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180));
         paths[3].setCallbacks(
                 new ParametricCallback(
                         0, 0, follower,
-                        () -> follower.setMaxPower(1)
+                        () -> {
+                            follower.setMaxPower(1);
+                            intake.stop();
+                        }
                 )
         );
         paths[4].getPath(0).setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180));
         paths[4].setCallbacks(
                 new ParametricCallback(
                         0, 0.6, follower,
-                        () -> follower.setMaxPower(0.65)
+                        () -> {
+                            follower.setMaxPower(0.65);
+                            intake.run();
+                        }
                 )
         );
         paths[5].getPath(0).setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180));
         paths[5].setCallbacks(
                 new ParametricCallback(
                         0, 0.0, follower,
-                        () -> follower.setMaxPower(1)
+                        () -> {
+                            follower.setMaxPower(1);
+                            intake.stop();
+                        }
                 )
         );
+
         follower.followPath(paths[0]);
     }
 
     @Override
     public void loop() {
+        shooter.flywheel.update(100);
         follower.update();
         telemetry.addData("X", follower.getPose().getX());
         telemetry.addData("Y", follower.getPose().getY());
