@@ -21,7 +21,7 @@ public class Shooter {
         turret = new Turret(hwMap);
     }
 
-    public void runLoop(Pose currentPose, Vector velocity) {
+    public void runLoop(Pose currentPose, Vector velocity, double headingVel) {
         this.previousPose = this.currentPose;
         this.currentPose = currentPose;
         Pose predictedPose = new Pose();
@@ -30,8 +30,8 @@ public class Shooter {
                     new Pose(
                             velocity.getXComponent(),
                             velocity.getYComponent(),
-                            velocity.getTheta()
-                    ).times(0.05)
+                            headingVel
+                    ).times(Settings.Positions.Transfer.RUN_TO_POS_TIME /*0.05*/)
             );
         }
         velocity.getClass();

@@ -42,7 +42,8 @@ public class SortTest extends OpMode {
         intake.run();
         shooter.runLoop(
                 dt.follower.getPose(),
-                dt.follower.getVelocity()
+                dt.follower.getVelocity(),
+                dt.follower.getAngularVelocity()
         );
 
         dt.teleOpDrive(
