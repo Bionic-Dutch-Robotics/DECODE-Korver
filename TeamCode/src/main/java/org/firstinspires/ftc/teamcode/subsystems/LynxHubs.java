@@ -10,7 +10,7 @@ public class LynxHubs extends Subsystem {
 
     @Override
     public void init(HardwareMap hardwareMap, AllianceColor alliance) {
-        hardwareMap.getAll(LynxModule.class).toArray(allHubs);
+        allHubs = hardwareMap.getAll(LynxModule.class).toArray(allHubs);
 
         for (LynxModule hub : allHubs) {
             hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
