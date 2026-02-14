@@ -40,10 +40,11 @@ public class SortTest extends OpMode {
 
         dt.update();
         intake.run();
-        shooter.runLoop(
-                dt.follower.getPose(),
-                dt.follower.getVelocity(),
-                dt.follower.getAngularVelocity()
+        shooter.flywheel.update(100);
+        shooter.turret.loop(
+                dt.follower.getPose().getX() - dt.follower.getVelocity().getXComponent()*0.1,
+                dt.follower.getPose().getY() - dt.follower.getVelocity().getYComponent()*0.1,
+                dt.follower.getHeading() - dt.follower.getAngularVelocity()*0.1
         );
 
         dt.teleOpDrive(
