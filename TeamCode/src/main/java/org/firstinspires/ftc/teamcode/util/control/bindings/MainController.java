@@ -12,15 +12,26 @@ import org.firstinspires.ftc.teamcode.util.control.Controller;
 
 public class MainController extends Controller {
     public static Command[] controls;
-    private Gamepad gamepad1;
 
-    public MainController(Drivetrain dt, Intake intake, Shooter shooter, Transfer transfer, Gamepad gamepad) {
-        this.gamepad1 = gamepad;
+    public MainController(Drivetrain dt, Intake intake, Gamepad gamepad) {
         controls = new Command[] {
                 new Command(
                         gamepad::yWasPressed,
-                        () -> dt.lineToPose(new Pose(), dt.follower.getHeading())
-                )
+                        () -> dt.lineToPose(new Pose(72,72, Math.PI), dt.follower.getHeading())
+                ),
+                new Command(
+                        gamepad::xWasPressed,
+                        () -> dt.lineToPose(new Pose(55, 15, Math.PI), dt.follower.getHeading())
+                ),
+                new Command(
+                        gamepad::aWasPressed,
+                        intake::toggle
+                ),
+                new Command(
+                        gamepad::bWasPressed,
+                        intake::eject
+                ),
         };
+        this.setController(controls);
     }
 }

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.util.control;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.function.BiConsumer;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
@@ -9,7 +10,6 @@ import java.util.function.Supplier;
 @SuppressWarnings("all")
 public class Controller {
     private ArrayList<Command> bindings = new ArrayList<>();
-
     public void bind(Command command) {
         bindings.add(command);
     }
@@ -70,6 +70,13 @@ public class Controller {
         for (int i=0; i < bindings.size(); i++) {
             bindings.get(i).kill();
             bindings.remove(i);
+        }
+    }
+
+    public void setController(Command[] commands) {
+        this.removeAllBindings();
+        for (Command command : commands) {
+            this.bind(command);
         }
     }
 }
