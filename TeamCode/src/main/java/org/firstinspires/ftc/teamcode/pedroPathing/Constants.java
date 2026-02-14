@@ -20,23 +20,6 @@ import org.firstinspires.ftc.teamcode.util.Settings;
 
 @Configurable
 public class Constants {
-        public static final Pose blueStartPose = new Pose(56.875, 8.5, Math.PI);
-        public static final Pose redStartPose = new Pose(80, 8, Math.toRadians(90));
-        public static final Pose farRedShoot = new Pose(86, 16, 2.78);
-        public static final Pose farBlueShoot = new Pose(64, 30, -2.7);
-        public static final Pose redCloseShoot = new Pose(76,76,Math.toRadians(135));
-        public static final Pose blueCloseShoot = new Pose(68,72, Math.toRadians(-135));
-        public static final double closeShootPower = 210;   //Targets 230, really reaches 140
-        public static final double farShootPower = 248;     //Targets 295, really reaches 180
-        public static final Pose redPark = new Pose(35,30, 0);
-        public static final Pose bluePark = new Pose(100,30, 0);
-
-        public static PIDFCoefficients shooterCoefficients = new PIDFCoefficients(0.00527, 0,0.000013,0);
-
-
-
-
-
     public static FollowerConstants followerConstants = new FollowerConstants()
             .mass(9.6)
             .forwardZeroPowerAcceleration(-39.082554597030864)

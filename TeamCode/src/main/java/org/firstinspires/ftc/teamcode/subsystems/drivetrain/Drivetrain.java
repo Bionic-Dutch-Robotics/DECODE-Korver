@@ -11,12 +11,14 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Subsystem;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
+import org.firstinspires.ftc.teamcode.util.Settings;
 
 public class Drivetrain extends Subsystem {
     public FilteredPIDFController xPid, yPid;
     public PIDFController headingPid;
     public Follower follower = null;
     private Pose gamepadReference, multipliers;
+    private AllianceColor alliance = null;
 
     /**
      * Creates a new drivetrain
@@ -26,11 +28,12 @@ public class Drivetrain extends Subsystem {
         if (follower == null) {
             follower = Constants.createFollower(hwMap);
             follower.setStartingPose(
-                    alliance.isRed() ? Constants.redStartPose : Constants.blueStartPose
+                    alliance.isRed() ? Settings.Positions.Drivetrain.Red.FAR_AUTO_START : Settings.Positions.Drivetrain.Blue.FAR_AUTO_START
             );
         }
         this.gamepadReference = gamepadReference;
         this.multipliers = multipliers;
+        this.alliance = alliance;
         //follower.teleOpLock(false, false, true);
     }
 
@@ -39,7 +42,7 @@ public class Drivetrain extends Subsystem {
         super.init();
         if (follower == null) {
             follower = Constants.createFollower(hardwareMap);
-            follower.setStartingPose(alliance.isRed() ? Constants.redStartPose : Constants.blueStartPose);
+            follower.setStartingPose(alliance.isRed() ? Settings.Positions.Drivetrain.Red.FAR_AUTO_START : Settings.Positions.Drivetrain.Blue.FAR_AUTO_START);
         }
     }
     public void setReferences(Pose gamepadReference, Pose multipliers) {
@@ -90,6 +93,13 @@ public class Drivetrain extends Subsystem {
         );
     }
 
+    public void lineToFarShoot(double currentHeading) {
+        this.lineToPose(alliance.isRed() ? Settings.Positions.Drivetrain.Red.FAR_SHOOT : Settings.Positions.Drivetrain.Blue.FAR_SHOOT, currentHeading);
+    }
+
+    public void lineToCloseShoot(double currentHeading) {
+        this.lineToPose(alliance.isRed() ? Settings.Positions.Drivetrain.Red.CLOSE_SHOOT : Settings.Positions.Drivetrain.Blue.CLOSE_SHOOT, currentHeading);
+    }
     /**
      * Gets real-time position of the robot, in PedroPathing coordinates.
      */
