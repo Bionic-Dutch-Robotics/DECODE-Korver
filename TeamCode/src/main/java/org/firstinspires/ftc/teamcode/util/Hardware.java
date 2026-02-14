@@ -28,18 +28,18 @@ public class Hardware {
         shooter = new Shooter(hwMap);
         shooter.setAlliance(alliance);
         intake = new Intake(hwMap);
-        hubs = new LynxHubs();
-        hubs.init(hwMap, alliance);
+        //hubs = new LynxHubs();
+        //hubs.init(hwMap, alliance);
     }
 
     public static void loop() {
         dt.update();
-        hubs.loop();
+        //hubs.loop();
     }
 
     public static void stop() {
         transfer.kicker.stop();
-        hubs.stop();
+        //hubs.stop();
         intake.stop();
 
     }
