@@ -109,7 +109,8 @@ public class KylesAuto extends OpMode {
             if (!dt.follower.isBusy()) {
                 // Spin up flywheel and update shooter
                 shooter.runLoop(dt.follower.getPose(),
-                        dt.follower.getVelocity()
+                        dt.follower.getVelocity(),
+                        dt.follower.getAngularVelocity()
                 );
                 shooter.flywheel.update(shooterSpeed);
                 shooter.tilt.setTilt(tiltPos);
