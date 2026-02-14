@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.tests;
 
 import com.pedropathing.control.PIDFController;
 import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.Pose;
+import com.pedropathing.math.Vector;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -85,8 +87,7 @@ public class ShooterManualTest extends OpMode {
         //        shooter.tilt.auto(shooter.flywheel.getDistance(follower.getPose().getX(), follower.getPose().getY(), new AllianceColor(AllianceColor.Selection.BLUE))
         //));
 
-
-        shooter.turret.loop(follower.getPose().getX(), follower.getPose().getY(), follower.getHeading());
+        shooter.turret.loop(follower.getPose().getX(), follower.getPose().getY(), follower.getPose().getHeading());
         shooter.flywheel.update(shooterPower);
 
         if (gamepad1.aWasPressed()) {
