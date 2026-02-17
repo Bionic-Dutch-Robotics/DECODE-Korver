@@ -17,11 +17,6 @@ public class Hardware {
     public static LynxHubs hubs;
     public static void initialize(HardwareMap hwMap, AllianceColor alliance, Pose gamepadReference) {
         dt = new Drivetrain(hwMap, alliance,gamepadReference, new Pose(1.15, 1.15, 1.15));
-        dt.follower.setStartingPose(
-                alliance.isRed() ?
-                        Settings.Positions.Drivetrain.Red.FAR_AUTO_START :
-                        Settings.Positions.Drivetrain.Blue.FAR_AUTO_START
-        );
 
         transfer = new Transfer(hwMap);
 

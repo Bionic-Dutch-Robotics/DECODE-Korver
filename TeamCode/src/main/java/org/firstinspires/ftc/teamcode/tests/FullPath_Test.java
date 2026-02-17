@@ -18,9 +18,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
-import org.firstinspires.ftc.teamcode.subsystems.drivetrain.autonomous.Actions;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
 import org.firstinspires.ftc.teamcode.util.MatchSettings;
+import org.firstinspires.ftc.teamcode.util.Settings;
 
 @Autonomous(name="Full Path Test")
 public class FullPath_Test extends OpMode {
@@ -33,7 +33,7 @@ public class FullPath_Test extends OpMode {
         follower = Constants.createFollower(hardwareMap);
         MatchSettings.initSelection(hardwareMap, new AllianceColor(AllianceColor.Selection.BLUE), gamepad1);
         MatchSettings.start();
-        follower.setStartingPose(Constants.blueStartPose);
+        follower.setStartingPose(Settings.Positions.Drivetrain.Blue.FAR_AUTO_START);
         transfer.start();
     }
 

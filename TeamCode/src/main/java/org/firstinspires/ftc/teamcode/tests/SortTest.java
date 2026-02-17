@@ -34,6 +34,9 @@ public class SortTest extends OpMode {
 
     @Override
     public void loop() {
+        telemetry.addData("X", dt.follower.getPose().getX());
+        telemetry.addData("Y", dt.follower.getPose().getY());
+        telemetry.addData("Headimng", dt.follower.getHeading());
         for (LynxModule module : allHubs) {
             module.getBulkData();
         }
@@ -53,13 +56,13 @@ public class SortTest extends OpMode {
                 -gamepad1.right_stick_x
         );
         if (gamepad1.aWasPressed()) {
-            /*transfer.kicker.setFireSequence(
+            transfer.kicker.setFireSequence(
                     new Integer[] {
                             2, 1, 0
                     }
             );
-            transfer.kicker.createFireSequence();*/
-            transfer.fireSortedArtifacts();
+            transfer.kicker.createFireSequence();
+            //transfer.fireSortedArtifacts();
 
         }
     }

@@ -10,8 +10,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
-import org.firstinspires.ftc.teamcode.subsystems.drivetrain.autonomous.Actions;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
+import org.firstinspires.ftc.teamcode.util.Settings;
 
 @Autonomous(name="Path Test")
 public class PathTest extends OpMode {
@@ -20,12 +20,12 @@ public class PathTest extends OpMode {
     @Override
     public void init() {
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(Constants.blueStartPose);
+        follower.setStartingPose(Settings.Positions.Drivetrain.Blue.FAR_AUTO_START);
     }
 
     @Override
     public void start() {
-        path = new Path(new BezierLine(Constants.blueStartPose, new Pose(72,72)));
+        path = new Path(new BezierLine(Settings.Positions.Drivetrain.Blue.FAR_AUTO_START, new Pose(72,72)));
         path.setHeadingInterpolation(HeadingInterpolator.linear(Math.PI, 0));
         follower.followPath(path);
     }

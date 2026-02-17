@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.util.Settings;
 
 @Disabled
 @TeleOp(name="Turret Attempt")
@@ -24,7 +25,7 @@ public class TurretAttemptTest extends OpMode {
     public void init() {
         turret = hardwareMap.get(DcMotorEx.class, "turret");
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(Constants.blueStartPose);
+        follower.setStartingPose(Settings.Positions.Drivetrain.Blue.FAR_AUTO_START);
         turretPid = new PIDFController(new PIDFCoefficients(0.025, 0, 0, 0));
         turret.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         turret.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

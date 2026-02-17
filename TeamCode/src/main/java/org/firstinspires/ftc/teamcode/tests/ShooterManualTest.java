@@ -37,7 +37,7 @@ public class ShooterManualTest extends OpMode {
         transfer.setMotif(new Artifact[] {Artifact.PURPLE, Artifact.GREEN, Artifact.PURPLE});
         transfer.start();
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(Constants.blueStartPose);
+        follower.setStartingPose(Settings.Positions.Drivetrain.Blue.FAR_AUTO_START);
         shooterPidf = new PIDFController(Settings.Positions.Shooter.SHOOTER_COEFFICIENTS);
         shooter = new Shooter(hardwareMap);
         shooter.setAlliance(new AllianceColor(AllianceColor.Selection.BLUE));

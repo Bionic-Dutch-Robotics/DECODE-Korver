@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.util.Settings;
 
 @TeleOp(name="Drivetrain Test")
 public class DrivetrainTest extends OpMode {
@@ -15,7 +16,7 @@ public class DrivetrainTest extends OpMode {
     @Override
     public void init() {
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(Constants.blueStartPose);
+        follower.setStartingPose(Settings.Positions.Drivetrain.Blue.FAR_AUTO_START);
     }
 
     @Override

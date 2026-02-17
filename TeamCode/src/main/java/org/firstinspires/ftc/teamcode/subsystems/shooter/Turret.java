@@ -43,7 +43,7 @@ public class Turret {
         //turretRad = MathFunctions.clamp(turretRad, -Math.PI/2, Math.PI/2);
 
         // Target angle
-        targetRad = Math.atan2(target.getY() - y, target.getX() - x) - MathFunctions.normalizeAngle(heading + fieldCentricTurretStartingPosition/2 + Math.toRadians(8));
+        targetRad = Math.atan2(target.getY() - y, target.getX() - x) - MathFunctions.normalizeAngle(heading + fieldCentricTurretStartingPosition/2 + Math.toRadians(0));
         targetRad = MathFunctions.scale(
                 MathFunctions.normalizeAngle(targetRad),
                 0, Math.PI*2,

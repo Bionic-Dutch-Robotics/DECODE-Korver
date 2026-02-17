@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Flywheel;
 import org.firstinspires.ftc.teamcode.subsystems.transfer.Kicker;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
+import org.firstinspires.ftc.teamcode.util.Settings;
 
 import java.util.function.Supplier;
 
@@ -32,7 +33,7 @@ public class ShooterRegressionTest extends OpMode {
         headingPid = new PIDFController(Constants.followerConstants.getCoefficientsHeadingPIDF());
         shooter = new Flywheel(hardwareMap, new AllianceColor(AllianceColor.Selection.BLUE));
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(Constants.redStartPose);
+        follower.setStartingPose(Settings.Positions.Drivetrain.Red.FAR_AUTO_START);
         intake = new Intake(hardwareMap);
         transfer = new Kicker(hardwareMap);
         runIntake = false;

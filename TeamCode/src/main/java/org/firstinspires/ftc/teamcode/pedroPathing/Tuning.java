@@ -22,6 +22,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.tuners.Drawing;
+import org.firstinspires.ftc.teamcode.util.Settings;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,7 +84,7 @@ public class Tuning extends SelectableOpMode {
         } else {
             follower = Constants.createFollower(hardwareMap);
         }
-        follower.setStartingPose(Constants.redStartPose);
+        follower.setStartingPose(Settings.Positions.Drivetrain.Red.FAR_AUTO_START);
 
         follower.setStartingPose(new Pose());
 
@@ -1137,7 +1138,7 @@ class Triangle extends OpMode {
     /** Creates the PathChain for the "triangle".*/
     @Override
     public void start() {
-        follower.setStartingPose(Constants.blueStartPose);
+        follower.setStartingPose(Settings.Positions.Drivetrain.Blue.FAR_AUTO_START);
 
         triangle = follower.pathBuilder()
                 .addPath(new BezierLine(startPose, interPose))

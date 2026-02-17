@@ -49,13 +49,6 @@ public class Flywheel {
         shooter.setPower(0.2);
     }
 
-    public void midFieldShoot() {
-        update(Constants.closeShootPower);
-    }
-
-    public void farShoot() {
-        update(Constants.farShootPower);
-    }
 
     public void update(double targetVelocity) {
         shooterPidf.updatePosition(shooter.getVelocity(AngleUnit.DEGREES));
