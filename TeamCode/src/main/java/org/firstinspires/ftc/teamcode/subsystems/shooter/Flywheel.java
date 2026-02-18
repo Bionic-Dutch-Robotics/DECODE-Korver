@@ -15,23 +15,29 @@ import org.firstinspires.ftc.teamcode.util.AllianceColor;
 import org.firstinspires.ftc.teamcode.util.Settings;
 
 public class Flywheel {
-    private PIDFController shooterPidf = null;
-    public DcMotorEx shooter = null;
+    private PIDFController shooterPidf = null, shooterPidf2 = null;
+    public DcMotorEx shooter = null, shooter2 = null;
     public final double redPowerCoefficient = 1.1;
     public final double bluePowerCoefficient = 1.0;
     private AllianceColor alliance;
 
     public Flywheel(HardwareMap hwMap, AllianceColor alliance) {
         shooter = hwMap.get(DcMotorEx.class, Settings.HardwareNames.Shooter.SHOOTER);
+        shooter2 = hwMap.get(DcMotorEx.class, Settings.HardwareNames.Shooter.SHOOTER_TWO);
         shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        shooter2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         shooter.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        shooter2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         shooter.setDirection(DcMotorSimple.Direction.REVERSE);
+        shooter2.setDirection(DcMotorSimple.Direction.REVERSE);
         shooterPidf = new PIDFController(SHOOTER_COEFFICIENTS);
+        shooterPidf2 = new PIDFController(SHOOTER_COEFFICIENTS);
         this.alliance = alliance;
     }
 
     public void eject() {
         shooter.setPower(-0.1);
+        shooter2.setPower(-0.1);
     }
     public void adaptive(double x, double y) {
         this.update(
@@ -43,17 +49,24 @@ public class Flywheel {
     }
 
     public void stop() {
+
         shooter.setPower(0);
+        shooter2.setPower(0);
     }
     public void idle() {
-        shooter.setPower(0.2);
+
+        shooter.setPower(0.8);
+        shooter2.setPower(0.8);
     }
 
 
     public void update(double targetVelocity) {
         shooterPidf.updatePosition(shooter.getVelocity(AngleUnit.DEGREES));
+        shooterPidf2.updatePosition(shooter2.getVelocity(AngleUnit.DEGREES));
         shooterPidf.setTargetPosition(targetVelocity);
+        shooterPidf2.setTargetPosition(targetVelocity);
         shooter.setPower(MathFunctions.clamp(shooterPidf.run(), -1, 1));
+        shooter2.setPower(MathFunctions.clamp(shooterPidf2.run(), -1, 1));
     }
     public double getTarget() {
         return shooterPidf.getTargetPosition();

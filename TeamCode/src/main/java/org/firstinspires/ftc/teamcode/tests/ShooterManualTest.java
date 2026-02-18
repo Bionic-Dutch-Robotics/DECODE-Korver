@@ -42,11 +42,7 @@ public class ShooterManualTest extends OpMode {
         shooter = new Shooter(hardwareMap);
         shooter.setAlliance(new AllianceColor(AllianceColor.Selection.BLUE));
         shooter.turret.setAlliance(new AllianceColor(AllianceColor.Selection.BLUE));
-        //follower = Constants.createFollower(hardwareMap);
-        //run = new Intake(hardwareMap);
-        //transfer = new Transfer(hardwareMap);
-        shooterPower = 250;
-        //headingPid = new PIDFController(follower.getConstants().getCoefficientsHeadingPIDF());
+        shooterPower = 50;
         goToHeading = false;
     }
 
@@ -72,20 +68,7 @@ public class ShooterManualTest extends OpMode {
                     true
             );
         }
-        /*if (gamepad1.leftBumperWasPressed()) {
-            goToHeading = !goToHeading;
 
-            if (!goToHeading) {
-                follower.breakFollowing();
-                follower.startTeleopDrive(false);
-            }
-        }*/
-
-        //shooterPidf.updatePosition(shooter.getVelocity(AngleUnit.DEGREES));
-        //shooterPidf.setTargetPosition(shooterPower);
-        //shooter.tilt.setTilt(
-        //        shooter.tilt.auto(shooter.flywheel.getDistance(follower.getPose().getX(), follower.getPose().getY(), new AllianceColor(AllianceColor.Selection.BLUE))
-        //));
 
         shooter.turret.loop(follower.getPose().getX(), follower.getPose().getY(), follower.getPose().getHeading());
         shooter.flywheel.update(shooterPower);
@@ -103,12 +86,12 @@ public class ShooterManualTest extends OpMode {
             shooterPower -= 1;
         }
 
-        //run.run();
         if (gamepad1.xWasPressed()) {
             transfer.fireSortedArtifacts();
         }
         intake.run();
         telemetry.addData("Shooter Velocity: ", shooter.flywheel.shooter.getVelocity(AngleUnit.DEGREES));
+        telemetry.addData("Shooter Velocity: ", shooter.flywheel.shooter2.getVelocity(AngleUnit.DEGREES));
         telemetry.addData("Shooter Target: ", shooterPower);
         telemetry.addData("Distance: ", shooter.flywheel.getDistance(follower.getPose().getX(), follower.getPose().getY(), new AllianceColor(AllianceColor.Selection.BLUE)));
         telemetry.update();

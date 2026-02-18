@@ -17,6 +17,7 @@ public class Settings {
         }
         public static class Shooter {
             public static final String SHOOTER = "shooter";
+            public static final String SHOOTER_TWO = "shooter2";
             public static final String TILT_SERVO = "tilt";
             public static final String TURRET = "turret";
         }
@@ -49,7 +50,7 @@ public class Settings {
             public static final double MIDFIELD_VELOCITY = 125;
 
             public static final PIDFCoefficients SHOOTER_COEFFICIENTS = new PIDFCoefficients (
-                    3.5, 0,0.005,0.00005
+                    0.073230, 0,0.0000045,0.00
             );  //TODO: Tune the kF value
         }
 
