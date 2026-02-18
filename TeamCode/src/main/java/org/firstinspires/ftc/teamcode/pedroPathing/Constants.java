@@ -22,8 +22,8 @@ import org.firstinspires.ftc.teamcode.util.Settings;
 public class Constants {
     public static FollowerConstants followerConstants = new FollowerConstants()
             .mass(9.6)
-            .forwardZeroPowerAcceleration(-39.082554597030864)
-            .lateralZeroPowerAcceleration(-71.21712910009308)
+            .forwardZeroPowerAcceleration(-24.947085808209017)
+            .lateralZeroPowerAcceleration(-70.51911769287462)
             .translationalPIDFCoefficients(new com.pedropathing.control.PIDFCoefficients(
                     0.3,
                     0,
@@ -44,10 +44,10 @@ public class Constants {
                     0.0006
             ))
             .headingPIDFCoefficients(new PIDFCoefficients(
-                    1.78,
+                    3.0,
                     0.00,
-                    0.055,
-                    0.025
+                    0.067,
+                    0.02455
             ))
             .secondaryHeadingPIDFCoefficients(new PIDFCoefficients(
                     0.0,
@@ -70,8 +70,8 @@ public class Constants {
 
     public static MecanumConstants driveConstants = new MecanumConstants()
             .maxPower(1.0)
-            .xVelocity(58.94098332923229)
-            .yVelocity(45.84543639656127)
+            .xVelocity(75.69462765671139)
+            .yVelocity(57.2784505528728)
             .leftFrontMotorName(Settings.HardwareNames.Drivetrain.FRONT_LEFT_DRIVE)
             .leftRearMotorName(Settings.HardwareNames.Drivetrain.BACK_LEFT_DRIVE)
             .rightFrontMotorName(Settings.HardwareNames.Drivetrain.FRONT_RIGHT_DRIVE)
@@ -91,7 +91,7 @@ public class Constants {
                 .strafePodX(0.157480315);
 
 
-    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1.65, 1);
+    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 2.15, 1);
 
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)
