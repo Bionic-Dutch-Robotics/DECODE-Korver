@@ -43,7 +43,7 @@ public class SortTest extends OpMode {
 
         dt.update();
         intake.run();
-        shooter.flywheel.update(100);
+        shooter.flywheel.update(150);
         shooter.turret.loop(
                 dt.follower.getPose().getX() - dt.follower.getVelocity().getXComponent()*0.1,
                 dt.follower.getPose().getY() - dt.follower.getVelocity().getYComponent()*0.1,
@@ -56,13 +56,13 @@ public class SortTest extends OpMode {
                 -gamepad1.right_stick_x
         );
         if (gamepad1.aWasPressed()) {
-            transfer.kicker.setFireSequence(
+            /*transfer.kicker.setFireSequence(
                     new Integer[] {
-                            2, 1, 0
+                            1,0,2
                     }
-            );
-            transfer.kicker.createFireSequence();
-            //transfer.fireSortedArtifacts();
+            );*/
+            //transfer.kicker.createFireSequence();
+            transfer.fireSortedArtifacts();
 
         }
     }

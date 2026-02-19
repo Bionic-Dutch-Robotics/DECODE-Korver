@@ -4,6 +4,7 @@ import static org.firstinspires.ftc.teamcode.util.Hardware.intake;
 import static org.firstinspires.ftc.teamcode.util.Hardware.shooter;
 import static org.firstinspires.ftc.teamcode.util.Hardware.transfer;
 
+import com.bylazar.field.Style;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
@@ -18,6 +19,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.pedroPathing.tuners.Drawing;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
 import org.firstinspires.ftc.teamcode.util.MatchSettings;
 import org.firstinspires.ftc.teamcode.util.Settings;
@@ -167,6 +169,8 @@ public class FullPath_Test extends OpMode {
 
     @Override
     public void loop() {
+        Drawing.drawDebug(follower);
+        Drawing.drawPath(paths[index], new Style("0.5", "0.5", 5));
         shooter.flywheel.update(100);
         follower.update();
         telemetry.addData("X", follower.getPose().getX());

@@ -29,7 +29,7 @@ public class ShooterManualTest extends OpMode {
     public double shooterPower;
     private Intake intake;
     private Transfer transfer;
-    private double tiltAngle = 0.15;
+    private double tiltAngle = 1.0;
     @Override
     public void init() {
         intake = new Intake(hardwareMap);
@@ -54,10 +54,10 @@ public class ShooterManualTest extends OpMode {
     public void loop() {
         shooter.tilt.setTilt(tiltAngle);
         if (gamepad1.leftBumperWasPressed()) {
-            tiltAngle += 0.01;
+            tiltAngle += 0.05;
         }
         else if (gamepad1.rightBumperWasPressed()) {
-            tiltAngle -= 0.01;
+            tiltAngle -= 0.05;
         }
         follower.update();
         if (!goToHeading) {
@@ -69,8 +69,20 @@ public class ShooterManualTest extends OpMode {
             );
         }
 
+        Vector velocity = follower.getVelocity();
+        double headingVel = follower.getAngularVelocity();
+        Pose predictedPose = follower.getPose().copy();
+        if (velocity.getMagnitude() > 0.5) {
+            predictedPose = follower.getPose().plus(
+                    new Pose(
+                            velocity.getXComponent(),
+                            velocity.getYComponent(),
+                            headingVel
+                    ).times(Settings.Positions.Transfer.RUN_TO_POS_TIME /*0.05*/)
+            );
+        }
 
-        shooter.turret.loop(follower.getPose().getX(), follower.getPose().getY(), follower.getPose().getHeading());
+        //shooter.turret.loop(predictedPose.getX(), predictedPose.getY(), predictedPose.getHeading());
         shooter.flywheel.update(shooterPower);
 
         if (gamepad1.aWasPressed()) {

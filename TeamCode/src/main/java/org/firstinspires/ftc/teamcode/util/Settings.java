@@ -41,8 +41,8 @@ public class Settings {
     public static class Positions {
         public static class Transfer {
             public static final double[] upPos = {0.20, 0.52, 0.5};
-            public static final double[] downPos = {0.62, 0.93, 0.124};
-            public static final double RUN_TO_POS_TIME = 0.33;
+            public static final double[] downPos = {0.63, 0.93, 0.1051};
+            public static final double RUN_TO_POS_TIME = 0.18;
         }
         public static class Shooter {
             //  Velocities are in degrees per second.

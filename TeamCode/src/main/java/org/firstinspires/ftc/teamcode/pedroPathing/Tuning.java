@@ -10,6 +10,7 @@ import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.telemetryM;
 import com.bylazar.configurables.PanelsConfigurables;
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.configurables.annotations.IgnoreConfigurable;
+import com.bylazar.field.Style;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
 import com.pedropathing.follower.Follower;
@@ -1058,6 +1059,7 @@ class CentripetalTuner extends OpMode {
 
     @Override
     public void start() {
+
         follower.activateAllPIDFs();
         forwards = new Path(new BezierCurve(new Pose(72,72), new Pose(Math.abs(DISTANCE) + 72,72), new Pose(Math.abs(DISTANCE) + 72,DISTANCE + 72)));
         backwards = new Path(new BezierCurve(new Pose(Math.abs(DISTANCE) + 72,DISTANCE + 72), new Pose(Math.abs(DISTANCE) + 72,72), new Pose(72,72)));
@@ -1074,6 +1076,7 @@ class CentripetalTuner extends OpMode {
      */
     @Override
     public void loop() {
+        Drawing.drawDebug(follower);
         follower.update();
         draw();
         if (!follower.isBusy()) {

@@ -25,23 +25,18 @@ public class Constants {
             .forwardZeroPowerAcceleration(-24.947085808209017)
             .lateralZeroPowerAcceleration(-70.51911769287462)
             .translationalPIDFCoefficients(new com.pedropathing.control.PIDFCoefficients(
-                    0.3,
+                    0.85,
                     0,
-                    0.025,
+                    0.08308,
                     0.024
             ))
             .translationalPIDFSwitch(4)
             .drivePIDFCoefficients(new FilteredPIDFCoefficients(
-                    .6,
+                    .5,
                     0,
-                    0.025,
+                    0.045,
                     0.6,
-                    0.024))
-            .secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(
-                    0,
-                    0,
-                    0.005,
-                    0.0006
+                    0.0
             ))
             .headingPIDFCoefficients(new PIDFCoefficients(
                     3.0,
@@ -49,20 +44,6 @@ public class Constants {
                     0.067,
                     0.02455
             ))
-            .secondaryHeadingPIDFCoefficients(new PIDFCoefficients(
-                    0.0,
-                    0,
-                    0.1,
-                    0.0005
-            ))
-            .secondaryDrivePIDFCoefficients(new FilteredPIDFCoefficients(
-                    0.0,
-                    0,
-                    0.000005,
-                    0.6,
-                    0.01
-            ))
-            .drivePIDFSwitch(15)
             .centripetalScaling(0.0005)
             .useSecondaryDrivePIDF(false)
             .useSecondaryHeadingPIDF(false)
@@ -91,7 +72,7 @@ public class Constants {
                 .strafePodX(0.157480315);
 
 
-    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 2.15, 1);
+    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, .75, 1);
 
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)
