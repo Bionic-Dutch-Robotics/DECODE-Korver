@@ -82,7 +82,7 @@ public class ShooterManualTest extends OpMode {
             );
         }
 
-        //shooter.turret.loop(predictedPose.getX(), predictedPose.getY(), predictedPose.getHeading());
+        shooter.turret.loop(predictedPose.getX(), predictedPose.getY(), predictedPose.getHeading());
         shooter.flywheel.update(shooterPower);
 
         if (gamepad1.aWasPressed()) {
