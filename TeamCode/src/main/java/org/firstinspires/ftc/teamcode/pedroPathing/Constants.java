@@ -25,9 +25,9 @@ public class Constants {
             .forwardZeroPowerAcceleration(-24.947085808209017)
             .lateralZeroPowerAcceleration(-70.51911769287462)
             .translationalPIDFCoefficients(new com.pedropathing.control.PIDFCoefficients(
-                    0.85,
+                    0.0,
                     0,
-                    0.08308,
+                    0.0,
                     0.024
             ))
             .translationalPIDFSwitch(4)
@@ -48,7 +48,6 @@ public class Constants {
             .useSecondaryDrivePIDF(false)
             .useSecondaryHeadingPIDF(false)
             .useSecondaryTranslationalPIDF(false);
-
     public static MecanumConstants driveConstants = new MecanumConstants()
             .maxPower(1.0)
             .xVelocity(75.69462765671139)
@@ -72,7 +71,7 @@ public class Constants {
                 .strafePodX(0.157480315);
 
 
-    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, .75, 1);
+    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, .75  , 1);
 
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)

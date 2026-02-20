@@ -59,7 +59,6 @@ public class TranslationalPIDF extends OpMode {
     @Override
     public void loop() {
         follower.update();
-
         if (!follower.isBusy()) {
             if (forward) {
                 forward = false;

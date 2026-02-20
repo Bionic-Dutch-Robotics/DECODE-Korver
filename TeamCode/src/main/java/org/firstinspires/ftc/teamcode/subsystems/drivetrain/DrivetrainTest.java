@@ -25,7 +25,7 @@ public class DrivetrainTest extends OpMode {
     public void loop() {
         telemetry.update();
         telemetry.addData("X", dt.follower.getPose().getX());
-        telemetry.addData("Y", dt.follower.getPose().getX());
+        telemetry.addData("Y", dt.follower.getPose().getY());
         telemetry.addData("Heading", dt.follower.getHeading());
         dt.update();
         dt.teleOpDrive(
