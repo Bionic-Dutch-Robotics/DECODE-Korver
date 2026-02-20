@@ -17,28 +17,27 @@ public class Turret {
     public double turretRad, targetRad, fieldCentricTurretRad, turretPower;
     private Pose target;
     private final double fieldCentricTurretStartingPosition = Math.PI;
-    private final Pose fieldCentricPlacementOffset = new Pose(0, 0.25, 0);
     private AllianceColor alliance;
 
 
     public Turret(HardwareMap hwMap) {
         turret = hwMap.get(DcMotorEx.class, Settings.HardwareNames.Shooter.TURRET);
         turret.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        turretPid = new PIDFController(new PIDFCoefficients(0.025, 0, 0.0005, 0.065));
+        turretPid = new PIDFController(new PIDFCoefficients(0.01, 0, 0.00045,0.0));
 
         turret.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        turret.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        turret.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         target = new Pose();
     }
 
     public void setAlliance(AllianceColor alliance) {
-        target = alliance.isRed() ? new Pose(141, 120) : new Pose(0, 144);
+        target = alliance.isRed() ? new Pose(135, 135) : new Pose(0, 144);
     }
 
     public void loop(double x, double y, double heading) {
         // Current turret angle in radians
         turretRad = MathFunctions.scale(
-                MathFunctions.normalizeAngle(turret.getCurrentPosition() / 140.003629846 - fieldCentricTurretStartingPosition),
+                MathFunctions.normalizeAngle(turret.getCurrentPosition() / 26.834029052817 - fieldCentricTurretStartingPosition),
                 0, Math.PI*2,
                 -Math.PI,Math.PI
         );
@@ -51,18 +50,18 @@ public class Turret {
                 0, Math.PI*2,
                 -Math.PI, Math.PI
         );
-        targetRad = MathFunctions.clamp(targetRad, -Math.PI/2, Math.PI/2);
+        targetRad = MathFunctions.clamp(targetRad, Math.toRadians(-90), Math.toRadians(90));
 
         // Set PID in radians
-        turretPid.setTargetPosition(targetRad * 140.003629846);
-        turretPid.updatePosition(turretRad * 140.003629846);
+        turretPid.setTargetPosition(targetRad * 26.834029052817);
+        turretPid.updatePosition(turretRad * 26.834029052817);
 
         // Only apply power if we are not at limit OR moving away from limit
-        if ((turretRad <= -Math.toRadians(90) /* -Math.PI/2 */ && turretPid.run() < 0) ||
-                (turretRad >= Math.toRadians(90) && turretPid.run() > 0)) {
+        if ((turretRad <= Math.toRadians(-100) /* -Math.PI/2 */ && turretPid.run() < 0) ||
+                (turretRad >= Math.toRadians(100) && turretPid.run() > 0)) {
             turretPower = 0; // stop motor at hard limit
         } else {
-            turretPower = MathFunctions.clamp(turretPid.run(), -0.7, 0.7);
+            turretPower = MathFunctions.clamp(turretPid.run(), -0.5, 0.5);
         }
 
         turret.setPower(turretPower);
