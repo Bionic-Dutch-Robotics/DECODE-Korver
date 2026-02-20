@@ -169,8 +169,8 @@ public class FullPath_Test extends OpMode {
 
     @Override
     public void loop() {
-        Drawing.drawDebug(follower);
-        Drawing.drawPath(paths[index], new Style("0.5", "0.5", 5));
+        //Drawing.drawDebug(follower);
+        //Drawing.drawPath(paths[index], new Style("0.5", "0.5", 5));
         shooter.flywheel.update(100);
         follower.update();
         telemetry.addData("X", follower.getPose().getX());

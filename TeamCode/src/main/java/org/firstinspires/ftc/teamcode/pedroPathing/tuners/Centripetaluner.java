@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.pedroPathing.tuners;
 
+import com.bylazar.field.Style;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.Pose;
@@ -74,6 +75,8 @@ public class Centripetaluner extends OpMode {
     public void loop() {
         follower.update();
         Drawing.drawDebug(follower);
+        Drawing.drawPath(
+                follower.getCurrentPath());
         if (!follower.isBusy()) {
             if (forward) {
                 forward = false;

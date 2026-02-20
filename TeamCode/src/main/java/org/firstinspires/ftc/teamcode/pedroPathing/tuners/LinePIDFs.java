@@ -64,7 +64,7 @@ public class LinePIDFs extends OpMode {
     public void loop() {
 
         Drawing.drawDebug(follower);
-        Drawing.drawPath(forward? forwards : backwards, new Style("0.5", "0.5", 5));
+        Drawing.drawPath(forward? forwards : backwards);
 
         follower.update();
 

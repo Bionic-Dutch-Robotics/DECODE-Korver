@@ -40,7 +40,7 @@ public class Drawing {
      */
     public static void drawDebug(Follower follower) {
         if (follower.getCurrentPath() != null) {
-            drawPath(follower.getCurrentPath(), robotLook);
+            drawPath(follower.getCurrentPathChain(), robotLook);
             Pose closestPoint = follower.getPointFromPath(follower.getCurrentPath().getClosestPointTValue());
             drawRobot(new Pose(closestPoint.getX(), closestPoint.getY(), follower.getCurrentPath().getHeadingGoal(follower.getCurrentPath().getClosestPointTValue())), robotLook);
         }
@@ -89,9 +89,8 @@ public class Drawing {
      * This draws a Path with a specified look.
      *
      * @param path  the Path to draw
-     * @param style the parameters used to draw the Path with
      */
-    public static void drawPath(Path path, Style style) {
+    public static void drawPath(Path path) {
         double[][] points = path.getPanelsDrawingPoints();
 
         for (int i = 0; i < points[0].length; i++) {
@@ -102,7 +101,6 @@ public class Drawing {
             }
         }
 
-        panelsField.setStyle(style);
         panelsField.moveCursor(points[0][0], points[0][1]);
         panelsField.line(points[1][0], points[1][1]);
     }
@@ -116,7 +114,7 @@ public class Drawing {
      */
     public static void drawPath(PathChain pathChain, Style style) {
         for (int i = 0; i < pathChain.size(); i++) {
-            drawPath(pathChain.getPath(i), style);
+            drawPath(pathChain, style);
         }
     }
 

@@ -17,7 +17,8 @@ public class Drivetrain extends Subsystem {
     public FilteredPIDFController xPid, yPid;
     public PIDFController headingPid;
     public Follower follower = null;
-    private Pose gamepadReference, multipliers;
+    private Pose gamepadReference = null;
+    private Pose multipliers = new Pose();
     private AllianceColor alliance = null;
 
     /**
@@ -31,8 +32,8 @@ public class Drivetrain extends Subsystem {
                     alliance.isRed() ? Settings.Positions.Drivetrain.Red.FAR_AUTO_START : Settings.Positions.Drivetrain.Blue.FAR_AUTO_START
             );
         }
-        this.gamepadReference = gamepadReference;
-        this.multipliers = multipliers;
+        this.gamepadReference = gamepadReference.copy();
+        this.multipliers = multipliers.copy();
         this.alliance = alliance;
         //follower.teleOpLock(false, false, true);
     }
