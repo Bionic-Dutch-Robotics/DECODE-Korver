@@ -46,4 +46,8 @@ public class Vision {
         }
         return null;
     }
+
+    public void stop() {
+        visionPortal.close();
+    }
 }
