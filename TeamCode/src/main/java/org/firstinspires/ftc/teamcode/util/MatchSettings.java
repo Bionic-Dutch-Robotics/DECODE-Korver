@@ -33,6 +33,7 @@ public class MatchSettings {
     }
 
     public static void start() {
+        vision.stop();
         if (motif == null) {
             motif = new Artifact[] {Artifact.PURPLE, Artifact.GREEN, Artifact.PURPLE};
         }

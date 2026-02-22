@@ -13,11 +13,11 @@ public class Tilt {
     }
 
     public void setTilt(double tiltAngle) {
-        tiltAngle = MathFunctions.clamp(tiltAngle, 0.15, 1.0);
+        tiltAngle = MathFunctions.clamp(tiltAngle, 0.1, 1.0);
         this.tilt.setPosition(tiltAngle);
     }
 
     public double auto(double distance) {
-        return -0.0000121382*Math.pow(distance, 2) + 0.00269935*distance + 0.00144725+0.065;
+        return 1.55916 * Math.pow(0.986585, distance);
     }
 }

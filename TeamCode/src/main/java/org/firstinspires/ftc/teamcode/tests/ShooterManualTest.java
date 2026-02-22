@@ -29,7 +29,7 @@ public class ShooterManualTest extends OpMode {
     public double shooterPower;
     private Intake intake;
     private Transfer transfer;
-    private double tiltAngle = 1.0;
+    private double tiltAngle = 0.1;
     @Override
     public void init() {
         intake = new Intake(hardwareMap);
@@ -82,7 +82,7 @@ public class ShooterManualTest extends OpMode {
             );
         }
 
-        shooter.turret.loop(predictedPose.getX(), predictedPose.getY(), predictedPose.getHeading());
+        shooter.turret.loop(predictedPose);
         shooter.flywheel.update(shooterPower);
 
         if (gamepad1.aWasPressed()) {
@@ -106,6 +106,7 @@ public class ShooterManualTest extends OpMode {
         telemetry.addData("Shooter Velocity: ", shooter.flywheel.shooter2.getVelocity(AngleUnit.DEGREES));
         telemetry.addData("Shooter Target: ", shooterPower);
         telemetry.addData("Distance: ", shooter.flywheel.getDistance(follower.getPose().getX(), follower.getPose().getY(), new AllianceColor(AllianceColor.Selection.BLUE)));
+        telemetry.addData("tilt", tiltAngle);
         telemetry.update();
     }
 

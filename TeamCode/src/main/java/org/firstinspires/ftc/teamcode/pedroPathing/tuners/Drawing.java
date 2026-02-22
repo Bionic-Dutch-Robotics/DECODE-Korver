@@ -8,17 +8,13 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.math.Vector;
 import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
-import com.pedropathing.util.PoseHistory; /**
- * This is the Drawing class. It handles the drawing of stuff on Panels Dashboard, like the robot.
- *
- * @author Lazar - 19234
- * @version 1.1, 5/19/2025
- */
+import com.pedropathing.util.PoseHistory;
+
 public class Drawing {
     public static final double ROBOT_RADIUS = 9; // woah
     private static final FieldManager panelsField = PanelsField.INSTANCE.getField();
 
-    private static final Style robotLook = new Style(
+    public static final Style robotLook = new Style(
             "", "#3F51B5", 0.75
     );
     private static final Style historyLook = new Style(
@@ -40,13 +36,12 @@ public class Drawing {
      */
     public static void drawDebug(Follower follower) {
         if (follower.getCurrentPath() != null) {
-            drawPath(follower.getCurrentPathChain(), robotLook);
+            drawPath(follower.getCurrentPath(), robotLook);
             Pose closestPoint = follower.getPointFromPath(follower.getCurrentPath().getClosestPointTValue());
             drawRobot(new Pose(closestPoint.getX(), closestPoint.getY(), follower.getCurrentPath().getHeadingGoal(follower.getCurrentPath().getClosestPointTValue())), robotLook);
         }
         drawPoseHistory(follower.getPoseHistory(), historyLook);
         drawRobot(follower.getPose(), historyLook);
-
         sendPacket();
     }
 
@@ -89,8 +84,9 @@ public class Drawing {
      * This draws a Path with a specified look.
      *
      * @param path  the Path to draw
+     * @param style the parameters used to draw the Path with
      */
-    public static void drawPath(Path path) {
+    public static void drawPath(Path path, Style style) {
         double[][] points = path.getPanelsDrawingPoints();
 
         for (int i = 0; i < points[0].length; i++) {
@@ -101,6 +97,7 @@ public class Drawing {
             }
         }
 
+        panelsField.setStyle(style);
         panelsField.moveCursor(points[0][0], points[0][1]);
         panelsField.line(points[1][0], points[1][1]);
     }
@@ -114,7 +111,7 @@ public class Drawing {
      */
     public static void drawPath(PathChain pathChain, Style style) {
         for (int i = 0; i < pathChain.size(); i++) {
-            drawPath(pathChain, style);
+            drawPath(pathChain.getPath(i), style);
         }
     }
 

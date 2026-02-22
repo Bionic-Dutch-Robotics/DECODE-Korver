@@ -35,7 +35,7 @@ public class ControllerTest extends OpMode {
 
         controller1.bind(
                 () -> true,
-                () -> shooter.flywheel.getRegressionVelocity(shooter.flywheel.getDistance(dt.follower.getPose().getX(), dt.follower.getPose().getY(), alliance), alliance),
+                () -> shooter.flywheel.getRegressionVelocity(shooter.flywheel.getDistance(dt.follower.getPose().getX(), dt.follower.getPose().getY(), alliance)),
                 (vel) -> shooter.flywheel.update(vel)
         );
     }
