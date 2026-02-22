@@ -48,9 +48,7 @@ public class DrivetrainOnlyAuto extends OpMode {
                 dt.follower.getPose().getY()
         );
         shooter.turret.loop(
-                dt.follower.getPose().getX(),
-                dt.follower.getPose().getX(),
-                dt.follower.getHeading()
+                dt.follower.getPose()
         );
         dt.update();
 

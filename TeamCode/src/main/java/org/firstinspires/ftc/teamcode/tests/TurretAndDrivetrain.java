@@ -18,10 +18,10 @@ public class TurretAndDrivetrain extends OpMode {
     @Override
     public void init() {
         MatchSettings.initSelection(hardwareMap, new AllianceColor(AllianceColor.Selection.BLUE), gamepad1);
-        MatchSettings.start();
 
 
         dt.startTeleOpDrive();
+        shooter.turret.setAlliance(new AllianceColor(AllianceColor.Selection.BLUE));
     }
 
     @Override
@@ -46,17 +46,15 @@ public class TurretAndDrivetrain extends OpMode {
                     ).times(Settings.Positions.Transfer.RUN_TO_POS_TIME /*0.05*/)
             );
         }
-
-        /*shooter.turret.loop(
-                predictedPose.getX(),
-                predictedPose.getY(),
-                predictedPose.getHeading()
-        );*/
-        shooter.turret.loop(72,72,Math.PI);
+        shooter.turret.loop(
+                dt.getPose()
+        );
+        //shooter.turret.loop(new Pose(72,72,Math.PI));
 
         telemetry.update();
-        telemetry.addData("Turret", shooter.turret.turret.getCurrentPosition()/169.75);
+        telemetry.addData("Turret", shooter.turret.turret.getCurrentPosition()/140.003629846);
         telemetry.addData("TurretTarget", shooter.turret.targetRad);
+        telemetry.addData("Turret Raw", shooter.turret.turret.getCurrentPosition());
         telemetry.addData("X", dt.getPose().getX());
         telemetry.addData("Y", dt.getPose().getY());
         telemetry.addData("Heading", dt.getPose().getHeading());

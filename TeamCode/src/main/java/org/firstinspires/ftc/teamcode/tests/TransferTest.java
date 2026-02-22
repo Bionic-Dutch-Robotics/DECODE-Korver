@@ -310,7 +310,7 @@ public class TransferTest extends OpMode {
         updateDrivetrain();
 
         currentPose = dt.getPose();
-        turret.loop(currentPose.getX(), currentPose.getY(), dt.getPose().getHeading());
+        turret.loop(currentPose);
 
         telemetry.update();
         runServoRapidFire();

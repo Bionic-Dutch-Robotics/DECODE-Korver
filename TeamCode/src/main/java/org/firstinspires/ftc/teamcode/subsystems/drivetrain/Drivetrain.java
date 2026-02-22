@@ -94,6 +94,7 @@ public class Drivetrain extends Subsystem {
         );
     }
 
+
     public void lineToFarShoot(double currentHeading) {
         this.lineToPose(alliance.isRed() ? Settings.Positions.Drivetrain.Red.FAR_SHOOT : Settings.Positions.Drivetrain.Blue.FAR_SHOOT, currentHeading);
     }

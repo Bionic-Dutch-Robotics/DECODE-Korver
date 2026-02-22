@@ -40,7 +40,7 @@ public class Settings {
      */
     public static class Positions {
         public static class Transfer {
-            public static final double[] upPos = {0.20, 0.52, 0.5};
+            public static final double[] upPos = {0.19, 0.53, 0.59};
             public static final double[] downPos = {0.63, 0.93, 0.1051};
             public static final double RUN_TO_POS_TIME = 0.18;
         }
@@ -64,7 +64,7 @@ public class Settings {
             }
             public static class Red {
 
-                public static final Pose FAR_AUTO_START = new Pose(80, 8, Math.toRadians(90)); //Needs to be updated
+                public static final Pose FAR_AUTO_START = new Pose(87, 8.5, Math.toRadians(180)); //Needs to be updated
                 public static final Pose CLOSE_AUTO_START = new Pose(121.6233, 131.271, 2.2);   //Needs to be updated
                 public static final Pose FAR_SHOOT = new Pose(79, 15, Math.PI);
                 public static final Pose CLOSE_SHOOT = new Pose(72, 72, Math.PI);

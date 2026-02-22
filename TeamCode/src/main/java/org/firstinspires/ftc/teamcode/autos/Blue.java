@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.util.AllianceColor;
 import org.firstinspires.ftc.teamcode.util.Artifact;
 import org.firstinspires.ftc.teamcode.util.MatchSettings;
 
-@Autonomous(name="Blue", preselectTeleOp="Blue Far")
+@Autonomous(name="BlueAuto", preselectTeleOp="Blue Far")
 public class Blue extends OpMode {
     private final AllianceColor alliance = new AllianceColor(AllianceColor.Selection.BLUE);
 

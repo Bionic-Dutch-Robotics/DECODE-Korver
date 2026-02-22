@@ -10,7 +10,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
 import org.firstinspires.ftc.teamcode.util.Settings;
 
@@ -42,8 +41,7 @@ public class Flywheel {
     public void adaptive(double x, double y) {
         this.update(
                 this.getRegressionVelocity(
-                        this.getDistance(x, y, alliance),
-                        alliance
+                        this.getDistance(x, y, alliance)
                 )
         );
     }
@@ -79,7 +77,7 @@ public class Flywheel {
             return Math.sqrt(Math.pow(-x, 2) + Math.pow(144-y, 2));
         }
     }
-    public double getRegressionVelocity (double distance, AllianceColor alliance) {
-        return 1.84932*distance + 162.83105;
+    public double getRegressionVelocity (double distance) {
+        return 0.763399*distance + 154.01632;
     }
 }

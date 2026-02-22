@@ -35,7 +35,7 @@ public class Shooter {
             );
         }
         velocity.getClass();
-        turret.loop(predictedPose.getX(), predictedPose.getY(), predictedPose.getHeading());
+        turret.loop(predictedPose);
         flywheel.adaptive(predictedPose.getX(), predictedPose.getY());
         tilt.auto(flywheel.getDistance(predictedPose.getX(), predictedPose.getY(), alliance));
     }
