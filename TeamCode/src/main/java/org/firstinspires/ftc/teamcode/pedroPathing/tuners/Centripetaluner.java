@@ -76,7 +76,7 @@ public class Centripetaluner extends OpMode {
         follower.update();
         Drawing.drawDebug(follower);
         Drawing.drawPath(
-                follower.getCurrentPath());
+                follower.getCurrentPath(), Drawing.robotLook);
         if (!follower.isBusy()) {
             if (forward) {
                 forward = false;

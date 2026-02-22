@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.tests;
 
+import static org.firstinspires.ftc.teamcode.util.Hardware.dt;
 import static org.firstinspires.ftc.teamcode.util.Hardware.intake;
 import static org.firstinspires.ftc.teamcode.util.Hardware.shooter;
 import static org.firstinspires.ftc.teamcode.util.Hardware.transfer;
@@ -26,17 +27,13 @@ import org.firstinspires.ftc.teamcode.util.Settings;
 
 @Autonomous(name="Full Path Test")
 public class FullPath_Test extends OpMode {
-    private Follower follower;
     private PathChain[] paths;
     private int index = 0;
     private final Pose shootPos = new Pose(55, 15);
     @Override
     public void init() {
-        follower = Constants.createFollower(hardwareMap);
         MatchSettings.initSelection(hardwareMap, new AllianceColor(AllianceColor.Selection.BLUE), gamepad1);
         MatchSettings.start();
-        follower.setStartingPose(Settings.Positions.Drivetrain.Blue.FAR_AUTO_START);
-        transfer.start();
     }
 
     @Override
@@ -100,9 +97,9 @@ public class FullPath_Test extends OpMode {
         paths[0].getPath(0).setConstantHeadingInterpolation(Math.toRadians(180));
         paths[0].setCallbacks(
                 new ParametricCallback(
-                        0, 0.6, follower,
+                        0, 0.57, dt.follower,
                         () -> {
-                            follower.setMaxPower(0.55);
+                            dt.follower.setMaxPower(0.25);
                             intake.run();
                         }
                 )
@@ -110,14 +107,14 @@ public class FullPath_Test extends OpMode {
         paths[1].getPath(0).setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180));
         paths[1].setCallbacks(
                 new ParametricCallback(
-                        0, 0, follower,
+                        0, 0, dt.follower,
                         () -> {
-                            follower.setMaxPower(1);
-                            intake.stop();
+                            dt.follower.setMaxPower(1);
+                            //intake.stop();
                         }
                 ),
                 new ParametricCallback(
-                        0, 0.96, follower,
+                        0, 0.95, dt.follower,
                         ()-> {
                             transfer.fireSortedArtifacts();
                         }
@@ -126,9 +123,9 @@ public class FullPath_Test extends OpMode {
         paths[2].getPath(0).setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180));
         paths[2].setCallbacks(
                 new ParametricCallback(
-                        0, 0.6, follower,
+                        0, 0.6, dt.follower,
                         () -> {
-                            follower.setMaxPower(0.65);
+                            dt.follower.setMaxPower(0.65);
                             intake.run();
                         }
                 )
@@ -136,9 +133,9 @@ public class FullPath_Test extends OpMode {
         paths[3].getPath(0).setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180));
         paths[3].setCallbacks(
                 new ParametricCallback(
-                        0, 0, follower,
+                        0, 0, dt.follower,
                         () -> {
-                            follower.setMaxPower(1);
+                            dt.follower.setMaxPower(1);
                             intake.stop();
                         }
                 )
@@ -146,9 +143,9 @@ public class FullPath_Test extends OpMode {
         paths[4].getPath(0).setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180));
         paths[4].setCallbacks(
                 new ParametricCallback(
-                        0, 0.6, follower,
+                        0, 0.6, dt.follower,
                         () -> {
-                            follower.setMaxPower(0.65);
+                            dt.follower.setMaxPower(0.65);
                             intake.run();
                         }
                 )
@@ -156,15 +153,15 @@ public class FullPath_Test extends OpMode {
         paths[5].getPath(0).setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180));
         paths[5].setCallbacks(
                 new ParametricCallback(
-                        0, 0.0, follower,
+                        0, 0.0, dt.follower,
                         () -> {
-                            follower.setMaxPower(1);
+                            dt.follower.setMaxPower(1);
                             intake.stop();
                         }
                 )
         );
 
-        follower.followPath(paths[0]);
+        dt.follower.followPath(paths[0]);
     }
 
     @Override
@@ -172,16 +169,16 @@ public class FullPath_Test extends OpMode {
         //Drawing.drawDebug(follower);
         //Drawing.drawPath(paths[index], new Style("0.5", "0.5", 5));
         shooter.flywheel.update(100);
-        follower.update();
-        telemetry.addData("X", follower.getPose().getX());
-        telemetry.addData("Y", follower.getPose().getY());
-        telemetry.addData("Theta", follower.getHeading());
+        dt.follower.update();
+        telemetry.addData("X", dt.follower.getPose().getX());
+        telemetry.addData("Y", dt.follower.getPose().getY());
+        telemetry.addData("Theta", dt.follower.getHeading());
         telemetry.update();
 
         if (gamepad1.aWasPressed()) {
             if (index <= 5)  index += 1;
             else            index = 0;
-            follower.followPath(paths[index]);
+            dt.follower.followPath(paths[index]);
         }
     }
 }
