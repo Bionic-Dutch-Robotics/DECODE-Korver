@@ -18,7 +18,7 @@ public class MatchSettings {
     public static final AllianceColor BLUE = new AllianceColor(AllianceColor.Selection.BLUE);
     public static final AllianceColor RED = new AllianceColor(AllianceColor.Selection.RED);
     public static Artifact[] motif;
-    private static Vision vision;
+    public static Vision vision;
     public static AllianceColor allianceColor;
 
     public static void initSelection(HardwareMap hwMap, AllianceColor alliance, Gamepad gamepad1) {
@@ -33,7 +33,7 @@ public class MatchSettings {
     }
 
     public static void start() {
-        vision.stop();
+        //vision.stop();
         if (motif == null) {
             motif = new Artifact[] {Artifact.PURPLE, Artifact.GREEN, Artifact.PURPLE};
         }
@@ -56,5 +56,9 @@ public class MatchSettings {
     private static void manageTelemetry(Telemetry telemetry) {
         telemetry.addData("Motif: ", Arrays.toString(motif));
         telemetry.update();
+    }
+
+    public static Vision getVision() {
+        return vision;
     }
 }

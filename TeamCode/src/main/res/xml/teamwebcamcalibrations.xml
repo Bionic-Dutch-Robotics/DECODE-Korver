@@ -1,18 +1,21 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
-<Calibrations>
-        <Camera vid="1" pid="0x0">
+<!--<Calibrations>
+        <Camera vid="Logitech" pid="0x0">
             <Calibration
                 size="1920 1080"
-                focalLength="723.77634528f, 723.77634528f"
+                fx="723.77634528"
+                fy="723.77634528f"
                 cx="978.280160264"
                 cy="676.049417409"
                 k1="-0.00854007406869"
                 k2="-0.00128521125041"
-                principalPoint="-0.000586335988762f, -0.000224250179508"
-                k3="-0.00625003537792" skew="0"/> <!--name="F: 1 - S: 0x0"-->
+                k3="-0.00625003537792"
+                p1="-0.000586335988762"
+                p2="-0.000224250179508"
+                skew="0"/> <!-name="F: 1 - S: 0x0"->
 
-        </Camera>
-</Calibrations>
+        </Camera>-->
+<Calibrations>
     <!-- ======================================================================================= -->
 
     <!-- Microsoft Lifecam HD 3000 v1, Calibrated by PTC using unknown tooling -->
@@ -40,7 +43,7 @@
     <!-- ======================================================================================= -->
 
     <!-- Logitech HD Webcam C310, Calibrated by by Robert Atkinson, 2018.05.30 using 3DF Zephyr -->
-    <!-- <Camera vid="Logitech" pid="0x081B">
+    <Camera vid="Logitech" pid="0x081B">
         <Calibration
             size="640 480"
             focalLength="821.993f, 821.993f"
@@ -54,7 +57,7 @@
             principalPoint="319.759f, 188.917f"
             distortionCoefficients="-0.0258948, 1.06258, 0, 0, -3.40245, 0, 0, 0"
             />
-    </Camera> -->
+    </Camera>
 
     <!-- ======================================================================================= -->
 
@@ -118,3 +121,4 @@
     </Camera> -->
 
     <!-- ======================================================================================= -->
+</Calibrations>

@@ -4,9 +4,9 @@ import android.util.Size;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Supplier;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.util.Artifact;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
@@ -20,12 +20,13 @@ public class Vision {
 
     public Vision (HardwareMap hwMap) {
         aprilTag = AprilTagProcessor.easyCreateWithDefaults();
+        aprilTag.setPoseSolver(AprilTagProcessor.PoseSolver.APRILTAG_BUILTIN);
         visionPortal = new VisionPortal.Builder()
                 .addProcessor(aprilTag)
                 .setCamera(hwMap.get(CameraName.class, "webcam1"))
                 .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
                 .enableLiveView(true)
-                .setCameraResolution(new Size(1920, 1080))
+                .setCameraResolution(new Size(640, 480))
                 .build();}
 
     public Artifact[] findMotif(Telemetry tm) {
@@ -45,6 +46,21 @@ public class Vision {
             }
         }
         return null;
+    }
+
+    /**
+     * @return  Error from AprilTag in degrees. Positive is to the right, negative is to the left.
+     *  Will return null if tag is not found
+     */
+    public Supplier<?> findTurretErrorFromBlueGoal() {
+        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+
+        for (AprilTagDetection detection: currentDetections) {
+            if (detection.id == 20) {
+                return () -> detection.ftcPose.bearing;
+            }
+        }
+        return () -> null;
     }
 
     public void stop() {

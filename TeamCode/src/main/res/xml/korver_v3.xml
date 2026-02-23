@@ -44,8 +44,8 @@
 
         <LynxModule name="Control Hub" port="173">
 
-            <!-- The built-in IMU is always port="0" bus="0" -->
-            <LynxEmbeddedIMU name="imu" port="0" bus="0" />
+            <!-- The built-in IMU is always port="0" bus="0"
+            <LynxEmbeddedIMU name="imu" port="0" bus="0" />-->
 
             <!-- **********************************************************
 
@@ -104,14 +104,15 @@
             <goBILDA5203SeriesMotor name="[...]" port="[...]" />-->
 
             <goBILDA5202SeriesMotor name="turret" port="0"/>
+            <goBILDA5202SeriesMotor name="shooter2" port="1"/>
             <goBILDA5202SeriesMotor name="backLeft" port="2"/>
             <goBILDA5202SeriesMotor name="backRight" port="3"/>
             <Servo name="kicker3" port="1"/>
             <Servo name="kicker2" port="2"/>
             <Servo name="kicker1" port="3"/>
-            <RevColorSensorV3 name="color2" port="1" bus="1"/>
-            <RevColorSensorV3 name="color3" port="2" bus="2"/>
-            <GoBILDAPinpoint name="pinpoint" port="3" bus="3"/>
+            <RevColorSensorV3 name="color2" port="0" bus="1"/>
+            <RevColorSensorV3 name="color3" port="0" bus="2"/>
+            <goBILDAPinpoint name="pinpoint" port="0" bus="3"/>
 
 
             <!--
@@ -219,5 +220,6 @@
         serialNumber="01.00.00">
 
     </LynxUsbDevice>-->
+    <Webcam name="webcam1" serialNumber="VendorProduct:vendor=0x046d|product=0x0825|connection=" />
 
 </Robot>

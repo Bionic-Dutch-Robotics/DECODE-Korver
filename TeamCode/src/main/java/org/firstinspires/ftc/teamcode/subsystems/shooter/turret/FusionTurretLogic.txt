@@ -1,0 +1,8 @@
+Turret knows its current position (WRONG)
+Turret knows where the target angle
+
+Vision knows error from AprilTag * -1
+
+AprilTagError * -1 + targetPosition = fieldCentricTurretPos
+
+plug back into turret

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.tests;
 
 import static android.os.SystemClock.sleep;
+import static org.firstinspires.ftc.teamcode.util.Hardware.transfer;
 import static org.firstinspires.ftc.teamcode.util.MatchSettings.motif;
 
 import com.pedropathing.geometry.Pose;
@@ -12,15 +13,12 @@ import org.firstinspires.ftc.teamcode.subsystems.transfer.Transfer;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
 import org.firstinspires.ftc.teamcode.util.MatchSettings;
 
-@Disabled
 @TeleOp(name="Match Settings / Vision Test")
 public class MatchSettingsTest extends OpMode {
-    private Transfer transfer;
 
     @Override
     public void init() {
         MatchSettings.initSelection(hardwareMap, new AllianceColor(AllianceColor.Selection.BLUE), gamepad1);
-        transfer = new Transfer(hardwareMap);
     }
 
     @Override
@@ -31,7 +29,7 @@ public class MatchSettingsTest extends OpMode {
 
     @Override
     public void start() {
-        transfer.setMotif(motif);
+        MatchSettings.start();
     }
 
     @Override
@@ -44,6 +42,7 @@ public class MatchSettingsTest extends OpMode {
         }
 
         telemetry.addData("Alliance", MatchSettings.allianceColor.getSelection().name());
+        telemetry.addData("Bearing", MatchSettings.vision.findTurretErrorFromBlueGoal().get());
 
         if (gamepad1.aWasPressed()) {
             transfer.fireSortedArtifacts();
