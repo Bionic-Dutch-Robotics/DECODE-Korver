@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
+import org.firstinspires.ftc.teamcode.util.MatchSettings;
 import org.firstinspires.ftc.teamcode.util.Settings;
 
 public class Turret {
@@ -17,6 +18,7 @@ public class Turret {
     public double turretRad, targetRad, fieldCentricTurretRad, turretPower;
     private Pose target;
     private final double fieldCentricTurretStartingPosition = Math.PI;
+    private double liveOffset = 0.0;
 
 
     public Turret(HardwareMap hwMap) {
@@ -75,11 +77,12 @@ public class Turret {
     }
 
     public double getTurretRadians() {
-        turretRad = MathFunctions.scale(
-                MathFunctions.normalizeAngle(turret.getCurrentPosition() / 140.003629846 - fieldCentricTurretStartingPosition),
+        turretRad = turret.getCurrentPosition() / 140.003629846
+                - fieldCentricTurretStartingPosition - liveOffset;
+
+        turretRad = MathFunctions.scale(MathFunctions.normalizeAngle(turretRad),
                 0, Math.PI*2,
-                -Math.PI,Math.PI
-        );
+                -Math.PI, Math.PI);
 
         return turretRad;
     }
@@ -90,5 +93,8 @@ public class Turret {
 
     public double convertTicksToRadians(double ticks) {
         return ticks/140.003629846;
+    }
+    public void setLiveOffset(double offset) {
+        this.liveOffset += offset;
     }
 }

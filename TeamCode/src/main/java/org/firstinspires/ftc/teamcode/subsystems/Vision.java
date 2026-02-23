@@ -26,7 +26,8 @@ public class Vision {
                 .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
                 .enableLiveView(true)
                 .setCameraResolution(new Size(640, 480))
-                .build();}
+                .build();
+    }
 
     public Artifact[] findMotif(Telemetry tm) {
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
