@@ -42,7 +42,7 @@ public class MatchSettingsTest extends OpMode {
         }
 
         telemetry.addData("Alliance", MatchSettings.allianceColor.getSelection().name());
-        telemetry.addData("Bearing", MatchSettings.vision.findTurretErrorFromBlueGoal().get());
+        telemetry.addLine(String.format("%o", MatchSettings.findError().longValue()));
 
         if (gamepad1.aWasPressed()) {
             transfer.fireSortedArtifacts();

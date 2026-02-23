@@ -58,7 +58,7 @@ public class MatchSettings {
         telemetry.update();
     }
 
-    public static Vision getVision() {
-        return vision;
+    public static Double findError() {
+        return (Double) vision.findTurretErrorFromBlueGoal().get();
     }
 }

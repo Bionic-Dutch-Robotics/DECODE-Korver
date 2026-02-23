@@ -20,7 +20,6 @@ public class Vision {
 
     public Vision (HardwareMap hwMap) {
         aprilTag = AprilTagProcessor.easyCreateWithDefaults();
-        aprilTag.setPoseSolver(AprilTagProcessor.PoseSolver.APRILTAG_BUILTIN);
         visionPortal = new VisionPortal.Builder()
                 .addProcessor(aprilTag)
                 .setCamera(hwMap.get(CameraName.class, "webcam1"))
@@ -52,16 +51,20 @@ public class Vision {
      * @return  Error from AprilTag in degrees. Positive is to the right, negative is to the left.
      *  Will return null if tag is not found
      */
-    public Supplier<?> findTurretErrorFromBlueGoal() {
+    public Supplier<Double> findTurretErrorFromBlueGoal() {
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
 
-        for (AprilTagDetection detection: currentDetections) {
-            if (detection.id == 20) {
-                return () -> detection.ftcPose.bearing;
+        if (currentDetections != null) {
+            for (AprilTagDetection detection : currentDetections) {
+                if (detection.metadata != null && detection.id == 20) {
+                    //return () -> (double) detection.ftcPose.bearing;
+                    return () -> detection.robotPose.getOrientation().getYaw();
+                }
             }
         }
-        return () -> null;
+        return () -> (double) -99999;
     }
+
 
     public void stop() {
         visionPortal.close();
