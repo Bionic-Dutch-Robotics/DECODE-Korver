@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
@@ -22,6 +23,7 @@ public class Intake extends Subsystem {
         spinner = hardwareMap.get(DcMotorEx.class, HardwareNames.Intake.INTAKE);
         spinner.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
         spinner.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        spinner.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     @Override

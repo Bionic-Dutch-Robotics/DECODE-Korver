@@ -215,11 +215,7 @@
             <RevColorSensorV3 name="color1" port="3" bus="3"/>
         </LynxModule>
     </LynxUsbDevice>
-    <!--<LynxUsbDevice
-        name="webcam1"
-        serialNumber="01.00.00">
-
-    </LynxUsbDevice>-->
+    <Webcam name="webcam2" serialNumber="01.00.00"/>
     <Webcam name="webcam1" serialNumber="VendorProduct:vendor=0x046d|product=0x0825|connection=" />
 
 </Robot>

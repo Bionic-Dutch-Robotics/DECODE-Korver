@@ -41,7 +41,7 @@ public class Settings {
     public static class Positions {
         public static class Transfer {
             public static final double[] upPos = {0.19, 0.53, 0.59};
-            public static final double[] downPos = {0.63, 0.93, 0.1051};
+            public static final double[] downPos = {0.63, 0.95, 0.1051};
             public static final double RUN_TO_POS_TIME = 0.18;
         }
         public static class Shooter {
@@ -73,7 +73,7 @@ public class Settings {
         }
 
         public static class Intake {
-            public static final double INTAKE_SPEED = 0.65;
+            public static final double INTAKE_SPEED = 1.0;
             public static final double EJECT_SPEED = -0.65;
         }
     }

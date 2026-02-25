@@ -59,6 +59,6 @@ public class MatchSettings {
     }
 
     public static Double findError() {
-        return (Double) vision.findTurretErrorFromBlueGoal().get();
+        return vision.findTurretErrorFromBlueGoal();
     }
 }

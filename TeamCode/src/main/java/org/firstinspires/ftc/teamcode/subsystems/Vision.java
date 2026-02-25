@@ -4,7 +4,7 @@ import android.util.Size;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.Supplier;
+import org.firstinspires.ftc.robotcontroller.external.samples.ConceptAprilTagMultiPortal;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.teamcode.util.Artifact;
@@ -15,22 +15,33 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import java.util.List;
 
 public class Vision {
-    private AprilTagProcessor aprilTag;
-    private VisionPortal visionPortal;
+    private AprilTagProcessor aprilTag1;
+    private AprilTagProcessor aprilTag2;
+    private VisionPortal visionPortal1, visionPortal2;
 
     public Vision (HardwareMap hwMap) {
-        aprilTag = AprilTagProcessor.easyCreateWithDefaults();
-        visionPortal = new VisionPortal.Builder()
-                .addProcessor(aprilTag)
+        aprilTag1 = AprilTagProcessor.easyCreateWithDefaults();
+        aprilTag2 = AprilTagProcessor.easyCreateWithDefaults();
+        int[] viewIds = VisionPortal.makeMultiPortalView(2, VisionPortal.MultiPortalLayout.VERTICAL);
+        visionPortal1 = new VisionPortal.Builder()
+                .addProcessor(aprilTag1)
                 .setCamera(hwMap.get(CameraName.class, "webcam1"))
                 .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
-                .enableLiveView(true)
+                .setLiveViewContainerId(viewIds[0])
+                .setCameraResolution(new Size(640, 480))
+                .build();
+
+        visionPortal1 = new VisionPortal.Builder()
+                .addProcessor(aprilTag2)
+                .setCamera(hwMap.get(CameraName.class, "webcam2"))
+                .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
+                .setLiveViewContainerId(viewIds[1])
                 .setCameraResolution(new Size(640, 480))
                 .build();
     }
 
     public Artifact[] findMotif(Telemetry tm) {
-        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+        List<AprilTagDetection> currentDetections = aprilTag2.getDetections();
         for (AprilTagDetection detection : currentDetections) {
             if (detection.metadata != null) {
                 tm.addData("Tag ID: ", detection.id);
@@ -52,22 +63,22 @@ public class Vision {
      * @return  Error from AprilTag in degrees. Positive is to the right, negative is to the left.
      *  Will return null if tag is not found
      */
-    public Supplier<Double> findTurretErrorFromBlueGoal() {
-        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+    public Double findTurretErrorFromBlueGoal() {
+        List<AprilTagDetection> currentDetections = aprilTag1.getDetections();
 
         if (currentDetections != null) {
             for (AprilTagDetection detection : currentDetections) {
                 if (detection.metadata != null && detection.id == 20) {
                     //return () -> (double) detection.ftcPose.bearing;
-                    return () -> detection.robotPose.getOrientation().getYaw();
+                    return -detection.ftcPose.yaw;
                 }
             }
         }
-        return () -> (double) -99999;
+        return 0.0;
     }
 
 
     public void stop() {
-        visionPortal.close();
+        visionPortal1.close();
     }
 }

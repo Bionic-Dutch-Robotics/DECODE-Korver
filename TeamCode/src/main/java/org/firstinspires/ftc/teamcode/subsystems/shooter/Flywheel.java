@@ -19,6 +19,7 @@ public class Flywheel {
     public final double redPowerCoefficient = 1.1;
     public final double bluePowerCoefficient = 1.0;
     private AllianceColor alliance;
+    private double voltageComp = 1.0;
 
     public Flywheel(HardwareMap hwMap, AllianceColor alliance) {
         shooter = hwMap.get(DcMotorEx.class, Settings.HardwareNames.Shooter.SHOOTER);
@@ -43,7 +44,12 @@ public class Flywheel {
                 this.getRegressionVelocity(
                         this.getDistance(x, y, alliance)
                 )
+                * voltageComp
         );
+    }
+
+    public void setVoltageComp (double voltageComp) {
+        this.voltageComp = voltageComp;
     }
 
     public void stop() {

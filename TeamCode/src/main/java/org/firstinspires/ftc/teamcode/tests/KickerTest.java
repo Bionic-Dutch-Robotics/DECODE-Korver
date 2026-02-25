@@ -1,23 +1,29 @@
 package org.firstinspires.ftc.teamcode.tests;
 
+import static org.firstinspires.ftc.teamcode.util.Hardware.dt;
+import static org.firstinspires.ftc.teamcode.util.Hardware.shooter;
+import static org.firstinspires.ftc.teamcode.util.Hardware.transfer;
+
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.subsystems.transfer.Transfer;
+import org.firstinspires.ftc.teamcode.util.AllianceColor;
 import org.firstinspires.ftc.teamcode.util.Artifact;
+import org.firstinspires.ftc.teamcode.util.MatchSettings;
 
 @TeleOp(name="Kicker Test")
 public class KickerTest extends OpMode {
-    private Transfer transfer;
     @Override
     public void init() {
-        transfer = new Transfer(hardwareMap);
+        MatchSettings.initSelection(hardwareMap, new AllianceColor(AllianceColor.Selection.BLUE), gamepad1);
         transfer.setMotif(new Artifact[]{Artifact.PURPLE, Artifact.GREEN, Artifact.PURPLE});
         transfer.kickAllServosDown();
     }
 
     @Override
     public void loop() {
+        shooter.flywheel.update(150);
         telemetry.update();
         if (gamepad1.aWasPressed()) {
             transfer.fireSortedArtifacts();

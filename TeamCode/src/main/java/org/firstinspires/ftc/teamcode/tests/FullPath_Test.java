@@ -29,6 +29,7 @@ import org.firstinspires.ftc.teamcode.util.Settings;
 public class FullPath_Test extends OpMode {
     private PathChain[] paths;
     private int index = 0;
+    private boolean hasShot1 = false;
     private final Pose shootPos = new Pose(55, 15);
     @Override
     public void init() {
