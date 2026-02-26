@@ -44,8 +44,8 @@
 
         <LynxModule name="Control Hub" port="173">
 
-            <!-- The built-in IMU is always port="0" bus="0"
-            <LynxEmbeddedIMU name="imu" port="0" bus="0" />-->
+            <!-- The built-in IMU is always port="0" bus="0"-->
+            <LynxEmbeddedIMU name="imu" port="0" bus="0" />
 
             <!-- **********************************************************
 
