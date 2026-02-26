@@ -27,16 +27,16 @@ public class Vision {
                 .addProcessor(aprilTag1)
                 .setCamera(hwMap.get(CameraName.class, "webcam1"))
                 .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
-                .setLiveViewContainerId(viewIds[0])
+                .setLiveViewContainerId(0)
                 .setCameraResolution(new Size(640, 480))
                 .build();
 
-        visionPortal1 = new VisionPortal.Builder()
+        visionPortal2 = new VisionPortal.Builder()
                 .addProcessor(aprilTag2)
                 .setCamera(hwMap.get(CameraName.class, "webcam2"))
                 .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
-                .setLiveViewContainerId(viewIds[1])
-                .setCameraResolution(new Size(640, 480))
+                .setLiveViewContainerId(0)
+                .setCameraResolution(new Size(1920, 1080))
                 .build();
     }
 
@@ -64,7 +64,7 @@ public class Vision {
      *  Will return null if tag is not found
      */
     public Double findTurretErrorFromBlueGoal() {
-        List<AprilTagDetection> currentDetections = aprilTag1.getDetections();
+        List<AprilTagDetection> currentDetections = aprilTag1.getFreshDetections();
 
         if (currentDetections != null) {
             for (AprilTagDetection detection : currentDetections) {
@@ -80,5 +80,6 @@ public class Vision {
 
     public void stop() {
         visionPortal1.close();
+        visionPortal2.close();
     }
 }
