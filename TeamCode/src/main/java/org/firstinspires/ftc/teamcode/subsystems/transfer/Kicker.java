@@ -63,6 +63,29 @@ public class Kicker {
             }
         }
     }
+
+    public void runSlowSequence (Integer[] order)  {
+        this.order = order;
+        this.cancelSequence();
+        this.future = this.executor.submit(this::slowFireSequence);
+    }
+    public void slowFireSequence() {
+        for (int i=0; i < order.length; i++) {
+            servoTimer.reset();
+            kickServoUp(order[i]);
+            try {
+                Thread.sleep((long) (RUN_TO_POS_TIME * 1.5));
+            } catch (InterruptedException ignored) {
+            }
+
+            servoTimer.reset();
+            kickServoDown(order[i]);
+            try {
+                Thread.sleep((long) (RUN_TO_POS_TIME * 1.5));
+            } catch (InterruptedException ignored) {
+            }
+        }
+    }
     public void toggleRunSequence() {
 
     }

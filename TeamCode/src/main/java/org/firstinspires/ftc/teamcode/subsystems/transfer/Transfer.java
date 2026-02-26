@@ -23,6 +23,10 @@ public class Transfer {
         //kicker.createFireSequence();
     }
 
+    public void runSlow() {
+        kicker.runSlowSequence(sorter.getOrder());
+    }
+
     public void cancelFire() {
         kicker.cancelSequence();
     }

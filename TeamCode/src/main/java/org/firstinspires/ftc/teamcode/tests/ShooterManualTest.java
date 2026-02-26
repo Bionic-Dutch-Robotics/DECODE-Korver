@@ -27,7 +27,6 @@ public class ShooterManualTest extends OpMode {
     public void init() {
         MatchSettings.initSelection(hardwareMap, new AllianceColor(AllianceColor.Selection.BLUE), gamepad1);
         shooterPower = 50;
-        goToHeading = false;
     }
 
     @Override
@@ -44,10 +43,10 @@ public class ShooterManualTest extends OpMode {
     public void loop() {
         shooter.tilt.setTilt(tiltAngle);
         if (gamepad1.leftBumperWasPressed()) {
-            tiltAngle += 0.05;
+            tiltAngle += 0.025;
         }
         else if (gamepad1.rightBumperWasPressed()) {
-            tiltAngle -= 0.05;
+            tiltAngle -= 0.025;
         }
 
         if (gamepad1.dpadLeftWasPressed()) {
@@ -95,6 +94,13 @@ public class ShooterManualTest extends OpMode {
 
         if (gamepad1.dpadDownWasPressed()) {
             intake.toggle();
+        }
+
+        if (gamepad1.leftStickButtonWasPressed()) {
+            shooter.flywheel.setVoltageComp(shooter.flywheel.getVoltageComp() + 0.05);
+        }
+        else if (gamepad1.rightStickButtonWasPressed()) {
+            shooter.flywheel.setVoltageComp(shooter.flywheel.getVoltageComp() - 0.05);
         }
         intake.run();
         telemetry.addData("Shooter Velocity: ", shooter.flywheel.shooter.getVelocity(AngleUnit.DEGREES));

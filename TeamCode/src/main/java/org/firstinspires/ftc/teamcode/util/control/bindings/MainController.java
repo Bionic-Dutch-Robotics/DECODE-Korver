@@ -13,46 +13,40 @@ import org.firstinspires.ftc.teamcode.util.control.Controller;
 public class MainController extends Controller {
     public static Command[] controls;
     private static boolean runToPos = false;
+    private final Pose resetCornerPose = new Pose(144-17.75, 144-17.75);
 
     public MainController(Drivetrain dt, Intake intake, Gamepad gamepad) {
         controls = new Command[] {
                 new Command(
-                        () -> gamepad.yWasPressed() && !runToPos,
-                        () -> {
-                            dt.lineToCloseShoot(dt.follower.getHeading());
-                                    runToPos = true;
-                        }
-                ),
-                new Command(
-                        () -> gamepad.yWasPressed() && runToPos,
-                        () -> {
-                            dt.follower.breakFollowing();
-                            dt.follower.startTeleOpDrive(true);
-                        }
-
-                ),
-                new Command(
-                        () -> gamepad.xWasPressed() && !runToPos,
-                        () -> {dt.lineToFarShoot(dt.follower.getHeading());
-                                    runToPos = true;
-                        }
-                ),
-                new Command(
-                        () -> gamepad.xWasPressed() && runToPos,
-                        () -> {
-                            dt.follower.breakFollowing();
-                            dt.follower.startTeleOpDrive(true);
-                        }
-
-                ),
-                new Command(
-                        gamepad::aWasPressed,
+                        gamepad::leftBumperWasPressed,
                         intake::toggle
                 ),
                 new Command(
-                        gamepad::bWasPressed,
+                        gamepad::rightBumperWasPressed,
                         intake::eject
                 ),
+                new Command(
+                        gamepad::yWasPressed,
+                        () -> dt.follower.setPose(new Pose(144-17.75, 144-17.75, Math.PI))
+                ),
+                new Command(
+                        gamepad::aWasPressed,
+                        () -> {
+                            if (!runToPos) {
+                                dt.lineToCloseShoot(dt.follower.getHeading());
+                                runToPos = true;
+                            }
+                            else if (runToPos) {
+                                runToPos = false;
+                                dt.follower.breakFollowing();
+                                dt.follower.startTeleopDrive();
+                            }
+                        }
+                ),
+                new Command(
+                        gamepad::aWasPressed,
+                        () ->{}
+                )
         };
         this.setController(controls);
     }
