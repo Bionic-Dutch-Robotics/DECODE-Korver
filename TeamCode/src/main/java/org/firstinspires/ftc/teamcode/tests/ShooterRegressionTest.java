@@ -6,32 +6,25 @@ import static org.firstinspires.ftc.teamcode.util.Hardware.shooter;
 import static org.firstinspires.ftc.teamcode.util.Hardware.transfer;
 
 import com.bylazar.configurables.annotations.Configurable;
-import com.pedropathing.control.PIDFController;
-import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.pedroPathing.tuners.Drawing;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
 import org.firstinspires.ftc.teamcode.util.MatchSettings;
 
-import java.util.function.Supplier;
-
 @Configurable
 @TeleOp(name="Shooter")
 public class ShooterRegressionTest extends OpMode {
-    public static com.pedropathing.control.PIDFController headingPid;
-    public static double shooterTarget;
+    public static double comp;
+
     public boolean runIntake, goToHeading;
-    public Supplier<PathChain> toGoal;
 
     @Override
     public void init() {
         MatchSettings.initSelection(hardwareMap, new AllianceColor(AllianceColor.Selection.BLUE), gamepad1);
         MatchSettings.start();
         dt.startTeleOpDrive();
-        headingPid = new PIDFController(Constants.followerConstants.getCoefficientsHeadingPIDF());
         runIntake = false;
         goToHeading = false;
     }
@@ -60,6 +53,24 @@ public class ShooterRegressionTest extends OpMode {
             }
         }
 
+        if (gamepad1.leftBumperWasPressed()) {
+            shooter.turret.setLiveOffset(-0.05);
+        }
+        else if (gamepad1.rightBumperWasPressed()) {
+            shooter.turret.setLiveOffset(0.05);
+        }
+
+        if (gamepad1.leftTriggerWasPressed()) {
+            shooter.flywheel.setVoltageComp(shooter.flywheel.getVoltageComp() + 0.02);
+        }
+        else if (gamepad1.rightTriggerWasPressed()) {
+            shooter.flywheel.setVoltageComp(shooter.flywheel.getVoltageComp() - 0.02);
+        }
+
+        if (gamepad1.bWasPressed()) {
+            intake.toggle();
+        }
+
 
         dt.update();
         if (!goToHeading) {
@@ -74,16 +85,14 @@ public class ShooterRegressionTest extends OpMode {
         shooter.tilt.setTilt(shooter.tilt.auto(
                 shooter.flywheel.getDistance(
                         dt.getPose().getX(),
-                        dt.getPose().getY(),
-                        new AllianceColor(AllianceColor.Selection.BLUE)
+                        dt.getPose().getY()
                 )
         ));
 
         shooter.flywheel.update(shooter.flywheel.getRegressionVelocity(
                 shooter.flywheel.getDistance(
                         dt.getPose().getX(),
-                        dt.getPose().getY(),
-                        new AllianceColor(AllianceColor.Selection.BLUE)
+                        dt.getPose().getY()
                 )
         ));
 
@@ -98,8 +107,7 @@ public class ShooterRegressionTest extends OpMode {
         telemetry.addData("Target Velocity: ", shooter.flywheel.getRegressionVelocity(
                 shooter.flywheel.getDistance(
                         dt.getPose().getX(),
-                        dt.getPose().getY(),
-                        new AllianceColor(AllianceColor.Selection.BLUE)
+                        dt.getPose().getY()
                 )
         ));
         telemetry.addData("Turret Target", shooter.turret.getTargetRadians(dt.getPose()));

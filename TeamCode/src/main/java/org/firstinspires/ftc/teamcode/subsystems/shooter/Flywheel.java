@@ -42,7 +42,7 @@ public class Flywheel {
     public void adaptive(double x, double y) {
         this.update(
                 this.getRegressionVelocity(
-                        this.getDistance(x, y, alliance)
+                        this.getDistance(x, y)
                 )
                 * voltageComp
         );
@@ -50,6 +50,9 @@ public class Flywheel {
 
     public void setVoltageComp (double voltageComp) {
         this.voltageComp = voltageComp;
+    }
+    public double getVoltageComp() {
+        return voltageComp;
     }
 
     public void stop() {
@@ -75,15 +78,15 @@ public class Flywheel {
     public double getTarget() {
         return shooterPidf.getTargetPosition();
     }
-    public double getDistance(double x, double y, AllianceColor alliance) {
+    public double getDistance(double x, double y) {
         if (alliance.isRed()) {
-            return Math.sqrt(Math.pow(144-x, 2) + Math.pow(144-y, 2));
+            return Math.sqrt(Math.pow(135-x, 2) + Math.pow(135-y, 2));
         }
         else {
-            return Math.sqrt(Math.pow(-x, 2) + Math.pow(144-y, 2));
+            return Math.sqrt(Math.pow(5-x, 2) + Math.pow(135-y, 2));
         }
     }
     public double getRegressionVelocity (double distance) {
-        return 0.763399*distance + 154.01632;
+        return 0.809636*distance + 178.98652;
     }
 }

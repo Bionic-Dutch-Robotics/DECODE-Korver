@@ -34,11 +34,7 @@ public class FullPath_Test extends OpMode {
     @Override
     public void init() {
         MatchSettings.initSelection(hardwareMap, new AllianceColor(AllianceColor.Selection.BLUE), gamepad1);
-        MatchSettings.start();
-    }
 
-    @Override
-    public void start() {
         paths = new PathChain[]{
                 new PathChain(
                         new Path(new BezierCurve(
@@ -51,48 +47,48 @@ public class FullPath_Test extends OpMode {
                         ))
                 ),
                 new PathChain(
-                    new Path(
-                            new BezierCurve(
-                                    new Pose(16.000, 63.700),
-                                    new Pose(50.800, 63.900),
-                                    shootPos
-                            )
-                    )
-                ),
-                new PathChain(
-                    new Path(
-                            new BezierCurve(
-                                    shootPos,
-                                    new Pose(76.0, 89.50),
-                                    new Pose(18.600, 83.600)
-                            )
-                    )
-                ),
-                new PathChain(
-                    new Path(
-                        new BezierCurve(
-                                new Pose(18.600, 83.600),
-                                new Pose(44.200, 68.500),
-                                shootPos
+                        new Path(
+                                new BezierCurve(
+                                        new Pose(16.000, 63.700),
+                                        new Pose(50.800, 63.900),
+                                        shootPos
+                                )
                         )
-                    )
                 ),
                 new PathChain(
-                    new Path(
-                            new BezierCurve(
-                                    shootPos,
-                                    new Pose(64.100, 39.00),
-                                    new Pose(17.600, 35.300)
-                            )
-                    )
+                        new Path(
+                                new BezierCurve(
+                                        shootPos,
+                                        new Pose(76.0, 89.50),
+                                        new Pose(18.600, 83.600)
+                                )
+                        )
                 ),
                 new PathChain(
-                    new Path(
-                            new BezierLine(
-                                    new Pose(17.600, 35.300),
-                                    shootPos
-                            )
-                    )
+                        new Path(
+                                new BezierCurve(
+                                        new Pose(18.600, 83.600),
+                                        new Pose(44.200, 68.500),
+                                        shootPos
+                                )
+                        )
+                ),
+                new PathChain(
+                        new Path(
+                                new BezierCurve(
+                                        shootPos,
+                                        new Pose(64.100, 39.00),
+                                        new Pose(17.600, 35.300)
+                                )
+                        )
+                ),
+                new PathChain(
+                        new Path(
+                                new BezierLine(
+                                        new Pose(17.600, 35.300),
+                                        shootPos
+                                )
+                        )
                 )
         };
         paths[0].getPath(0).setConstantHeadingInterpolation(Math.toRadians(180));
@@ -117,7 +113,11 @@ public class FullPath_Test extends OpMode {
                 new ParametricCallback(
                         0, 0.95, dt.follower,
                         ()-> {
-                            transfer.fireSortedArtifacts();
+                            if (!hasShot1) {
+                                transfer.fireSortedArtifacts();
+                                hasShot1=true;
+                            }
+
                         }
                 )
         );
@@ -161,6 +161,18 @@ public class FullPath_Test extends OpMode {
                         }
                 )
         );
+    }
+    @Override
+    public void init_loop() {
+        MatchSettings.refreshMotif(telemetry);
+        telemetry.update();
+
+
+    }
+
+    @Override
+    public void start() {
+        MatchSettings.start();
 
         dt.follower.followPath(paths[0]);
     }
@@ -177,7 +189,7 @@ public class FullPath_Test extends OpMode {
         telemetry.update();
 
         if (gamepad1.aWasPressed()) {
-            if (index <= 5)  index += 1;
+            if (index < 5)  index += 1;
             else            index = 0;
             dt.follower.followPath(paths[index]);
         }

@@ -11,7 +11,6 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
-import org.firstinspires.ftc.teamcode.util.Hardware;
 import org.firstinspires.ftc.teamcode.util.MatchSettings;
 import org.firstinspires.ftc.teamcode.util.control.Controller;
 
@@ -67,7 +66,11 @@ public class BlueFar extends OpMode {
 
         chetan.bind(
                 gamepad1::leftTriggerWasPressed,
-                () -> shooter.turret.setLiveOffset(turretCorrection)
+                () -> shooter.turret.setLiveOffset(0.05)
+        );
+        chetan.bind(
+                gamepad1::rightTriggerWasPressed,
+                () -> shooter.turret.setLiveOffset(-0.05)
         );
     }
 
@@ -93,13 +96,12 @@ public class BlueFar extends OpMode {
             transfer.fireSortedArtifacts();
         }*/
         dt.update();
-        turretCorrection = MatchSettings.findError();
+        //turretCorrection = MatchSettings.findError();
         shooter.turret.loop(dt.getPose()
         );
         shooter.tilt.setTilt(shooter.tilt.auto(shooter.flywheel.getDistance(
                 dt.getPose().getX(),
-                dt.getPose().getY(),
-                new AllianceColor(AllianceColor.Selection.BLUE)
+                dt.getPose().getY()
         )));
 
         shooter.flywheel.setVoltageComp(voltageComp);
@@ -121,8 +123,7 @@ public class BlueFar extends OpMode {
         telemetry.addData("Target Velocity: ", shooter.flywheel.getRegressionVelocity(
                 shooter.flywheel.getDistance(
                         dt.getPose().getX(),
-                        dt.getPose().getY(),
-                        new AllianceColor(AllianceColor.Selection.BLUE)
+                        dt.getPose().getY()
                 )
         ));
         telemetry.addData("Turret Target", shooter.turret.getTargetRadians(dt.getPose()));

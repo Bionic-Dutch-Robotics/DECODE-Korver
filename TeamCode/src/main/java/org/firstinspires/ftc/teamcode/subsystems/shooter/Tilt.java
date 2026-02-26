@@ -18,6 +18,7 @@ public class Tilt {
     }
 
     public double auto(double distance) {
-        return 1.55916 * Math.pow(0.986585, distance);
+        return distance < 115 ? -0.0000066366*Math.pow(distance, 3) + 0.00183287*Math.pow(distance, 2) - 0.15909*distance + 4.5531 :
+                0.1;
     }
 }

@@ -1,54 +1,44 @@
 package org.firstinspires.ftc.teamcode.tests;
 
+import static org.firstinspires.ftc.teamcode.util.Hardware.dt;
+import static org.firstinspires.ftc.teamcode.util.Hardware.intake;
+import static org.firstinspires.ftc.teamcode.util.Hardware.shooter;
+import static org.firstinspires.ftc.teamcode.util.Hardware.transfer;
+
 import com.pedropathing.control.PIDFController;
-import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
-import com.pedropathing.math.Vector;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
-import org.firstinspires.ftc.teamcode.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
-import org.firstinspires.ftc.teamcode.subsystems.transfer.Transfer;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
-import org.firstinspires.ftc.teamcode.util.Artifact;
-import org.firstinspires.ftc.teamcode.util.Settings;
+import org.firstinspires.ftc.teamcode.util.MatchSettings;
 
 @TeleOp(name="SHOOTER Manual")
 public class ShooterManualTest extends OpMode {
     //public Follower follower;
-    public Shooter shooter;
     public PIDFController shooterPidf;
-    private Follower follower;
-    //public Transfer transfer;
     //public Intake run;
     //public PIDFController headingPid;
     public boolean goToHeading;
     public double shooterPower;
-    private Intake intake;
-    private Transfer transfer;
     private double tiltAngle = 0.1;
     @Override
     public void init() {
-        intake = new Intake(hardwareMap);
-        transfer = new Transfer(hardwareMap);
-        transfer.setMotif(new Artifact[] {Artifact.PURPLE, Artifact.GREEN, Artifact.PURPLE});
-        transfer.start();
-        follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(Settings.Positions.Drivetrain.Blue.FAR_AUTO_START);
-        shooterPidf = new PIDFController(Settings.Positions.Shooter.SHOOTER_COEFFICIENTS);
-        shooter = new Shooter(hardwareMap);
-        shooter.setAlliance(new AllianceColor(AllianceColor.Selection.BLUE));
-        shooter.turret.setAlliance(new AllianceColor(AllianceColor.Selection.BLUE));
+        MatchSettings.initSelection(hardwareMap, new AllianceColor(AllianceColor.Selection.BLUE), gamepad1);
         shooterPower = 50;
         goToHeading = false;
     }
 
     @Override
+    public void init_loop() {
+        telemetry.update();
+        MatchSettings.refreshMotif(telemetry);
+    }
+    @Override
     public void start() {
-        follower.startTeleopDrive(false);
+        MatchSettings.start();
+        dt.follower.startTeleopDrive(false);
     }
     @Override
     public void loop() {
@@ -59,31 +49,32 @@ public class ShooterManualTest extends OpMode {
         else if (gamepad1.rightBumperWasPressed()) {
             tiltAngle -= 0.05;
         }
-        follower.update();
-        if (!goToHeading) {
-            follower.setTeleOpDrive(
+
+        if (gamepad1.dpadLeftWasPressed()) {
+            shooter.turret.setLiveOffset(0.05);
+        }
+        else if (gamepad1.dpadRightWasPressed()) {
+            shooter.turret.setLiveOffset(-0.05);
+        }
+        dt.update();
+            dt.teleOpDrive(
                     -gamepad1.left_stick_y,
                     -gamepad1.left_stick_x,
-                    -gamepad1.right_stick_x,
-                    true
+                    -gamepad1.right_stick_x
             );
-        }
 
-        Vector velocity = follower.getVelocity();
-        double headingVel = follower.getAngularVelocity();
-        Pose predictedPose = follower.getPose().copy();
-        if (velocity.getMagnitude() > 0.5) {
-            predictedPose = follower.getPose().plus(
-                    new Pose(
-                            velocity.getXComponent(),
-                            velocity.getYComponent(),
-                            headingVel
-                    ).times(Settings.Positions.Transfer.RUN_TO_POS_TIME /*0.05*/)
-            );
-        }
+        Pose predictedPose = shooter.getPredictedPose(
+                dt.getPose(),
+                dt.follower.getVelocity(),
+                dt.follower.getAngularVelocity()
+        );
 
         shooter.turret.loop(predictedPose);
-        shooter.flywheel.update(shooterPower);
+        //shooter.flywheel.update(shooterPower);
+        shooter.flywheel.update(
+                shooter.flywheel.getRegressionVelocity(
+                        shooter.getFlywheel().getDistance(predictedPose.getX(),
+                                predictedPose.getY())));
 
         if (gamepad1.aWasPressed()) {
             shooterPower += 10;
@@ -101,17 +92,22 @@ public class ShooterManualTest extends OpMode {
         if (gamepad1.xWasPressed()) {
             transfer.fireSortedArtifacts();
         }
+
+        if (gamepad1.dpadDownWasPressed()) {
+            intake.toggle();
+        }
         intake.run();
         telemetry.addData("Shooter Velocity: ", shooter.flywheel.shooter.getVelocity(AngleUnit.DEGREES));
         telemetry.addData("Shooter Velocity: ", shooter.flywheel.shooter2.getVelocity(AngleUnit.DEGREES));
         telemetry.addData("Shooter Target: ", shooterPower);
-        telemetry.addData("Distance: ", shooter.flywheel.getDistance(follower.getPose().getX(), follower.getPose().getY(), new AllianceColor(AllianceColor.Selection.BLUE)));
+        telemetry.addData("Distance: ", shooter.flywheel.getDistance(dt.getPose().getX(), dt.getPose().getY()));
         telemetry.addData("tilt", tiltAngle);
         telemetry.update();
     }
 
     @Override
     public void stop() {
+        MatchSettings.vision.stop();
         transfer.kicker.stop();
     }
 }

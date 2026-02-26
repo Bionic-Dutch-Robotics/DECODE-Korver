@@ -73,16 +73,14 @@ public class RedShooterTest extends OpMode {
         shooter.tilt.setTilt(shooter.tilt.auto(
                 shooter.flywheel.getDistance(
                         dt.getPose().getX(),
-                        dt.getPose().getY(),
-                        new AllianceColor(AllianceColor.Selection.RED)
+                        dt.getPose().getY()
                 )
         ));
 
         shooter.flywheel.update(shooter.flywheel.getRegressionVelocity(
                 shooter.flywheel.getDistance(
                         dt.getPose().getX(),
-                        dt.getPose().getY(),
-                        new AllianceColor(AllianceColor.Selection.RED)
+                        dt.getPose().getY()
                 )
         ));
 
@@ -98,8 +96,7 @@ public class RedShooterTest extends OpMode {
         telemetry.addData("Target Velocity: ", shooter.flywheel.getRegressionVelocity(
                 shooter.flywheel.getDistance(
                         dt.getPose().getX(),
-                        dt.getPose().getY(),
-                        new AllianceColor(AllianceColor.Selection.RED)
+                        dt.getPose().getY()
                 )
         ));
         telemetry.update();

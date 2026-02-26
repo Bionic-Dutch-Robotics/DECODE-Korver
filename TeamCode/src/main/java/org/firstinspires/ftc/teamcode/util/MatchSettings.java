@@ -55,7 +55,7 @@ public class MatchSettings {
     }
     private static void manageTelemetry(Telemetry telemetry) {
         telemetry.addData("Motif: ", Arrays.toString(motif));
-        telemetry.update();
+        //telemetry.update();
     }
 
     public static Double findError() {
