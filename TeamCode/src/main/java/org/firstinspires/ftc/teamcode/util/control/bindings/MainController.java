@@ -50,6 +50,19 @@ public class MainController extends Controller {
                                 alliance.isRed() ? Settings.Positions.Drivetrain.Red.PARK : Settings.Positions.Drivetrain.Blue.PARK,
                                 dt.getPose().getHeading());
                         }
+                ),
+                new Command(
+                        gamepad::bWasPressed,
+                        () -> {
+                            if (!runToPos) {
+                                dt.lineToFarShoot(dt.follower.getHeading());
+                                runToPos = true;
+                            } else {
+                                runToPos = false;
+                                dt.follower.breakFollowing();
+                                dt.follower.startTeleopDrive();
+                            }
+                        }
                 )
         };
         this.setController(controls);

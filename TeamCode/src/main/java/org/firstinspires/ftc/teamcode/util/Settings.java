@@ -66,7 +66,7 @@ public class Settings {
 
                 public static final Pose FAR_AUTO_START = new Pose(87, 8.5, Math.toRadians(180)); //Needs to be updated
                 public static final Pose CLOSE_AUTO_START = new Pose(121.6233, 131.271, 2.2);   //Needs to be updated
-                public static final Pose FAR_SHOOT = new Pose(79, 15, Math.PI);
+                public static final Pose FAR_SHOOT = Blue.FAR_SHOOT.mirror();
                 public static final Pose CLOSE_SHOOT = new Pose(72, 72, Math.PI);
                 public static final Pose PARK = new Pose(35,30, Math.PI);
             }
