@@ -146,8 +146,13 @@ public class BlueAuto extends OpMode {
                             0, 1, dt.follower,
                             () -> {
                                 dt.follower.followPath(paths[3]);
-                                hasIntook2 = true;
                             }
+                    )
+            );
+            paths[3].setCallbacks(
+                    new ParametricCallback(
+                            0, 1, dt.follower,
+                            () -> hasIntook1 = true
                     )
             );
         }       // Callbacks
