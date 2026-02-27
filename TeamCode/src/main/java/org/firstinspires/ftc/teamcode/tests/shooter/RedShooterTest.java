@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.tests;
+package org.firstinspires.ftc.teamcode.tests.shooter;
 
 import static org.firstinspires.ftc.teamcode.util.Hardware.dt;
 import static org.firstinspires.ftc.teamcode.util.Hardware.intake;

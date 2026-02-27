@@ -28,7 +28,7 @@ import org.firstinspires.ftc.teamcode.util.MatchSettings;
 import org.firstinspires.ftc.teamcode.util.Settings;
 import org.firstinspires.ftc.teamcode.util.control.Controller;
 
-@Autonomous(name="Full Path Test")
+@Autonomous(name="Real Blue Auto", preselectTeleOp = "Blue TeleOp FR")
 public class BlueAuto extends OpMode {
     private PathChain[] paths;
     private int index = 0;
@@ -146,6 +146,7 @@ public class BlueAuto extends OpMode {
                             0, 1, dt.follower,
                             () -> {
                                 dt.follower.followPath(paths[3]);
+                                hasIntook2 = true;
                             }
                     )
             );
@@ -183,9 +184,10 @@ public class BlueAuto extends OpMode {
         manager.bind(
                 () -> (shootTimer.time() > RUN_TO_POS_TIME*6*1.5 && hasShot2),
                 () -> {
-                    dt.follower.followPath(paths[0]);
+                    dt.follower.followPath(paths[2]);
                 }
         );
+
 
 
     }
@@ -194,24 +196,25 @@ public class BlueAuto extends OpMode {
     public void init_loop() {
         MatchSettings.refreshMotif(telemetry);
         telemetry.update();
-
-
     }
 
     @Override
     public void start() {
         shootTimer.reset();
         MatchSettings.start();
-
-        dt.follower.followPath(paths[0]);
     }
 
     @Override
     public void loop() {
+        shooter.runLoop(
+                dt.getPose(),
+                dt.follower.getVelocity(),
+                dt.follower.getAngularVelocity()
+        );
+
         manager.update();
 
 
-        shooter.flywheel.update(100);
         dt.follower.update();
         telemetry.addData("X", dt.follower.getPose().getX());
         telemetry.addData("Y", dt.follower.getPose().getY());

@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.util.control.Controller;
 
 public class SubController extends Controller
 {
-    public static Command[] controls;
+    public Command[] controls;
     public SubController(Transfer transfer, Shooter shooter, Gamepad gamepad) {
         controls = new Command[]{
                 new Command(
@@ -18,8 +18,28 @@ public class SubController extends Controller
                 ),
                 new Command(
                         gamepad::bWasPressed,
-                        transfer::cancelFire
+                        transfer::runSlow
                 ),
+                new Command(
+                        gamepad::leftBumperWasPressed,
+                        () -> shooter.flywheel.setVoltageComp(
+                                shooter.flywheel.getVoltageComp() + 0.015
+                        )
+                ),
+                new Command(
+                        gamepad::rightBumperWasPressed,
+                        () -> shooter.flywheel.setVoltageComp(
+                                shooter.flywheel.getVoltageComp() - 0.015
+                        )
+                ),
+                new Command(
+                        gamepad::leftTriggerWasPressed,
+                        () -> shooter.turret.setLiveOffset(0.05)
+                ),
+                new Command(
+                        gamepad::rightTriggerWasPressed,
+                        () -> shooter.turret.setLiveOffset(-0.05)
+                )
         };
         this.setController(controls);
     }

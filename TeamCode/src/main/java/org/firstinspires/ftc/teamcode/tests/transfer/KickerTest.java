@@ -1,13 +1,11 @@
-package org.firstinspires.ftc.teamcode.tests;
+package org.firstinspires.ftc.teamcode.tests.transfer;
 
-import static org.firstinspires.ftc.teamcode.util.Hardware.dt;
 import static org.firstinspires.ftc.teamcode.util.Hardware.shooter;
 import static org.firstinspires.ftc.teamcode.util.Hardware.transfer;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.subsystems.transfer.Transfer;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
 import org.firstinspires.ftc.teamcode.util.Artifact;
 import org.firstinspires.ftc.teamcode.util.MatchSettings;

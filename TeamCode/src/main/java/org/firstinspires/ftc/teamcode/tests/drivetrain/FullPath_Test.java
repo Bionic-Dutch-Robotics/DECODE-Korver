@@ -1,27 +1,20 @@
-package org.firstinspires.ftc.teamcode.tests;
+package org.firstinspires.ftc.teamcode.tests.drivetrain;
 
 import static org.firstinspires.ftc.teamcode.util.Hardware.dt;
 import static org.firstinspires.ftc.teamcode.util.Hardware.intake;
 import static org.firstinspires.ftc.teamcode.util.Hardware.shooter;
 import static org.firstinspires.ftc.teamcode.util.Hardware.transfer;
 
-import com.bylazar.field.Style;
-import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
-import com.pedropathing.geometry.FinetunedBezierCurve;
 import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.HeadingInterpolator;
 import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.paths.callbacks.ParametricCallback;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
-import org.firstinspires.ftc.teamcode.pedroPathing.tuners.Drawing;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
 import org.firstinspires.ftc.teamcode.util.MatchSettings;
 import org.firstinspires.ftc.teamcode.util.Settings;

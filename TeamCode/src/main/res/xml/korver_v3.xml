@@ -110,6 +110,7 @@
             <Servo name="kicker3" port="1"/>
             <Servo name="kicker2" port="2"/>
             <Servo name="kicker1" port="3"/>
+            <Servo name="park" port="4"/>
             <RevColorSensorV3 name="color2" port="0" bus="1"/>
             <RevColorSensorV3 name="color3" port="0" bus="2"/>
             <goBILDAPinpoint name="pinpoint" port="0" bus="3"/>

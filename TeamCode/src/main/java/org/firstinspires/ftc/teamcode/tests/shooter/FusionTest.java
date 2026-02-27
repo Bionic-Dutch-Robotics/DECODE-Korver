@@ -1,22 +1,12 @@
-package org.firstinspires.ftc.teamcode.tests;
+package org.firstinspires.ftc.teamcode.tests.shooter;
 
-import android.util.Size;
-
-import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
-import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 
 import static org.firstinspires.ftc.teamcode.util.Hardware.dt;
 import static org.firstinspires.ftc.teamcode.util.Hardware.shooter;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
 import org.firstinspires.ftc.teamcode.util.MatchSettings;
-import org.firstinspires.ftc.vision.VisionPortal;
-import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
-
-import java.util.List;
 
 @TeleOp(name="Fusion")
 public class FusionTest extends OpMode {

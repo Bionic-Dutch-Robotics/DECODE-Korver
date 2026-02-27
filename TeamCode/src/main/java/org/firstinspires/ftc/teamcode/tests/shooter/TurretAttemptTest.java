@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.tests;
+package org.firstinspires.ftc.teamcode.tests.shooter;
 
 import com.pedropathing.control.PIDFCoefficients;
 import com.pedropathing.control.PIDFController;

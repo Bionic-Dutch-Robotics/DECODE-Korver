@@ -21,7 +21,7 @@ public class Sorter {
             colorSensors[i].setGain(10.0F);
         }
 
-        order = new ArtifactOrder(new Artifact[] {Artifact.PURPLE, Artifact.PURPLE, Artifact.GREEN});
+        order = new ArtifactOrder(new Artifact[]{Artifact.PURPLE, Artifact.PURPLE, Artifact.GREEN});
     }
 
     public Artifact[] getStoredArtifacts() {
@@ -34,8 +34,7 @@ public class Sorter {
                 } else {
                     storedArtifacts[i] = Artifact.GREEN;
                 }
-            }
-            else {
+            } else {
                 storedArtifacts[i] = Artifact.UNKNOWN;
             }
 
@@ -53,7 +52,26 @@ public class Sorter {
     public void setMotif(Artifact[] motif) {
         order.setMotif(motif);
     }
+
     public Artifact[] getMotif() {
         return order.getMotif();
+    }
+
+    public NormalizedRGBA[] getRawSensorColors() {
+        NormalizedRGBA[] vals = new NormalizedRGBA[3];
+        for (int i = 0; i < colorSensors.length; i++) {
+            vals[i] = colorSensors[i].getNormalizedColors();
+        }
+
+        return vals;
+    }
+
+    public double[] getRawSensorDistances() {
+        double[] vals = new double[3];
+
+        for (int i = 0; i < colorSensors.length; i++) {
+            vals[i] = ((DistanceSensor) colorSensors[i]).getDistance(DistanceUnit.INCH);
+        }
+        return vals;
     }
 }
