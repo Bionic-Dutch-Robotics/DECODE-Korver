@@ -5,6 +5,7 @@ import static org.firstinspires.ftc.teamcode.util.Hardware.shooter;
 import static org.firstinspires.ftc.teamcode.util.Hardware.transfer;
 
 import com.pedropathing.paths.callbacks.ParametricCallback;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.bylazar.configurables.annotations.Configurable;
@@ -20,7 +21,7 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.geometry.Pose;
 
-
+@Disabled
 @Autonomous(name = "Blue Auto", preselectTeleOp = "Blue Far")
 @Configurable
 public class KylesAuto extends OpMode {

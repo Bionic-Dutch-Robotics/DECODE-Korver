@@ -5,6 +5,7 @@ import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.stopRobot;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.math.Vector;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -28,6 +29,7 @@ import java.util.ArrayList;
  * @author Atharv Gurnani - 13085 Bionic Dutch
  * @version 1.0, 3/13/2024
  */
+@Disabled
 @TeleOp(name="Lateral ZPAM Tuner", group="tuners")
 public class LateralZPAM extends OpMode {
     private final ArrayList<Double> accelerations = new ArrayList<>();

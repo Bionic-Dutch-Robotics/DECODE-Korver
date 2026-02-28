@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.pedroPathing.tuners;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -22,6 +23,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
  * @author Atharv Gurnani - 13085 Bionic Dutch
  * @version 2.0, 6/26/2025
  */
+@Disabled
 @TeleOp(name="Lateral Encoder Tuner", group="tuners")
 public class LateralTner extends OpMode {
     public static double DISTANCE = 48;

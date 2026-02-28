@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autos;
+package org.firstinspires.ftc.teamcode.autos.comp;
 
 import static org.firstinspires.ftc.teamcode.util.Hardware.dt;
 import static org.firstinspires.ftc.teamcode.util.Hardware.intake;
@@ -7,26 +7,19 @@ import static org.firstinspires.ftc.teamcode.util.Hardware.transfer;
 import static org.firstinspires.ftc.teamcode.util.Settings.Positions.Transfer.RUN_TO_POS_TIME;
 import static org.firstinspires.ftc.teamcode.util.Settings.Positions.Transfer.SLOW_SHOOT_COEFFICIENT;
 
-import com.bylazar.field.Style;
-import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
-import com.pedropathing.geometry.FinetunedBezierCurve;
 import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.HeadingInterpolator;
 import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.paths.callbacks.ParametricCallback;
-import com.pedropathing.paths.callbacks.PathCallback;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
-import org.firstinspires.ftc.teamcode.pedroPathing.tuners.Drawing;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
+import org.firstinspires.ftc.teamcode.util.Hardware;
 import org.firstinspires.ftc.teamcode.util.MatchSettings;
 import org.firstinspires.ftc.teamcode.util.Settings;
 import org.firstinspires.ftc.teamcode.util.control.Controller;
@@ -35,7 +28,7 @@ import org.firstinspires.ftc.teamcode.util.control.Controller;
 public class RedAuto extends OpMode {
     private PathChain[] paths;
     private int index = 0;
-    private boolean hasShot1 = false, hasShot2=false, hasShot3=false, hashShot4=false;
+    private boolean hasShot1 = false, hasShot2=false, hasShot3=false, hasShot4=false;
     private boolean hasFinishedIntakePath1=false, hasFinishedIntakePath2=false, hasFinishedIntakePath3=false;
     private boolean hasIntook1 = false, hasIntook2 = false, hasIntook3 = false;
     private Controller manager = new Controller();
@@ -45,7 +38,6 @@ public class RedAuto extends OpMode {
     @Override
     public void init() {
         MatchSettings.initSelection(hardwareMap, new AllianceColor(AllianceColor.Selection.RED), gamepad1);
-        shooter.turret.setLiveOffset(-0.1);
 
         {
             paths = new PathChain[]{
@@ -109,7 +101,7 @@ public class RedAuto extends OpMode {
         {
             paths[0].setCallbacks(
                     new ParametricCallback(
-                            0, 0.57, dt.follower,
+                            0, 0.27, dt.follower,
                             () -> {
                                 dt.follower.setMaxPower(0.4);
                                 intake.run();
@@ -128,7 +120,7 @@ public class RedAuto extends OpMode {
                             0, 0.05, dt.follower,
                             () -> {
                                 dt.follower.setMaxPower(1);
-                                intake.custom(0.5);
+                                intake.custom(0.2);
                             }
                     ),
                     new ParametricCallback(
@@ -143,14 +135,15 @@ public class RedAuto extends OpMode {
                     new ParametricCallback(
                             0, 0.6, dt.follower,
                             () -> {
-                                dt.follower.setMaxPower(0.6);
+                                dt.follower.setMaxPower(0.5);
                                 intake.run();
                             }
                     ),
                     new ParametricCallback(
-                            0, 0.98, dt.follower,
+                            0, 0.97, dt.follower,
                             () -> {
                                 dt.follower.followPath(paths[3]);
+                                dt.follower.setMaxPower(1);
                                 hasFinishedIntakePath2=true;
                             }
                     )
@@ -164,14 +157,14 @@ public class RedAuto extends OpMode {
 
             paths[4].setCallbacks(
                     new ParametricCallback(
-                            0, 0.6, dt.follower,
+                            0, 0.2, dt.follower,
                             () -> {
                                 dt.follower.setMaxPower(0.6);
                                 intake.run();
                             }
                     ),
                     new ParametricCallback(
-                            0, 1, dt.follower,
+                            0, 0.97, dt.follower,
                             () -> {
                                 hasFinishedIntakePath3=true;
                                 dt.follower.setMaxPower(1);
@@ -219,6 +212,7 @@ public class RedAuto extends OpMode {
                     transfer.runSlow();
                     shootTimer.reset();
                     hasShot2 = true;
+                    shooter.turret.setLiveOffset(-0.2);
                 }
         );
 
@@ -232,6 +226,7 @@ public class RedAuto extends OpMode {
         manager.bind(
                 () -> (hasIntook2 && !hasShot3),
                 () -> {
+                    shooter.turret.setLiveOffset(0.2);
                     transfer.runSlow();
                     shootTimer.reset();
                     hasShot3 = true;
@@ -239,9 +234,19 @@ public class RedAuto extends OpMode {
         );
 
         manager.bind(
-                () -> (hasShot3 && shootTimer.time() > SLOW_SHOOT_COEFFICIENT * RUN_TO_POS_TIME),
+                () -> (hasShot3 && shootTimer.time() > SLOW_SHOOT_COEFFICIENT * RUN_TO_POS_TIME && !hasFinishedIntakePath3),
                 () -> {
                     dt.follower.followPath(paths[4]);
+                }
+        );
+
+        manager.bind(
+                () -> (hasIntook3 && !hasShot4),
+                () -> {
+                    shooter.turret.setLiveOffset(-0.2);
+                    shootTimer.reset();
+                    transfer.runSlow();
+                    hasShot4 = true;
                 }
         );
 
@@ -253,6 +258,29 @@ public class RedAuto extends OpMode {
     public void init_loop() {
         MatchSettings.refreshMotif(telemetry);
         telemetry.update();
+
+        if (gamepad1.aWasPressed()) {
+            shooter.flywheel.setVoltageComp(
+                    shooter.flywheel.getVoltageComp() + 0.02
+            );
+        }
+        else if (gamepad1.bWasPressed()) {
+            shooter.flywheel.setVoltageComp(
+                shooter.flywheel.getVoltageComp() - 0.02
+            );
+        }
+
+        if (gamepad1.leftStickButtonWasPressed()) {
+            if (MatchSettings.allianceColor.isRed()) {
+                dt.follower.setStartingPose(Settings.Positions.Drivetrain.Red.FAR_AUTO_START);
+                MatchSettings.AutoToTeleOpCarryOver.turretEndRadians = 0.0;
+            } else {
+                dt.follower.setStartingPose(Settings.Positions.Drivetrain.Red.FAR_AUTO_START);
+                MatchSettings.AutoToTeleOpCarryOver.turretEndRadians = 0.0;
+            }
+        }
+
+        telemetry.addData("Volt Comp",shooter.flywheel.getVoltageComp());
     }
 
     @Override
@@ -278,5 +306,10 @@ public class RedAuto extends OpMode {
         telemetry.addData("Y", dt.follower.getPose().getY());
         telemetry.addData("Theta", dt.follower.getHeading());
         telemetry.update();
+    }
+
+    @Override
+    public void stop() {
+        Hardware.stop();
     }
 }

@@ -50,7 +50,7 @@ public class TransferTest extends OpMode {
         initServos();
         intake = new Intake(hardwareMap);
 
-        dt = new Drivetrain(hardwareMap, new AllianceColor(AllianceColor.Selection.BLUE), new Pose(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x), new Pose(1,1,1));
+        dt = new Drivetrain(hardwareMap, new AllianceColor(AllianceColor.Selection.BLUE), new Pose(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x), new Pose(1,1,1), false);
 
         time = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
         shooter = new Flywheel(hardwareMap, new AllianceColor(AllianceColor.Selection.BLUE));

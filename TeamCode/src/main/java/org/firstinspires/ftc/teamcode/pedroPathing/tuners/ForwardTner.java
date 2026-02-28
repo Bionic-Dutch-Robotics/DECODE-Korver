@@ -2,11 +2,13 @@ package org.firstinspires.ftc.teamcode.pedroPathing.tuners;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
+@Disabled
 @TeleOp(name="Forward Encoder Tuner", group="tuners")
 public class ForwardTner extends OpMode {
     private Follower follower;

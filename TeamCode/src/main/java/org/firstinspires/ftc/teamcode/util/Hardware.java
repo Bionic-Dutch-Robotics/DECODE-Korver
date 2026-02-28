@@ -15,7 +15,6 @@ public class Hardware {
     public static Shooter shooter = null;
     public static Intake intake = null;
     public static boolean hasBeenInitialized = false;
-    public static LynxHubs hubs;
     public static void initialize(HardwareMap hwMap, AllianceColor alliance, Pose gamepadReference) {
         dt = new Drivetrain(
                 hwMap, alliance,
@@ -29,6 +28,7 @@ public class Hardware {
         shooter = new Shooter(hwMap);
         shooter.setAlliance(alliance);
         intake = new Intake(hwMap);
+
         if (!hasBeenInitialized) hasBeenInitialized = true;
     }
 

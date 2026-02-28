@@ -5,6 +5,7 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.Path;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -24,6 +25,8 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
  * @author Atharv Gurnani - 13085 Bionic Dutch
  * @version 1.0, 3/13/2024
  */
+
+@Disabled
 @TeleOp(name="Centripetal Coefficient Tuner", group="tuners")
 public class Centripetaluner extends OpMode {
     public  double DISTANCE = 20;
