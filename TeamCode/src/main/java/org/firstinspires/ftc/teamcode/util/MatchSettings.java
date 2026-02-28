@@ -21,6 +21,12 @@ public class MatchSettings {
     public static Vision vision;
     public static AllianceColor allianceColor;
 
+    public static class AutoToTeleOpCarryOver {
+        public static Pose drivetrainEndPos = null;
+        public static double turretEndRadians = 0.0;
+    }
+
+
     public static void initSelection(HardwareMap hwMap, AllianceColor alliance, Gamepad gamepad1) {
         allianceColor = alliance;
         Pose gamepadReference = new Pose(

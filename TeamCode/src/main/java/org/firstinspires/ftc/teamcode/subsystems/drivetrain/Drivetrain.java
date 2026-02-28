@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Subsystem;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
+import org.firstinspires.ftc.teamcode.util.MatchSettings;
 import org.firstinspires.ftc.teamcode.util.Settings;
 
 public class Drivetrain extends Subsystem {
@@ -25,11 +26,19 @@ public class Drivetrain extends Subsystem {
      * Creates a new drivetrain
      * @param hwMap     A HardwareMap object from an OpMode or LinearOpMode
      */
-    public Drivetrain(HardwareMap hwMap, AllianceColor alliance, Pose gamepadReference, Pose multipliers) {
-        if (follower == null) {
+    public Drivetrain(HardwareMap hwMap, AllianceColor alliance, Pose gamepadReference, Pose multipliers, boolean hasBeenInitialized) {
+        if (!hasBeenInitialized) {
             follower = Constants.createFollower(hwMap);
             follower.setStartingPose(
                     alliance.isRed() ? Settings.Positions.Drivetrain.Red.FAR_AUTO_START : Settings.Positions.Drivetrain.Blue.FAR_AUTO_START
+            );
+        }
+        else {
+            Pose startPose = MatchSettings.AutoToTeleOpCarryOver.drivetrainEndPos;
+
+            follower = Constants.createFollower(hwMap);
+            follower.setStartingPose(
+                    startPose
             );
         }
         this.gamepadReference = gamepadReference.copy();
@@ -56,6 +65,9 @@ public class Drivetrain extends Subsystem {
         follower.update();
     }
 
+    /**
+     * Call this when ending an OpMode. Stores crucial OpMode-crossing values
+     */
     @Override
     public void stop() {
         follower.breakFollowing();
@@ -64,6 +76,7 @@ public class Drivetrain extends Subsystem {
                 0,0,0
         );
         follower.update();
+        MatchSettings.AutoToTeleOpCarryOver.drivetrainEndPos = this.getPose();
     }
 
     public void startTeleOpDrive() {

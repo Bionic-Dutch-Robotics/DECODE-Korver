@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems.shooter.turret;
 
+import static org.firstinspires.ftc.teamcode.util.MatchSettings.AutoToTeleOpCarryOver.turretEndRadians;
+
 import com.pedropathing.control.PIDFCoefficients;
 import com.pedropathing.control.PIDFController;
 import com.pedropathing.geometry.Pose;
@@ -9,7 +11,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
-import org.firstinspires.ftc.teamcode.util.MatchSettings;
 import org.firstinspires.ftc.teamcode.util.Settings;
 
 public class Turret {
@@ -19,7 +20,6 @@ public class Turret {
     private Pose target;
     private final double fieldCentricTurretStartingPosition = Math.PI;
     private double liveOffset = 0.0;
-
 
     public Turret(HardwareMap hwMap) {
         turret = hwMap.get(DcMotorEx.class, Settings.HardwareNames.Shooter.TURRET);
@@ -78,7 +78,7 @@ public class Turret {
 
     public double getTurretRadians() {
         turretRad = turret.getCurrentPosition() / 140.003629846
-                - fieldCentricTurretStartingPosition - liveOffset;
+                - fieldCentricTurretStartingPosition - liveOffset + turretEndRadians;
 
         turretRad = MathFunctions.scale(MathFunctions.normalizeAngle(turretRad),
                 0, Math.PI*2,
@@ -96,5 +96,10 @@ public class Turret {
     }
     public void setLiveOffset(double offset) {
         this.liveOffset += offset;
+    }
+
+    public void stop() {
+        turret.setPower(0);
+        turretEndRadians = this.getTurretRadians();
     }
 }

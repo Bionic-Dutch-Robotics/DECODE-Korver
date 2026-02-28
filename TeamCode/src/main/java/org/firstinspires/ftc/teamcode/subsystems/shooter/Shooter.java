@@ -14,7 +14,7 @@ public class Shooter {
     public Tilt tilt;
     public Turret turret;
     private AllianceColor alliance;
-    private Pose currentPose = new Pose(), previousPose = new Pose(), velocity = new Pose();
+    private Pose currentPose = new Pose();
 
     public Shooter(HardwareMap hwMap) {
         flywheel = new Flywheel(hwMap, new AllianceColor(AllianceColor.Selection.BLUE));
@@ -23,7 +23,6 @@ public class Shooter {
     }
 
     public Pose getPredictedPose(Pose pose, Vector velocity, double angularVelocity) {
-
         return pose.plus(
                 new Pose(
                         velocity.getXComponent(),
@@ -34,7 +33,6 @@ public class Shooter {
     }
 
     public void runLoop(Pose currentPose, Vector velocity, double headingVel) {
-        this.previousPose = this.currentPose;
         this.currentPose = currentPose;
         Pose predictedPose = this.getPredictedPose(currentPose, velocity, headingVel);
         turret.loop(predictedPose);
