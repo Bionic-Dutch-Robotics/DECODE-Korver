@@ -14,15 +14,19 @@ public class Hardware {
     public static Transfer transfer;
     public static Shooter shooter;
     public static Intake intake;
+    public static boolean hasBeenInitialized = false;
     public static LynxHubs hubs;
     public static void initialize(HardwareMap hwMap, AllianceColor alliance, Pose gamepadReference) {
-        dt = new Drivetrain(hwMap, alliance,gamepadReference, new Pose(1.15, 1.15, 1.15));
+        if (!hasBeenInitialized) {
+            dt = new Drivetrain(hwMap, alliance, gamepadReference, new Pose(1.15, 1.15, 1.15));
 
-        transfer = new Transfer(hwMap);
+            transfer = new Transfer(hwMap);
 
-        shooter = new Shooter(hwMap);
-        shooter.setAlliance(alliance);
-        intake = new Intake(hwMap);
+            shooter = new Shooter(hwMap);
+            shooter.setAlliance(alliance);
+            intake = new Intake(hwMap);
+            hasBeenInitialized = true;
+        }
         //hubs = new LynxHubs();
         //hubs.init(hwMap, alliance);
     }

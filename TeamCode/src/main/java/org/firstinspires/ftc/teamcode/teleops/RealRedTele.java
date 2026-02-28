@@ -14,15 +14,14 @@ import org.firstinspires.ftc.teamcode.util.MatchSettings;
 import org.firstinspires.ftc.teamcode.util.control.bindings.MainController;
 import org.firstinspires.ftc.teamcode.util.control.bindings.SubController;
 
-@TeleOp(name="Blue TeleOp FR")
-public class RealBlueTele extends OpMode {
+@TeleOp(name="Red TeleOp FR")
+public class RealRedTele extends OpMode {
     private MainController chetan;
     private SubController atharv;
     @Override
     public void init() {
-        MatchSettings.initSelection(hardwareMap, new AllianceColor(AllianceColor.Selection.BLUE), gamepad1);
-
-        chetan = new MainController(dt, intake, gamepad1, new AllianceColor(AllianceColor.Selection.BLUE));
+        MatchSettings.initSelection(hardwareMap, new AllianceColor(AllianceColor.Selection.RED), gamepad1);
+        chetan = new MainController(dt, intake, gamepad1, new AllianceColor(AllianceColor.Selection.RED));
         atharv = new SubController(transfer, shooter, gamepad2);
     }
 
@@ -40,12 +39,12 @@ public class RealBlueTele extends OpMode {
 
     @Override
     public void loop() {
-       dt.update();
-       chetan.runDrive();
-       atharv.runShooter(dt.follower);
+        dt.update();
+        chetan.runDrive();
+        atharv.runShooter(dt.follower);
 
-       chetan.update();
-       atharv.update();
+        chetan.update();
+        atharv.update();
     }
 
     @Override

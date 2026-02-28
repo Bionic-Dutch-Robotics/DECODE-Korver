@@ -43,6 +43,7 @@ public class Settings {
             public static final double[] upPos = {0.19, 0.53, 0.59};
             public static final double[] downPos = {0.63, 0.95, 0.1051};
             public static final double RUN_TO_POS_TIME = 0.195;
+            public static final double SLOW_SHOOT_COEFFICIENT = 1.5;
         }
         public static class Shooter {
             //  Velocities are in degrees per second.
@@ -59,16 +60,15 @@ public class Settings {
                 public static final Pose FAR_AUTO_START = new Pose(57, 8.5, Math.PI);
                 public static final Pose FAR_SHOOT = new Pose(55, 15, Math.PI);
                 public static final Pose CLOSE_SHOOT = new Pose(72, 72, Math.PI);
-                public static final Pose CLOSE_AUTO_START = new Pose(30.9436, 123.8405, -2.27); //Needs to be updated
                 public static final Pose PARK = new Pose(100,30, Math.PI);
             }
             public static class Red {
 
-                public static final Pose FAR_AUTO_START = new Pose(87, 8.5, Math.toRadians(180)); //Needs to be updated
+                public static final Pose FAR_AUTO_START = Blue.FAR_AUTO_START.mirror().withHeading(Math.PI);
                 public static final Pose CLOSE_AUTO_START = new Pose(121.6233, 131.271, 2.2);   //Needs to be updated
-                public static final Pose FAR_SHOOT = Blue.FAR_SHOOT.mirror();
+                public static final Pose FAR_SHOOT = Blue.FAR_SHOOT.mirror().withHeading(Math.PI);
                 public static final Pose CLOSE_SHOOT = new Pose(72, 72, Math.PI);
-                public static final Pose PARK = new Pose(35,30, Math.PI);
+                public static final Pose PARK = Blue.PARK.copy();
             }
         }
 

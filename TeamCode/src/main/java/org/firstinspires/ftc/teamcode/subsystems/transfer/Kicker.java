@@ -74,20 +74,17 @@ public class Kicker {
             servoTimer.reset();
             kickServoUp(order[i]);
             try {
-                Thread.sleep((long) (RUN_TO_POS_TIME * 1.5));
+                Thread.sleep((long) (RUN_TO_POS_TIME * Settings.Positions.Transfer.SLOW_SHOOT_COEFFICIENT * 1000));
             } catch (InterruptedException ignored) {
             }
 
             servoTimer.reset();
             kickServoDown(order[i]);
             try {
-                Thread.sleep((long) (RUN_TO_POS_TIME * 1.5));
+                Thread.sleep((long) (RUN_TO_POS_TIME * Settings.Positions.Transfer.SLOW_SHOOT_COEFFICIENT * 1000));
             } catch (InterruptedException ignored) {
             }
         }
-    }
-    public void toggleRunSequence() {
-
     }
 
     public void cancelSequence() {
@@ -124,9 +121,6 @@ public class Kicker {
     public void stop() {
         this.cancelSequence();
         executor.shutdown();
-        executor = null;
-        future = null;
-        order = null;
         servoTimer.reset();
     }
 }

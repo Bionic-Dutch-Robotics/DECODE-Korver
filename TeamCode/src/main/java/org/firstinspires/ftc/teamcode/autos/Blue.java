@@ -39,6 +39,5 @@ public class Blue extends OpMode {
 
     @Override
     public void loop() {
-
     }
 }

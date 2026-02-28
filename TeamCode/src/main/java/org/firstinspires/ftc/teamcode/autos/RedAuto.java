@@ -31,39 +31,39 @@ import org.firstinspires.ftc.teamcode.util.MatchSettings;
 import org.firstinspires.ftc.teamcode.util.Settings;
 import org.firstinspires.ftc.teamcode.util.control.Controller;
 
-@Autonomous(name="Real Blue Auto", preselectTeleOp = "Blue TeleOp FR")
-public class BlueAuto extends OpMode {
+@Autonomous(name="Real Red Auto", preselectTeleOp = "Red TeleOp FR")
+public class RedAuto extends OpMode {
     private PathChain[] paths;
     private int index = 0;
-    private boolean hasShot1 = false, hasShot2=false, hasShot3=false, hasShot4=false;
+    private boolean hasShot1 = false, hasShot2=false, hasShot3=false, hashShot4=false;
     private boolean hasFinishedIntakePath1=false, hasFinishedIntakePath2=false, hasFinishedIntakePath3=false;
     private boolean hasIntook1 = false, hasIntook2 = false, hasIntook3 = false;
     private Controller manager = new Controller();
-    private final Pose shootPos = new Pose(55, 15);
+    private final Pose shootPos = new Pose(55, 15).mirror();
     private ElapsedTime shootTimer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
 
     @Override
     public void init() {
-        MatchSettings.initSelection(hardwareMap, new AllianceColor(AllianceColor.Selection.BLUE), gamepad1);
+        MatchSettings.initSelection(hardwareMap, new AllianceColor(AllianceColor.Selection.RED), gamepad1);
         shooter.turret.setLiveOffset(-0.1);
 
         {
             paths = new PathChain[]{
                     new PathChain(      //0 --- Intake 1
                             new Path(new BezierCurve(
-                                    new Pose(56.500, 8.500),
-                                    new Pose(81.200, 59.900),
-                                    new Pose(33.500, 81.700),
-                                    new Pose(28.200, 41.400),
-                                    new Pose(20.700, 62.200),
-                                    new Pose(19.000, 66.300)
+                                    new Pose(56.500, 8.500).mirror(),
+                                    new Pose(81.200, 59.900).mirror(),
+                                    new Pose(33.500, 81.700).mirror(),
+                                    new Pose(28.200, 41.400).mirror(),
+                                    new Pose(20.700, 62.200).mirror(),
+                                    new Pose(19.000, 66.300).mirror()
                             ))
                     ),
                     new PathChain(      //1 --- Go to Shoot 1
                             new Path(
                                     new BezierCurve(
-                                            new Pose(19.000, 66.300),
-                                            new Pose(50.800, 63.900),
+                                            new Pose(19.000, 66.300).mirror(),
+                                            new Pose(50.800, 63.900).mirror(),
                                             shootPos
                                     )
                             )
@@ -72,16 +72,16 @@ public class BlueAuto extends OpMode {
                             new Path(
                                     new BezierCurve(
                                             shootPos,
-                                            new Pose(76.0, 89.50),
-                                            new Pose(18.600, 83.600)
+                                            new Pose(76.0, 89.50).mirror(),
+                                            new Pose(18.600, 83.600).mirror()
                                     )
                             )
                     ),
                     new PathChain(      //3 --- Go To Shoot 2
                             new Path(
                                     new BezierCurve(
-                                            new Pose(18.600, 83.600),
-                                            new Pose(44.200, 68.500),
+                                            new Pose(18.600, 83.600).mirror(),
+                                            new Pose(44.200, 68.500).mirror(),
                                             shootPos
                                     )
                             )
@@ -90,15 +90,15 @@ public class BlueAuto extends OpMode {
                             new Path(
                                     new BezierCurve(
                                             shootPos,
-                                            new Pose(64.100, 39.00),
-                                            new Pose(17.600, 35.300)
+                                            new Pose(64.100, 39.00).mirror(),
+                                            new Pose(17.600, 35.300).mirror()
                                     )
                             )
                     ),
                     new PathChain(      //5 --- Go to Shoot 3
                             new Path(
                                     new BezierLine(
-                                            new Pose(17.600, 35.300),
+                                            new Pose(17.600, 35.300).mirror(),
                                             shootPos
                                     )
                             )
@@ -132,7 +132,7 @@ public class BlueAuto extends OpMode {
                             }
                     ),
                     new ParametricCallback(
-                            0, 0.995, dt.follower,
+                            0, 0.97, dt.follower,
                             () -> {
                                 hasIntook1 = true;
                             }
@@ -151,7 +151,6 @@ public class BlueAuto extends OpMode {
                             0, 0.98, dt.follower,
                             () -> {
                                 dt.follower.followPath(paths[3]);
-                                dt.follower.setMaxPower(1);
                                 hasFinishedIntakePath2=true;
                             }
                     )
@@ -172,7 +171,7 @@ public class BlueAuto extends OpMode {
                             }
                     ),
                     new ParametricCallback(
-                            0, 0.995, dt.follower,
+                            0, 1, dt.follower,
                             () -> {
                                 hasFinishedIntakePath3=true;
                                 dt.follower.setMaxPower(1);
@@ -246,13 +245,6 @@ public class BlueAuto extends OpMode {
                 }
         );
 
-        manager.bind(
-                () -> (hasIntook3 && !hasShot4),
-                () -> {
-                    transfer.runSlow();
-                }
-        );
-
 
 
     }
@@ -261,17 +253,6 @@ public class BlueAuto extends OpMode {
     public void init_loop() {
         MatchSettings.refreshMotif(telemetry);
         telemetry.update();
-
-        if (gamepad2.aWasPressed()) {
-            shooter.flywheel.setVoltageComp(
-                    shooter.flywheel.getVoltageComp() + 0.02
-            );
-        }
-        else if (gamepad2.bWasPressed()) {
-            shooter.flywheel.setVoltageComp(
-                    shooter.flywheel.getVoltageComp() - 0.02
-            );
-        }
     }
 
     @Override

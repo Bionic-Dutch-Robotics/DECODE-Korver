@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.util.control.bindings;
 
+import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
@@ -10,7 +12,9 @@ import org.firstinspires.ftc.teamcode.util.control.Controller;
 public class SubController extends Controller
 {
     public Command[] controls;
+    private Shooter shooter;
     public SubController(Transfer transfer, Shooter shooter, Gamepad gamepad) {
+        this.shooter = shooter;
         controls = new Command[]{
                 new Command(
                         gamepad::aWasPressed,
@@ -42,5 +46,13 @@ public class SubController extends Controller
                 )
         };
         this.setController(controls);
+    }
+
+    public void runShooter(Follower follower) {
+        shooter.runLoop(
+                follower.getPose(),
+                follower.getVelocity(),
+                follower.getAngularVelocity()
+        );
     }
 }

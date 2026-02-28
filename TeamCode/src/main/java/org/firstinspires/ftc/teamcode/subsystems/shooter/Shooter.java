@@ -23,15 +23,14 @@ public class Shooter {
     }
 
     public Pose getPredictedPose(Pose pose, Vector velocity, double angularVelocity) {
-        Pose predictedPose = pose.plus(
+
+        return pose.plus(
                 new Pose(
                         velocity.getXComponent(),
                         velocity.getYComponent(),
                         angularVelocity
                 ).times(Settings.Positions.Transfer.RUN_TO_POS_TIME)
         );
-
-        return predictedPose;
     }
 
     public void runLoop(Pose currentPose, Vector velocity, double headingVel) {
@@ -40,7 +39,7 @@ public class Shooter {
         Pose predictedPose = this.getPredictedPose(currentPose, velocity, headingVel);
         turret.loop(predictedPose);
         flywheel.adaptive(predictedPose.getX(), predictedPose.getY());
-        tilt.auto(flywheel.getDistance(predictedPose.getX(), predictedPose.getY()));
+        tilt.setTilt(tilt.auto(flywheel.getDistance(predictedPose.getX(), predictedPose.getY())));
     }
 
     public Tilt getTilt() {

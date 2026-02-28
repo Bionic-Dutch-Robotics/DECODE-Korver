@@ -16,7 +16,13 @@ public class MainController extends Controller {
     private final Pose resetCornerPoseBlue = new Pose(144-17.75, 144-17.75, Math.PI);
     private final Pose resetCornerPoseRed = new Pose(17.75, 17.75, Math.PI);
 
+    private Drivetrain dt;
+
+    private Gamepad gamepad;
+
     public MainController(Drivetrain dt, Intake intake, Gamepad gamepad, AllianceColor alliance) {
+        this.dt = dt;
+        this.gamepad = gamepad;
         controls = new Command[] {
                 new Command(
                         gamepad::leftBumperWasPressed,
@@ -66,5 +72,15 @@ public class MainController extends Controller {
                 )
         };
         this.setController(controls);
+    }
+
+    public void runDrive() {
+        if (!runToPos) {
+            dt.teleOpDrive(
+                    -gamepad.left_stick_y,
+                    -gamepad.left_stick_x,
+                    -gamepad.right_stick_x
+            );
+        }
     }
 }
