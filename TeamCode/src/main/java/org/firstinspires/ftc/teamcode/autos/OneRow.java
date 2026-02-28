@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autos.comp;
+package org.firstinspires.ftc.teamcode.autos;
 
 import static org.firstinspires.ftc.teamcode.util.Hardware.dt;
 import static org.firstinspires.ftc.teamcode.util.Hardware.intake;
@@ -24,8 +24,8 @@ import org.firstinspires.ftc.teamcode.util.MatchSettings;
 import org.firstinspires.ftc.teamcode.util.Settings;
 import org.firstinspires.ftc.teamcode.util.control.Controller;
 
-@Autonomous(name="Real Blue Auto", preselectTeleOp = "Blue TeleOp FR")
-public class BlueAuto extends OpMode {
+@Autonomous(name="One Row Blue Auto", preselectTeleOp = "Blue TeleOp FR")
+public class OneRow extends OpMode {
     private PathChain[] paths;
     private int index = 0;
     private boolean hasShot1 = false, hasShot2=false, hasShot3=false, hasShot4=false;
@@ -110,7 +110,7 @@ public class BlueAuto extends OpMode {
                     new ParametricCallback(
                             0, 0.97, dt.follower,
                             () -> {
-                                dt.follower.followPath(paths[1]);
+                                dt.follower.followPath(paths[3]);
                             }
                     )
             );
@@ -200,7 +200,7 @@ public class BlueAuto extends OpMode {
         manager.bind(
                 () -> (hasShot1 && shootTimer.time() > RUN_TO_POS_TIME*6 && !hasFinishedIntakePath1),
                 () -> {
-                    dt.follower.followPath(paths[0]);
+                    dt.follower.followPath(paths[4]);
                     hasFinishedIntakePath1 = true;
                 }
         );
@@ -214,43 +214,6 @@ public class BlueAuto extends OpMode {
                     shooter.turret.setLiveOffset(-0.1);
                 }
         );
-
-        manager.bind(
-                () -> (shootTimer.time() > RUN_TO_POS_TIME*6*1.5 && hasShot2 && !hasFinishedIntakePath2),
-                () -> {
-                    dt.follower.followPath(paths[2]);
-                }
-        );
-
-        manager.bind(
-                () -> (hasIntook2 && !hasShot3),
-                () -> {
-                    shooter.turret.setLiveOffset(-0.1);
-                    transfer.runSlow();
-                    shootTimer.reset();
-                    hasShot3 = true;
-                }
-        );
-
-        manager.bind(
-                () -> (hasShot3 && shootTimer.time() > SLOW_SHOOT_COEFFICIENT * RUN_TO_POS_TIME && !hasFinishedIntakePath3),
-                () -> {
-                    dt.follower.followPath(paths[4]);
-                }
-        );
-
-        manager.bind(
-                () -> (hasIntook3 && !hasShot4),
-                () -> {
-                    shooter.turret.setLiveOffset(-0.1);
-                    shootTimer.reset();
-                    transfer.runSlow();
-                    hasShot4 = true;
-                }
-        );
-
-
-
     }
 
     @Override
