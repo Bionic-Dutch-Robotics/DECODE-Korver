@@ -16,42 +16,40 @@ public class AugmentedOpModeTest extends AugmentedOpMode {
     private LynxHubs hubs;
 
     @Override
-    public void init() {
+    public AllianceColor initialize() {
         dt.setInitCommands(
-                new Command[] {
-                        new Command(
-                                () -> dt.setReferences(
-                                        new Pose(
-                                                -gamepad1.left_stick_y,
-                                                -gamepad1.left_stick_x,
-                                                -gamepad1.right_stick_x
-                                        ),
-                                        new Pose(1.15, 1.15, 1.15)
-                                )
-                        )
-                }
-        );
-
-        this.registerSubsystems(
-                new Subsystem[]{
-                        hubs,
-                        dt,
-                        intake
-                }
-        );
-
-        this.initialize(
-                new AllianceColor(AllianceColor.Selection.BLUE)
-        );
+                    new Command[]{}
+                );
+        return new AllianceColor(AllianceColor.Selection.BLUE);
     }
 
     @Override
-    public void loop() {
-        this.update();
+    public void initLoop() {
+
     }
 
     @Override
-    public void stop() {
-        this.kill();
+    public void onLoop() {
+        dt.teleOpDrive(
+                -gamepad1.left_stick_y,
+                -gamepad1.left_stick_x,
+                -gamepad1.right_stick_x
+        );
+        intake.run();
+    }
+
+    @Override
+    public void onStop() {
+
+    }
+
+    @Override
+    public Subsystem[] getSubsystems() {
+        return new Subsystem[] {dt, intake, hubs};
+    }
+
+    @Override
+    public void onStart() {
+
     }
 }
