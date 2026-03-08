@@ -5,23 +5,32 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
 
+import java.util.List;
+
 public class LynxHubs extends Subsystem {
-    private LynxModule[] allHubs;
+    private List<LynxModule> allHubs = null;
+    private LynxModule.BulkData ctrlHubData = null;
+    private LynxModule.BulkData exHubData = null;
 
     @Override
     public void init(HardwareMap hardwareMap, AllianceColor alliance) {
-        allHubs = hardwareMap.getAll(LynxModule.class).toArray(allHubs);
+        allHubs = hardwareMap.getAll(LynxModule.class);
 
         for (LynxModule hub : allHubs) {
-            hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
+            hub.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
     }
 
     @Override
     public void loop() {
         for (LynxModule hub : allHubs) {
-            hub.getBulkData();
+            hub.clearBulkCache();
         }
+
+        ctrlHubData = allHubs.get(0).getBulkData();
+        exHubData = allHubs.get(1).getBulkData();
+
+        //TODO: Figure out how to get/set motor/servo/sensor values
     }
 
     @Override

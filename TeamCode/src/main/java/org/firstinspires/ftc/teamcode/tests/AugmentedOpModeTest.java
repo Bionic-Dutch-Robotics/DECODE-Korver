@@ -31,6 +31,11 @@ public class AugmentedOpModeTest extends AugmentedOpMode {
     }
 
     @Override
+    public void onStart() {
+        dt.startTeleOpDrive();
+    }
+
+    @Override
     public void onLoop() {
         dt.teleOpDrive(
                 -gamepad1.left_stick_y,
@@ -48,10 +53,5 @@ public class AugmentedOpModeTest extends AugmentedOpMode {
     @Override
     public Subsystem[] getSubsystems() {
         return new Subsystem[] {dt, intake, hubs};
-    }
-
-    @Override
-    public void onStart() {
-
     }
 }
