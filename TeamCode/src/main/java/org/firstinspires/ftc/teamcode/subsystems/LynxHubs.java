@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
 
+import org.firstinspires.ftc.robotcontroller.external.samples.SensorGoBildaPinpoint;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
 
 import java.util.List;
@@ -44,8 +47,8 @@ public class LynxHubs extends Subsystem {
                 exHubData.getAnalogInputVoltage(port);
     }
 
-    public byte[] getSensorData(I2cDevice sensor) {
-        return sensor.device.read(0x08, 3);
+    public byte[] getSensorData(I2cDevice sensor, int ireg, int creg) {
+        return sensor.device.read(ireg, creg);
     }
 
     @Override
@@ -56,7 +59,7 @@ public class LynxHubs extends Subsystem {
         EXPANSION_HUB
     }
 
-    public class I2cDevice {
+    public static class I2cDevice {
         I2cDeviceSynch device;
         String name;
     }
