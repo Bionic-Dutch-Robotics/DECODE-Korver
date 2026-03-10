@@ -49,7 +49,7 @@ public class LynxHubs extends Subsystem {
     }
 
     @Override
-    public void stop() {allHubs = null;}
+    public void stop() {allHubs.clear();}
 
     public enum Hub {
         CONTROL_HUB,
