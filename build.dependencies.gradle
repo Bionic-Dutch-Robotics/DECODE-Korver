@@ -25,7 +25,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
 
     implementation 'com.pedropathing:ftc:2.0.6'
-    implementation 'com.pedropathing:ivy:0.0.1-SNAPSHOT'
+    implementation 'com.pedropathing:ivy:1.0.0'
     implementation 'com.pedropathing:telemetry:1.0.0'
     implementation 'com.bylazar:fullpanels:1.0.12'
     implementation 'org.team11260:fast-load:0.1.4-beta1'
