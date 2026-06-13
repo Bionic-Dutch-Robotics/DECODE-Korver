@@ -6,8 +6,10 @@ import com.pedropathing.control.PIDFCoefficients;
 import com.pedropathing.control.PIDFController;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.math.MathFunctions;
+import com.qualcomm.hardware.rev.RevTouchSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
@@ -15,6 +17,7 @@ import org.firstinspires.ftc.teamcode.util.Settings;
 
 public class Turret {
     public DcMotorEx turret;
+    private RevTouchSensor touch;
     private PIDFController turretPid;
     public double turretRad, targetRad, fieldCentricTurretRad, turretPower;
     private Pose target;
@@ -29,6 +32,8 @@ public class Turret {
         turret.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         turret.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         target = new Pose();
+
+        touch = hwMap.get(RevTouchSensor.class, "Touch sensor");
     }
 
     public void setAlliance(AllianceColor alliance) {
@@ -71,12 +76,18 @@ public class Turret {
                 0, Math.PI*2,
                 -Math.PI, Math.PI
         );
-        targetRad = MathFunctions.clamp(targetRad, Math.toRadians(-90), Math.toRadians(90));
+        //                                              Originally -90                  90
+        targetRad = MathFunctions.clamp(targetRad, Math.toRadians(-100), Math.toRadians(100));
 
         return targetRad;
     }
 
     public double getTurretRadians() {
+
+        if (touch.isPressed()) {
+            liveOffset = -Math.PI;
+        }
+
         turretRad = turret.getCurrentPosition() / 140.003629846
                 - fieldCentricTurretStartingPosition - liveOffset + turretEndRadians;
 
