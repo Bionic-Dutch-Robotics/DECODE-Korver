@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
@@ -16,6 +17,7 @@ import org.firstinspires.ftc.teamcode.util.Settings;
 public class Flywheel {
     private PIDFController shooterPidf = null, shooterPidf2 = null;
     public DcMotorEx shooter = null, shooter2 = null;
+    public VoltageSensor voltageSensor = null;
     public final double redPowerCoefficient = 1.1;
     public final double bluePowerCoefficient = 1.0;
     private AllianceColor alliance;
@@ -24,6 +26,7 @@ public class Flywheel {
     public Flywheel(HardwareMap hwMap, AllianceColor alliance) {
         shooter = hwMap.get(DcMotorEx.class, Settings.HardwareNames.Shooter.SHOOTER);
         shooter2 = hwMap.get(DcMotorEx.class, Settings.HardwareNames.Shooter.SHOOTER_TWO);
+        voltageSensor = hwMap.voltageSensor.iterator().next();
         shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         shooter2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         shooter.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -44,7 +47,6 @@ public class Flywheel {
                 this.getRegressionVelocity(
                         this.getDistance(x, y)
                 )
-                * voltageComp
         );
     }
 
@@ -72,8 +74,15 @@ public class Flywheel {
         shooterPidf2.updatePosition(shooter2.getVelocity(AngleUnit.DEGREES));
         shooterPidf.setTargetPosition(targetVelocity);
         shooterPidf2.setTargetPosition(targetVelocity);
-        shooter.setPower(MathFunctions.clamp(shooterPidf.run(), -1, 1));
-        shooter2.setPower(MathFunctions.clamp(shooterPidf2.run(), -1, 1));
+
+        double batteryVoltage = voltageSensor.getVoltage();
+        shooter.setPower(MathFunctions.clamp(
+                (shooterPidf.run() * batteryVoltage) / 12,
+                -1, 1
+        ));
+        shooter2.setPower(MathFunctions.clamp(
+                (shooterPidf.run() * batteryVoltage) / 12,
+                -1, 1));
     }
     public double getTarget() {
         return shooterPidf.getTargetPosition();

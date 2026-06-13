@@ -58,7 +58,7 @@ repositories {
         url = "https://repo.dairy.foundation/releases"
     }
     maven {
-        url = "https://www.methewo.tech/maven/"
+        url = "https://www.matthewo.tech/maven/"
     }
     maven {
         url = 'https://jitpack.io'
