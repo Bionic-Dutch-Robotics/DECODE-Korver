@@ -76,7 +76,8 @@ public class LateralZPAM extends OpMode {
     @Override
     public void loop() {
         if (gamepad1.bWasPressed()) {
-            stopRobot(follower);
+            follower.startTeleopDrive(true);
+            follower.setTeleOpDrive(0,0,0);
             requestOpModeStop();
         }
 

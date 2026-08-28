@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.pedroPathing.tuners;
 
-import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.draw;
+import static org.firstinspires.ftc.teamcode.pedroPathing.tuners.Drawing.drawRobot;
 import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
 
 import com.pedropathing.geometry.BezierLine;
@@ -61,7 +61,7 @@ public class TranslationalPIDF extends OpMode {
     /** This runs the OpMode, updating the Follower as well as printing out the debug statements to the Telemetry */
     @Override
     public void loop() {
-        draw();
+        drawRobot(follower.getPose());
         follower.update();
         if (!follower.isBusy()) {
             if (forward) {

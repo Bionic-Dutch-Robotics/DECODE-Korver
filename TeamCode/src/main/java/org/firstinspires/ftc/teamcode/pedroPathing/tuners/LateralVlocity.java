@@ -79,7 +79,8 @@ public class LateralVlocity extends OpMode {
     @Override
     public void loop() {
         if (gamepad1.bWasPressed()) {
-            stopRobot(follower);
+            follower.startTeleopDrive(true);
+follower.setTeleOpDrive(0,0,0);
             requestOpModeStop();
         }
 
@@ -88,7 +89,8 @@ public class LateralVlocity extends OpMode {
         if (!end) {
             if (Math.abs(follower.getPose().getY()) > (DISTANCE + 72)) {
                 end = true;
-                stopRobot(follower);
+                follower.startTeleopDrive(true);
+follower.setTeleOpDrive(0,0,0);
             } else {
                 follower.setTeleOpDrive(0,1,0,true);
                 double currentVelocity = Math.abs(follower.getVelocity().dot(new Vector(1, Math.PI / 2)));
@@ -96,7 +98,8 @@ public class LateralVlocity extends OpMode {
                 velocities.remove(0);
             }
         } else {
-            stopRobot(follower);
+            follower.startTeleopDrive(true);
+follower.setTeleOpDrive(0,0,0);
             double average = 0;
             for (double velocity : velocities) {
                 average += velocity;

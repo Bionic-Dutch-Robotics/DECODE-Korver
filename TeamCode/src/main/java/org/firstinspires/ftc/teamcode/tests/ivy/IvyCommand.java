@@ -1,101 +1,39 @@
 package org.firstinspires.ftc.teamcode.tests.ivy;
 
+import static org.firstinspires.ftc.teamcode.util.Hardware.dt;
+import static org.firstinspires.ftc.teamcode.util.Hardware.shooter;
+import static org.firstinspires.ftc.teamcode.util.Hardware.transfer;
+
 import com.pedropathing.ivy.Command;
-import com.pedropathing.ivy.behaviors.BlockedBehavior;
-import com.pedropathing.ivy.behaviors.ConflictBehavior;
-import com.pedropathing.ivy.behaviors.EndCondition;
-import com.pedropathing.ivy.behaviors.InterruptedBehavior;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.pedropathing.ivy.CommandBuilder;
+import com.pedropathing.ivy.Scheduler;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.teamcode.util.Hardware;
-import org.firstinspires.ftc.teamcode.util.Settings;
+import org.firstinspires.ftc.teamcode.util.AllianceColor;
+import org.firstinspires.ftc.teamcode.util.MatchSettings;
 
-import java.util.Collections;
-import java.util.Set;
+public class IvyCommand extends OpMode {
+    private Command update;
 
-public class IvyCommand implements Command {
-    private ElapsedTime timer;
-    private int state;
-    private Integer[] order;
+    @Override
+    public void init() {
+        MatchSettings.initSelection(hardwareMap, new AllianceColor(AllianceColor.Selection.BLUE), gamepad1);
 
-    public IvyCommand() {
-        timer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
+        update = Command.build()
+                .setStart(MatchSettings::start)
+                .setExecute(() -> {
+                    dt.update();
+                    shooter.runLoop(dt.getPose(),
+                            dt.follower.getVelocity(),
+                            dt.follower.getAngularVelocity());
+                })
+                .setEnd((endCondition) -> transfer.kicker.stop())
+                .requiring(dt, shooter);
+
+        Scheduler.schedule(update);
     }
 
     @Override
-    public Set<Object> requirements() {
-        return Collections.emptySet();
-    }
-
-    @Override
-    public int priority() {
-        return 0;
-    }
-
-    @Override
-    public InterruptedBehavior interruptedBehavior() {
-        return null;
-    }
-
-    @Override
-    public ConflictBehavior conflictBehavior() {
-        return null;
-    }
-
-    @Override
-    public BlockedBehavior blockedBehavior() {
-        return null;
-    }
-
-    @Override
-    public void start() {
-        timer.reset();
-        order = Hardware.transfer.sorter.getOrder();
-    }
-
-    @Override
-    public boolean done() {
-        return state >= 6;
-    }
-
-    @Override
-    public void execute() {
-        if (state == 0) {
-            Hardware.transfer.kickServoUp(order[0]);
-            manageState();
-        }
-        else if (state == 1) {
-            Hardware.transfer.kickServoDown(order[0]);
-            manageState();
-        }
-        else if (state == 2) {
-            Hardware.transfer.kickServoUp(order[1]);
-            manageState();
-        }
-        else if (state == 3) {
-            Hardware.transfer.kickServoDown(order[1]);
-            manageState();
-        }
-        else if (state == 4) {
-            Hardware.transfer.kickServoUp(order[2]);
-            manageState();
-        }
-        else if (state == 5) {
-            Hardware.transfer.kickServoDown(order[2]);
-            manageState();
-        }
-    }
-
-    public void manageState() {
-        if (timer.time() >= Settings.Positions.Transfer.RUN_TO_POS_TIME && state < 6) {
-            timer.reset();
-            state++;
-        }
-    }
-
-    @Override
-    public void end(EndCondition endCondition) {
-
+    public void loop() {
+        Scheduler.execute();
     }
 }

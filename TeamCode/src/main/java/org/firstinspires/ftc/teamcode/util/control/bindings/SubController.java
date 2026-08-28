@@ -38,11 +38,11 @@ public class SubController extends Controller
                 ),
                 new Command(
                         gamepad::leftTriggerWasPressed,
-                        () -> shooter.turret.setLiveOffset(0.05)
+                        () -> shooter.turret.setLiveOffset(0.1)
                 ),
                 new Command(
                         gamepad::rightTriggerWasPressed,
-                        () -> shooter.turret.setLiveOffset(-0.05)
+                        () -> shooter.turret.setLiveOffset(-0.1)
                 )
         };
         this.setController(controls);

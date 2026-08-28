@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.util;
 
+import static org.firstinspires.ftc.teamcode.util.Hardware.dt;
 import static org.firstinspires.ftc.teamcode.util.Hardware.transfer;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -45,6 +46,8 @@ public class MatchSettings {
         }
         transfer.setMotif(motif);
         transfer.start();
+
+        dt.startTeleOpDrive();
     }
 
     /**
