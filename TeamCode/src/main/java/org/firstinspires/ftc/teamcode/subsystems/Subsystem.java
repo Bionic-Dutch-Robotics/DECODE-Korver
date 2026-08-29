@@ -1,15 +1,14 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.pedropathing.ivy.Command;
+import com.pedropathing.ivy.Scheduler;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
-import org.firstinspires.ftc.teamcode.util.control.Command;
-import org.firstinspires.ftc.teamcode.util.control.Controller;
 
 public abstract class Subsystem {
     private Command[] initCommands;
     private Command[] teleCommands;
-    public Controller controller = new Controller();
 
     abstract public void init(HardwareMap hardwareMap, AllianceColor alliance);
     public void setInitCommands(Command[] commands) {
@@ -21,14 +20,14 @@ public abstract class Subsystem {
     }
 
     public void init() {
-        for (Command command : initCommands) {
-            controller.bind(command);
+        if (initCommands != null) {
+            Scheduler.schedule(initCommands);
         }
     }
 
     public void start() {
-        for (Command command : teleCommands) {
-            controller.bind(command);
+        if (teleCommands != null) {
+            Scheduler.schedule(teleCommands);
         }
     }
 
@@ -41,8 +40,4 @@ public abstract class Subsystem {
 
     abstract public void loop();
     abstract public void stop();
-
-    public Controller getController() {
-        return controller;
-    }
 }

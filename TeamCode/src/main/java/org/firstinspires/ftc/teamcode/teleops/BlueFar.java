@@ -6,25 +6,27 @@ import static org.firstinspires.ftc.teamcode.util.Hardware.shooter;
 import static org.firstinspires.ftc.teamcode.util.Hardware.transfer;
 
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.ivy.Command;
+import com.pedropathing.ivy.Scheduler;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
 import org.firstinspires.ftc.teamcode.util.MatchSettings;
-import org.firstinspires.ftc.teamcode.util.control.Controller;
 
 import java.util.List;
+import java.util.function.BooleanSupplier;
 
 @TeleOp(name="Blue")
 public class BlueFar extends OpMode {
-    private Controller chetan = new Controller(), atharv = new Controller();
     private List<LynxModule> allHubs = null;
     private double voltageComp = 1.0;
     private double turretCorrection = 0.0;
 
     @Override
     public void init() {
+        Scheduler.reset();
         allHubs = hardwareMap.getAll(LynxModule.class);
         MatchSettings.initSelection(hardwareMap, new AllianceColor(AllianceColor.Selection.BLUE), gamepad1);
         MatchSettings.start();
@@ -34,43 +36,18 @@ public class BlueFar extends OpMode {
             //hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         }
 
-        chetan.bind(
-                () -> gamepad1.aWasPressed(),
-                () -> transfer.fireSortedArtifacts()
-        );
-
-        chetan.bind(
-                gamepad1::startWasPressed,
-                () -> {
-                    dt.follower.setPose(new Pose(144-17.75/2, 17.75/2, Math.PI));
-                    dt.follower.startTeleopDrive();
-                }
-        );
-
-        chetan.bind(
-                gamepad1::dpadUpWasPressed,
-                () -> {
-                    intake.toggle();
-                }
-        );
-
-
-        chetan.bind(
-                gamepad1::leftBumperWasPressed,
-                () -> voltageComp += 0.02
-        );
-        chetan.bind(
-                gamepad1::rightBumperWasPressed,
-                () -> voltageComp -= 0.02
-        );
-
-        chetan.bind(
-                gamepad1::leftTriggerWasPressed,
-                () -> shooter.turret.setLiveOffset(0.05)
-        );
-        chetan.bind(
-                gamepad1::rightTriggerWasPressed,
-                () -> shooter.turret.setLiveOffset(-0.05)
+        Scheduler.schedule(
+                event(gamepad1::aWasPressed, () -> transfer.fireSortedArtifacts()),
+                event(gamepad1::startWasPressed,
+                        () -> {
+                            dt.follower.setPose(new Pose(144-17.75/2, 17.75/2, Math.PI));
+                            dt.follower.startTeleopDrive();
+                        }),
+                event(gamepad1::dpadUpWasPressed, intake::toggle),
+                event(gamepad1::leftBumperWasPressed, () -> voltageComp += 0.02),
+                event(gamepad1::rightBumperWasPressed, () -> voltageComp -= 0.02),
+                event(gamepad1::leftTriggerWasPressed, () -> shooter.turret.setLiveOffset(0.05)),
+                event(gamepad1::rightTriggerWasPressed, () -> shooter.turret.setLiveOffset(-0.05))
         );
     }
 
@@ -80,7 +57,7 @@ public class BlueFar extends OpMode {
             //hub.getBulkData();
         }
 
-        chetan.update();
+        Scheduler.execute();
         /*if (gamepad1.rightBumperWasPressed()) {
             voltageComp -= 0.02;
         }
@@ -130,5 +107,15 @@ public class BlueFar extends OpMode {
         telemetry.addData("Turret Pos", shooter.turret.convertTicksToRadians(shooter.turret.turret.getCurrentPosition()));
         telemetry.addData("Encoder", shooter.turret.turret.getCurrentPosition());
         telemetry.update();
+    }
+
+    private static Command event(BooleanSupplier condition, Runnable action) {
+        return Command.build()
+                .setExecute(() -> {
+                    if (condition.getAsBoolean()) {
+                        action.run();
+                    }
+                })
+                .setDone(() -> false);
     }
 }

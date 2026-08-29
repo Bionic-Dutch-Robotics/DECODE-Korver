@@ -8,6 +8,8 @@ import static org.firstinspires.ftc.teamcode.util.Hardware.transfer;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.ivy.Command;
+import com.pedropathing.ivy.Scheduler;
 import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.paths.callbacks.ParametricCallback;
@@ -18,19 +20,20 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
 import org.firstinspires.ftc.teamcode.util.MatchSettings;
 import org.firstinspires.ftc.teamcode.util.Settings;
-import org.firstinspires.ftc.teamcode.util.control.Controller;
+
+import java.util.function.BooleanSupplier;
 
 @Autonomous(name="Full Path Test")
 public class FullPath_Test extends OpMode {
     private PathChain[] paths;
     private int index = 0;
     private boolean hasShot1 = false, hasShot2=false, hasShot3=false;
-    private Controller manager = new Controller();
     private final Pose shootPos = new Pose(55, 15);
     private ElapsedTime shootTimer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
     private State state;
     @Override
     public void init() {
+        Scheduler.reset();
         MatchSettings.initSelection(hardwareMap, new AllianceColor(AllianceColor.Selection.BLUE), gamepad1);
 
         paths = new PathChain[]{
@@ -124,21 +127,16 @@ public class FullPath_Test extends OpMode {
         );
 
         state = State.SHOOT_0;
-        manager.bind(
-                () -> (state == State.SHOOT_0 && !hasShot1),
-                transfer::runSlow
-        );
-        manager.bind(
-                () -> (state == State.SHOOT_0 && shootTimer.time() > Settings.Positions.Transfer.RUN_TO_POS_TIME * 1.5) && hasShot1,
-                () -> {
-                    shootTimer.reset();
-                    dt.follower.followPath(paths[0]);
-                    state = State.INTAKE_1;
-                }
-        );
-        manager.bind(
-                () -> (state == State.INTAKE_1 && !dt.follower.isBusy()),
-                () -> dt.follower.followPath(paths[1])
+        Scheduler.schedule(
+                event(() -> (state == State.SHOOT_0 && !hasShot1), transfer::runSlow),
+                event(() -> (state == State.SHOOT_0 && shootTimer.time() > Settings.Positions.Transfer.RUN_TO_POS_TIME * 1.5) && hasShot1,
+                        () -> {
+                            shootTimer.reset();
+                            dt.follower.followPath(paths[0]);
+                            state = State.INTAKE_1;
+                        }),
+                event(() -> (state == State.INTAKE_1 && !dt.follower.isBusy()),
+                        () -> dt.follower.followPath(paths[1]))
         );
 
         paths[2].getPath(0).setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180));
@@ -208,7 +206,7 @@ public class FullPath_Test extends OpMode {
 
     @Override
     public void loop() {
-        manager.update();
+        Scheduler.execute();
 
 
         shooter.flywheel.update(100);
@@ -217,6 +215,16 @@ public class FullPath_Test extends OpMode {
         telemetry.addData("Y", dt.follower.getPose().getY());
         telemetry.addData("Theta", dt.follower.getHeading());
         telemetry.update();
+    }
+
+    private static Command event(BooleanSupplier condition, Runnable action) {
+        return Command.build()
+                .setExecute(() -> {
+                    if (condition.getAsBoolean()) {
+                        action.run();
+                    }
+                })
+                .setDone(() -> false);
     }
 }
     enum State {

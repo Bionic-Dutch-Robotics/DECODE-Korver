@@ -10,6 +10,8 @@ import static org.firstinspires.ftc.teamcode.util.Settings.Positions.Transfer.SL
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.ivy.Command;
+import com.pedropathing.ivy.Scheduler;
 import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.paths.callbacks.ParametricCallback;
@@ -22,7 +24,8 @@ import org.firstinspires.ftc.teamcode.util.AllianceColor;
 import org.firstinspires.ftc.teamcode.util.Hardware;
 import org.firstinspires.ftc.teamcode.util.MatchSettings;
 import org.firstinspires.ftc.teamcode.util.Settings;
-import org.firstinspires.ftc.teamcode.util.control.Controller;
+
+import java.util.function.BooleanSupplier;
 
 @Autonomous(name="One Row Blue Auto", preselectTeleOp = "Blue TeleOp FR")
 public class OneRow extends OpMode {
@@ -31,12 +34,12 @@ public class OneRow extends OpMode {
     private boolean hasShot1 = false, hasShot2=false, hasShot3=false, hasShot4=false;
     private boolean hasFinishedIntakePath1=false, hasFinishedIntakePath2=false, hasFinishedIntakePath3=false;
     private boolean hasIntook1 = false, hasIntook2 = false, hasIntook3 = false;
-    private Controller manager = new Controller();
     private final Pose shootPos = new Pose(55, 15);
     private ElapsedTime shootTimer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
 
     @Override
     public void init() {
+        Scheduler.reset();
         MatchSettings.initSelection(hardwareMap, new AllianceColor(AllianceColor.Selection.BLUE), gamepad1);
 
         {
@@ -188,31 +191,25 @@ public class OneRow extends OpMode {
             path.getPath(0).setConstantHeadingInterpolation(Math.PI);
         }
 
-        manager.bind(
-                () -> (!hasShot1 && shootTimer.time() > 1.5),
-                () -> {
-                    transfer.fireSortedArtifacts();
-                    shootTimer.reset();
-                    hasShot1 = true;
-                }
-        );
-
-        manager.bind(
-                () -> (hasShot1 && shootTimer.time() > RUN_TO_POS_TIME*6 && !hasFinishedIntakePath1),
-                () -> {
-                    dt.follower.followPath(paths[4]);
-                    hasFinishedIntakePath1 = true;
-                }
-        );
-
-        manager.bind(
-                () -> (hasIntook1 && !hasShot2),
-                () -> {
-                    transfer.runSlow();
-                    shootTimer.reset();
-                    hasShot2 = true;
-                    shooter.turret.setLiveOffset(-0.1);
-                }
+        Scheduler.schedule(
+                event(() -> (!hasShot1 && shootTimer.time() > 1.5),
+                        () -> {
+                            transfer.fireSortedArtifacts();
+                            shootTimer.reset();
+                            hasShot1 = true;
+                        }),
+                event(() -> (hasShot1 && shootTimer.time() > RUN_TO_POS_TIME*6 && !hasFinishedIntakePath1),
+                        () -> {
+                            dt.follower.followPath(paths[4]);
+                            hasFinishedIntakePath1 = true;
+                        }),
+                event(() -> (hasIntook1 && !hasShot2),
+                        () -> {
+                            transfer.runSlow();
+                            shootTimer.reset();
+                            hasShot2 = true;
+                            shooter.turret.setLiveOffset(-0.1);
+                        })
         );
     }
 
@@ -261,7 +258,7 @@ public class OneRow extends OpMode {
                 dt.follower.getAngularVelocity()
         );
 
-        manager.update();
+        Scheduler.execute();
 
 
         dt.follower.update();
@@ -274,5 +271,15 @@ public class OneRow extends OpMode {
     @Override
     public void stop() {
         Hardware.stop();
+    }
+
+    private static Command event(BooleanSupplier condition, Runnable action) {
+        return Command.build()
+                .setExecute(() -> {
+                    if (condition.getAsBoolean()) {
+                        action.run();
+                    }
+                })
+                .setDone(() -> false);
     }
 }

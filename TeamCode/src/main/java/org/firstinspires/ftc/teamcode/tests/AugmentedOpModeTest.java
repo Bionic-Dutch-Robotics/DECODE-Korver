@@ -1,15 +1,15 @@
 package org.firstinspires.ftc.teamcode.tests;
 
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.ivy.Command;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.AugmentedOpMode;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.LynxHubs;
 import org.firstinspires.ftc.teamcode.subsystems.Subsystem;
 import org.firstinspires.ftc.teamcode.subsystems.drivetrain.Drivetrain;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
-import org.firstinspires.ftc.teamcode.util.control.AugmentedOpMode;
-import org.firstinspires.ftc.teamcode.util.control.Command;
 
 @TeleOp(name="Augmented OpMode Test", group="tests")
 public class AugmentedOpModeTest extends AugmentedOpMode {

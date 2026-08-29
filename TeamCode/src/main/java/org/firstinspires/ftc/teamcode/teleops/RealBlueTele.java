@@ -5,14 +5,15 @@ import static org.firstinspires.ftc.teamcode.util.Hardware.intake;
 import static org.firstinspires.ftc.teamcode.util.Hardware.shooter;
 import static org.firstinspires.ftc.teamcode.util.Hardware.transfer;
 
+import com.pedropathing.ivy.Scheduler;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.teleops.bindings.MainController;
+import org.firstinspires.ftc.teamcode.teleops.bindings.SubController;
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
 import org.firstinspires.ftc.teamcode.util.Hardware;
 import org.firstinspires.ftc.teamcode.util.MatchSettings;
-import org.firstinspires.ftc.teamcode.util.control.bindings.MainController;
-import org.firstinspires.ftc.teamcode.util.control.bindings.SubController;
 
 @TeleOp(name="Blue TeleOp FR")
 public class RealBlueTele extends OpMode {
@@ -20,6 +21,7 @@ public class RealBlueTele extends OpMode {
     private SubController atharv;
     @Override
     public void init() {
+        Scheduler.reset();
         MatchSettings.initSelection(hardwareMap, new AllianceColor(AllianceColor.Selection.BLUE), gamepad1);
 
         chetan = new MainController(dt, intake, gamepad1, new AllianceColor(AllianceColor.Selection.BLUE));
@@ -44,8 +46,7 @@ public class RealBlueTele extends OpMode {
        chetan.runDrive();
        atharv.runShooter(dt.follower);
 
-       chetan.update();
-       atharv.update();
+       Scheduler.execute();
     }
 
     @Override

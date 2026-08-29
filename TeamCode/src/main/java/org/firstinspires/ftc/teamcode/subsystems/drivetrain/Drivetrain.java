@@ -1,11 +1,15 @@
 package org.firstinspires.ftc.teamcode.subsystems.drivetrain;
 
+import static com.pedropathing.ivy.commands.Commands.infinite;
+
 import com.pedropathing.control.FilteredPIDFController;
 import com.pedropathing.control.PIDFController;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.ivy.CommandBuilder;
 import com.pedropathing.paths.Path;
+import com.pedropathing.ivy.Command;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
@@ -18,6 +22,7 @@ public class Drivetrain extends Subsystem {
     public FilteredPIDFController xPid, yPid;
     public PIDFController headingPid;
     public Follower follower = null;
+    public boolean dtIsEnabled = true;
     private Pose gamepadReference = null;
     private Pose multipliers = new Pose();
     private AllianceColor alliance = null;
@@ -97,6 +102,16 @@ public class Drivetrain extends Subsystem {
                 true
 
         );
+    }
+
+    /**
+     * If drive is enabled (toggleable through other methods,
+     * and if controller inputs are provided,
+     * this will drive the robot with corrected gamepad vectors.
+     * @return command
+     */
+    public Command ivyLoop() {
+        return infinite(this::update);
     }
 
     public void lineToPose(Pose target, double currentHeading) {

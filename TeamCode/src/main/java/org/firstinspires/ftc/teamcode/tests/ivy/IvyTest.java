@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
-import com.pedropathing.ivy.groups.Groups;
 import org.firstinspires.ftc.teamcode.util.MatchSettings;
 
 
@@ -13,13 +12,18 @@ import org.firstinspires.ftc.teamcode.util.MatchSettings;
 public class IvyTest extends OpMode {
     @Override
     public void init() {
+        Scheduler.reset();
         MatchSettings.initSelection(hardwareMap, new AllianceColor(AllianceColor.Selection.BLUE), gamepad1);
-        MatchSettings.start();
         Scheduler.schedule(new IvyCommand());
-        Scheduler.execute();
+    }
+
+    @Override
+    public void start() {
+        MatchSettings.start();
     }
 
     @Override
     public void loop() {
+        Scheduler.execute();
     }
 }

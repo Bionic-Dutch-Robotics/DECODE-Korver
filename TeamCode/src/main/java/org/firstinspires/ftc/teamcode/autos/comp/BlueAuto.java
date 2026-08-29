@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.autos.comp;
 
+import static com.pedropathing.ivy.commands.Commands.instant;
+import static com.pedropathing.ivy.commands.Commands.waitMs;
+import static com.pedropathing.ivy.groups.Groups.sequential;
+import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 import static org.firstinspires.ftc.teamcode.util.Hardware.dt;
 import static org.firstinspires.ftc.teamcode.util.Hardware.intake;
 import static org.firstinspires.ftc.teamcode.util.Hardware.shooter;
@@ -10,33 +14,27 @@ import static org.firstinspires.ftc.teamcode.util.Settings.Positions.Transfer.SL
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.ivy.Scheduler;
 import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.paths.callbacks.ParametricCallback;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.util.AllianceColor;
 import org.firstinspires.ftc.teamcode.util.Hardware;
 import org.firstinspires.ftc.teamcode.util.MatchSettings;
 import org.firstinspires.ftc.teamcode.util.Settings;
-import org.firstinspires.ftc.teamcode.util.control.Controller;
 
 @Autonomous(name="Real Blue Auto", preselectTeleOp = "Blue TeleOp FR")
 public class BlueAuto extends OpMode {
     private PathChain[] paths;
-    private int index = 0;
-    private boolean hasShot1 = false, hasShot2=false, hasShot3=false, hasShot4=false;
-    private boolean hasFinishedIntakePath1=false, hasFinishedIntakePath2=false, hasFinishedIntakePath3=false;
-    private boolean hasIntook1 = false, hasIntook2 = false, hasIntook3 = false;
-    private Controller manager = new Controller();
     private final Pose shootPos = new Pose(55, 15);
-    private ElapsedTime shootTimer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
 
     @Override
     public void init() {
+        Scheduler.reset();
         MatchSettings.initSelection(hardwareMap, new AllianceColor(AllianceColor.Selection.BLUE), gamepad1);
 
         {
@@ -125,7 +123,6 @@ public class BlueAuto extends OpMode {
                     new ParametricCallback(
                             0, 0.97, dt.follower,
                             () -> {
-                                hasIntook1 = true;
                             }
                     )
             );
@@ -143,14 +140,14 @@ public class BlueAuto extends OpMode {
                             () -> {
                                 dt.follower.followPath(paths[3]);
                                 dt.follower.setMaxPower(1);
-                                hasFinishedIntakePath2=true;
                             }
                     )
             );
             paths[3].setCallbacks(
                     new ParametricCallback(
                             0, 1, dt.follower,
-                            () -> hasIntook2 = true
+                            () -> {
+                            }
                     )
             );
 
@@ -165,7 +162,6 @@ public class BlueAuto extends OpMode {
                     new ParametricCallback(
                             0, 0.97, dt.follower,
                             () -> {
-                                hasFinishedIntakePath3=true;
                                 dt.follower.setMaxPower(1);
                                 dt.follower.followPath(
                                         paths[5]
@@ -178,7 +174,6 @@ public class BlueAuto extends OpMode {
                     new ParametricCallback(
                             0, 1, dt.follower,
                             () -> {
-                                hasIntook3 = true;
                             }
                     )
             );
@@ -188,69 +183,30 @@ public class BlueAuto extends OpMode {
             path.getPath(0).setConstantHeadingInterpolation(Math.PI);
         }
 
-        manager.bind(
-                () -> (!hasShot1 && shootTimer.time() > 1.5),
-                () -> {
-                    transfer.fireSortedArtifacts();
-                    shootTimer.reset();
-                    hasShot1 = true;
-                }
+        Scheduler.schedule(
+                sequential(
+                        waitMs(1500),
+                        instant(() -> transfer.fireSortedArtifacts()),
+                        waitMs(RUN_TO_POS_TIME * 6 * 1000),
+                        follow(dt.follower, paths[0]),
+                        instant(() -> {
+                            transfer.runSlow();
+                            shooter.turret.setLiveOffset(-0.1);
+                        }),
+                        waitMs(RUN_TO_POS_TIME * 6 * 1.5 * 1000),
+                        follow(dt.follower, paths[2]),
+                        instant(() -> {
+                            shooter.turret.setLiveOffset(-0.1);
+                            transfer.runSlow();
+                        }),
+                        waitMs(SLOW_SHOOT_COEFFICIENT * RUN_TO_POS_TIME * 1000),
+                        follow(dt.follower, paths[4]),
+                        instant(() -> {
+                            shooter.turret.setLiveOffset(-0.1);
+                            transfer.runSlow();
+                        })
+                )
         );
-
-        manager.bind(
-                () -> (hasShot1 && shootTimer.time() > RUN_TO_POS_TIME*6 && !hasFinishedIntakePath1),
-                () -> {
-                    dt.follower.followPath(paths[0]);
-                    hasFinishedIntakePath1 = true;
-                }
-        );
-
-        manager.bind(
-                () -> (hasIntook1 && !hasShot2),
-                () -> {
-                    transfer.runSlow();
-                    shootTimer.reset();
-                    hasShot2 = true;
-                    shooter.turret.setLiveOffset(-0.1);
-                }
-        );
-
-        manager.bind(
-                () -> (shootTimer.time() > RUN_TO_POS_TIME*6*1.5 && hasShot2 && !hasFinishedIntakePath2),
-                () -> {
-                    dt.follower.followPath(paths[2]);
-                }
-        );
-
-        manager.bind(
-                () -> (hasIntook2 && !hasShot3),
-                () -> {
-                    shooter.turret.setLiveOffset(-0.1);
-                    transfer.runSlow();
-                    shootTimer.reset();
-                    hasShot3 = true;
-                }
-        );
-
-        manager.bind(
-                () -> (hasShot3 && shootTimer.time() > SLOW_SHOOT_COEFFICIENT * RUN_TO_POS_TIME && !hasFinishedIntakePath3),
-                () -> {
-                    dt.follower.followPath(paths[4]);
-                }
-        );
-
-        manager.bind(
-                () -> (hasIntook3 && !hasShot4),
-                () -> {
-                    shooter.turret.setLiveOffset(-0.1);
-                    shootTimer.reset();
-                    transfer.runSlow();
-                    hasShot4 = true;
-                }
-        );
-
-
-
     }
 
     @Override
@@ -285,7 +241,6 @@ public class BlueAuto extends OpMode {
     @Override
     public void start() {
         hardwareMap.get(Servo.class, "park").setPosition(0.65);
-        shootTimer.reset();
         MatchSettings.start();
     }
 
@@ -298,8 +253,7 @@ public class BlueAuto extends OpMode {
                 dt.follower.getAngularVelocity()
         );
 
-        manager.update();
-
+        Scheduler.execute();
 
         dt.follower.update();
         telemetry.addData("X", dt.follower.getPose().getX());
